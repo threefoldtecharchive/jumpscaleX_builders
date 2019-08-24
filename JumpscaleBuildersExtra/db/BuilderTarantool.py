@@ -1,7 +1,7 @@
 from Jumpscale import j
 
 
-class BuilderTarantool(j.builders.system._BaseClass):
+class BuilderTarantool(j.baseclasses.builder):
     def _init(self, **kwargs):
         self.git_url = "https://github.com/tarantool/tarantool.git"
 

@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderZeroFlist(j.builders.system._BaseClass):
-    NAME = "zflist"
+class BuilderZeroFlist(j.baseclasses.builder):
+    __jslocation__ = "j.builders.storage.zflist"
 
     def _init(self, **kwargs):
         super()._init()

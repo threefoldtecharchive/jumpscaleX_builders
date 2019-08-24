@@ -6,12 +6,12 @@ _NBDSERVER_CONFIG_FILE = "{DIR_BASE}/config/nbdserver/config.yaml"
 _DEFAULT_LOCAL_CONFIG_FILE = "./config.yaml"
 
 
-class BuilderZDisk(j.builders.system._BaseClass):
+class BuilderZDisk(j.baseclasses.builder):
     """
     Manages 0-Disk over prefab
     """
 
-    NAME = "0-disk"
+    __jslocation__ = "j.builders.storage.0-disk"
 
     def build(self, branch="master", reset=False):
         """

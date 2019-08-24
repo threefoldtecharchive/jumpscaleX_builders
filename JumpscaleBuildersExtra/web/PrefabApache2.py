@@ -2,9 +2,9 @@ from Jumpscale import j
 import textwrap
 
 
-class BuilderApache2(j.builders.system._BaseClass):
+class BuilderApache2(j.baseclasses.builder):
 
-    NAME = "apachectl"
+    __jslocation__ = "j.builders.web.apachectl"
 
     def build(self, reset=True):
 

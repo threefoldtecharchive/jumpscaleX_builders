@@ -1,9 +1,9 @@
 from Jumpscale import j
 
 
-class BuilderProtobuf(j.builders.system._BaseClass):
+class BuilderProtobuf(j.baseclasses.builder):
 
-    NAME = "protoc"
+    __jslocation__ = "j.builders.libs.protoc"
 
     def install(self, reset=False):
         """

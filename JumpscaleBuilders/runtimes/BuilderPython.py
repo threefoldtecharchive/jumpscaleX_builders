@@ -3,13 +3,13 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderPython(j.builders.system._BaseClass):
+class BuilderPython(j.baseclasses.builder):
     """
     : Determine version using
     : > j.builders.runtimes.python.TAG = "vX.Y.Z"
     """
 
-    NAME = "python3"
+    __jslocation__ = "j.builders.runtimes.python3"
     TAG = "v3.6.8"
 
     def _init(self, **kwargs):

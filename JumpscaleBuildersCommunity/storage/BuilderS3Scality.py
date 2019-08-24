@@ -4,8 +4,8 @@ from time import sleep
 builder_method = j.builders.system.builder_method
 
 
-class BuilderS3Scality(j.builders.system._BaseClass):
-    NAME = "s3scality"
+class BuilderS3Scality(j.baseclasses.builder):
+    __jslocation__ = "j.builders.storage.s3scality"
 
     @property
     def path(self):

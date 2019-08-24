@@ -4,7 +4,7 @@ from Jumpscale import j
 import Jumpscale
 
 
-class BuilderFileSystem(j.builders.system._BaseClass):
+class BuilderFileSystem(j.baseclasses.builder):
     def create(self, device, fs_type="ext4"):
         """
         Create filesystem on a data disk

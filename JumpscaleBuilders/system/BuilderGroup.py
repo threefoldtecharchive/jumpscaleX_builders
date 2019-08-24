@@ -1,7 +1,7 @@
 from Jumpscale import j
 
 
-class BuilderGroup(j.builders.system._BaseClass):
+class BuilderGroup(j.baseclasses.builder):
     def create(self, name, gid=None):
         """Creates a group with the given name, and optionally given gid."""
         options = []

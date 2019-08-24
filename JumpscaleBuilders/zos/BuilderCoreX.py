@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderCoreX(j.builders.system._BaseClass):
-    NAME = "corex"
+class BuilderCoreX(j.baseclasses.builder):
+    __jslocation__ = "j.builders.zos.corex"
 
     def _init(self, **kwargs):
         self.git_url = "https://github.com/threefoldtech/corex.git"

@@ -1,8 +1,8 @@
 from Jumpscale import j
 
 
-class BuilderGateOne(j.builders.system._BaseClass):
-    NAME = "gateone"
+class BuilderGateOne(j.baseclasses.builder):
+    __jslocation__ = "j.builders.network.gateone"
 
     def build(self, reset=False):
         """

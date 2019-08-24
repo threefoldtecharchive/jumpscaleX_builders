@@ -3,8 +3,8 @@ import os
 import textwrap
 
 
-class BuilderMicroEditor(j.builders.system._BaseClass):
-    NAME = "micro"
+class BuilderMicroEditor(j.baseclasses.builder):
+    __jslocation__ = "j.builders.apps.micro"
 
     def install(self, reset=False):
         """

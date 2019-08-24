@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderARDB(j.builders.system._BaseClass):
-    NAME = "ardb-server"
+class BuilderARDB(j.baseclasses.builder):
+    __jslocation__ = "j.builders.db.ardb"
 
     def _init(self, **kwargs):
         # forest db (backend engine) paths

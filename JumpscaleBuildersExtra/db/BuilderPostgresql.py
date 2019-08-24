@@ -4,8 +4,8 @@ builder_method = j.builders.system.builder_method
 import time
 
 
-class BuilderPostgresql(j.builders.system._BaseClass):
-    NAME = "psql"
+class BuilderPostgresql(j.baseclasses.builder):
+    __jslocation__ = "j.builders.db.psql"
 
     def _init(self, **kwargs):
         self.DOWNLOAD_DIR = self.tools.joinpaths(self.DIR_BUILD, "build")

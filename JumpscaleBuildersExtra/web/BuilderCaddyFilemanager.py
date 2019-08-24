@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderCaddyFilemanager(j.builders.system._BaseClass):
-    NAME = "filemanager"
+class BuilderCaddyFilemanager(j.baseclasses.builder):
+    __jslocation__ = "j.builders.web.filemanager"
     PLUGINS = ["iyo", "filemanager"]
 
     def _init(self, **kwargs):

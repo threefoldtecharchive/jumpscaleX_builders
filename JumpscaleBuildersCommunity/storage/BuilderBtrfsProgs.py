@@ -3,7 +3,7 @@ from JumpscaleBuilder.BuilderFactory import BuilderApp
 
 
 class BuilderBtrfsProgs(BuilderApp):
-    NAME = "btrfs"
+    __jslocation__ = "j.builders.storage.btrfs"
 
     # depends of: pkg-config build-essential e2fslibs-dev libblkid-dev liblzo2-dev
 

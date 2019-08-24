@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderCockroachDB(j.builders.system._BaseClass):
-    NAME = "cockroach"
+class BuilderCockroachDB(j.baseclasses.builder):
+    __jslocation__ = "j.builders.db.cockroach"
 
     def _init(self, **kwargs):
         self.DIR_BUILD = self._replace("{DIR_TEMP}/cockroachdb")

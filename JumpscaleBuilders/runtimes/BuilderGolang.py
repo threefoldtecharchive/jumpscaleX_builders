@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderGolangTools(j.builders.system._BaseClass):
-    NAME = "golangtools"
+class BuilderGolangTools(j.baseclasses.builder):
+    __jslocation__ = "j.builders.runtimes.golangtools"
 
     def _init(self, **kwargs):
         self.base_dir = self._replace("{DIR_BASE}")
@@ -136,7 +136,7 @@ class BuilderGolangTools(j.builders.system._BaseClass):
 
 class BuilderGolang(BuilderGolangTools):
 
-    NAME = "go"
+    __jslocation__ = "j.builders.runtimes.go"
     STABLE_VERSION = "1.12.1"
     DOWNLOAD_URL = "https://dl.google.com/go/go{version}.{platform}-{arch}.tar.gz"
 

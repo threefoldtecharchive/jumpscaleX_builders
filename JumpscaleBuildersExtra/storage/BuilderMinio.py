@@ -1,5 +1,5 @@
 from Jumpscale import j
-from Jumpscale.builders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
 
 import os
 import textwrap
@@ -8,7 +8,7 @@ builder_method = j.builders.system.builder_method
 
 
 class BuilderMinio(BuilderGolangTools):
-    NAME = "minio"
+    __jslocation__ = "j.builders.storage.minio"
 
     def _init(self, **kwargs):
         super()._init()

@@ -2,12 +2,12 @@ import os
 from Jumpscale import j
 
 
-class BuilderSmartmontools(j.builders.system._BaseClass):
+class BuilderSmartmontools(j.baseclasses.builder):
     """
     Builder module for smartmontools (smartctl command)
     """
 
-    NAME = "smartmontools"
+    __jslocation__ = "j.builders.monitoring.smartmontools"
 
     _DOWNLOAD_URL = "http:/builds.smartmontools.org/r4592/smartmontools-6.6-0-20171104-r4592.linux-x86_64-static.tar.gz"
     _VERSION = "6.6"

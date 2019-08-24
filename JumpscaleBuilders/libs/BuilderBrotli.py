@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderBrotli(j.builders.system._BaseClass):
-    NAME = "brotli"
+class BuilderBrotli(j.baseclasses.builder):
+    __jslocation__ = "j.builders.libs.brotli"
 
     def _init(self, **kwargs):
         self.src_dir = self.DIR_BUILD + "/code/"

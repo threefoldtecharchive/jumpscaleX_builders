@@ -5,7 +5,7 @@ import time
 import socket
 
 
-class BuilderSSHReflector(j.builders.system._BaseClass):
+class BuilderSSHReflector(j.baseclasses.builder):
     def __init__(self, executor, prefab):
         self.executor = executor
         self.prefab = prefab

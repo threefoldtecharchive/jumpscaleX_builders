@@ -1,11 +1,11 @@
 from Jumpscale import j
-from Jumpscale.builders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
 
 builder_method = j.builders.system.builder_method
 
 
 class BuilderEtcd(BuilderGolangTools):
-    NAME = "etcd"
+    __jslocation__ = "j.builders.db.etcd"
 
     def _init(self):
         super()._init()

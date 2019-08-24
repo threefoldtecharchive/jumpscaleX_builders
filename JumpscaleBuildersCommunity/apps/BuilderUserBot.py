@@ -5,7 +5,7 @@ from .BuilderDigitalME import BuilderDigitalME
 builder_method = j.builders.system.builder_method
 
 
-class BuilderUserBot(j.builders.system._BaseClass):
+class BuilderUserBot(j.baseclasses.builder):
     """
     specs:
 
@@ -16,7 +16,7 @@ class BuilderUserBot(j.builders.system._BaseClass):
 
     """
 
-    NAME = "userbot"
+    __jslocation__ = "j.builders.apps.userbot"
 
     @builder_method()
     def _init(self, **kwargs):

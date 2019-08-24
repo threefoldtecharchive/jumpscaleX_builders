@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderTraefik(j.builders.system._BaseClass):
-    NAME = "traefik"
+class BuilderTraefik(j.baseclasses.builder):
+    __jslocation__ = "j.builders.web.traefik"
     VERSION = "1.7.9"  # latest
     URL = "https://github.com/containous/traefik/releases/download/v{version}/traefik_{platform}-{arch}"
 

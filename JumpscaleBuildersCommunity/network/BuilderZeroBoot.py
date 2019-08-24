@@ -8,7 +8,7 @@ ZEROTIER_FIREWALL_ZONE_REGEX = re.compile(r"^firewall\.@zone\[(\d+)\]\.name='zer
 FORWARDING_FIREWALL_REGEX = re.compile(r"^firewall\.@forwarding\[(\d+)\].*?('\w+')?$")
 
 
-class BuilderZeroBoot(j.builders.system._BaseClass):
+class BuilderZeroBoot(j.baseclasses.builder):
     def install(self, network_id, token, zos_version="v.1.4.1", zos_args="", reset=False):
         if not reset and self._done_check("install"):
             return

@@ -4,8 +4,8 @@ import textwrap
 builder_method = j.builders.system.builder_method
 
 
-class BuilderGraphql(j.builders.system._BaseClass):
-    NAME = "graphql"
+class BuilderGraphql(j.baseclasses.builder):
+    __jslocation__ = "j.builders.apps.graphql"
 
     def _init(self):
         self.APP_DIR = self._replace("{DIR_BASE}/apps/graphql")

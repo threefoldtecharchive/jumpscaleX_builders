@@ -4,8 +4,8 @@ import textwrap
 from time import sleep
 
 
-class BuilderLapis(j.builders.system._BaseClass):
-    NAME = "lapis"
+class BuilderLapis(j.baseclasses.builder):
+    __jslocation__ = "j.builders.web.lapis"
 
     def _init(self, **kwargs):
         self.BUILDDIR = self._replace("{DIR_VAR}/build/")

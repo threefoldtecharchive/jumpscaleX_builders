@@ -1,11 +1,11 @@
 from Jumpscale import j
-from Jumpscale.builders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
 
 builder_method = j.builders.system.builder_method
 
 
 class BuilderEthereum(BuilderGolangTools):
-    NAME = "geth"
+    __jslocation__ = "j.builders.blockchain.geth"
 
     def _init(self, **kwargs):
         super()._init()

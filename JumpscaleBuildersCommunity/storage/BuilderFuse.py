@@ -1,8 +1,8 @@
 from Jumpscale import j
 
 
-class BuilderFuse(j.builders.system._BaseClass):
-    NAME = "fuse"
+class BuilderFuse(j.baseclasses.builder):
+    __jslocation__ = "j.builders.storage.fuse"
 
     def install(self):
         j.builders.system.package.ensure(

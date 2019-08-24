@@ -1,11 +1,11 @@
 from Jumpscale import j
 
-JSBASE = j.builders.system._BaseClass
+JSBASE = j.baseclasses.builder
 builder_method = j.builders.system.builder_method
 
 
 class BuilderRipple(JSBASE):
-    NAME = "rippled"
+    __jslocation__ = "j.builders.blockchain.rippled"
 
     @builder_method()
     def build(self):

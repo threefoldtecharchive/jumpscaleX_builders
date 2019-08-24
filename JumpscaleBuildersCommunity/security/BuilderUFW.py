@@ -1,7 +1,7 @@
 from Jumpscale import j
 
 
-class BuilderUFW(j.builders.system._BaseClass):
+class BuilderUFW(j.baseclasses.builder):
     def _init(self, **kwargs):
         self._ufw_allow = {}
         self._ufw_deny = {}

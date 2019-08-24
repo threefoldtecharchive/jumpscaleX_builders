@@ -2,11 +2,11 @@ from Jumpscale import j
 import json
 
 builder_method = j.builders.system.builder_method
-JSBASE = j.builders.system._BaseClass
+JSBASE = j.baseclasses.builder
 
 
-class BuilderZerotier(j.builders.system._BaseClass):
-    NAME = "zerotier"
+class BuilderZerotier(j.baseclasses.builder):
+    __jslocation__ = "j.builders.network.zerotier"
 
     def _init(self, **kwargs):
         self.DIR_BUILD = j.core.tools.text_replace("{DIR_VAR}/build/zerotier/")

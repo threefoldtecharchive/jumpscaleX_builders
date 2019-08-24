@@ -4,12 +4,12 @@ import requests
 builder_method = j.builders.system.builder_method
 
 
-class BuilderTIDB(j.builders.system._BaseClass):
+class BuilderTIDB(j.baseclasses.builder):
     """
     Installs TIDB.
     """
 
-    NAME = "tidb"
+    __jslocation__ = "j.builders.db.tidb"
 
     def _init(self, **kwargs):
         self.DIR_BUILD = self._replace("{DIR_VAR}/build/tidb")

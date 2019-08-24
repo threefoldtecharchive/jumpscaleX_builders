@@ -4,12 +4,12 @@ from Jumpscale.tools.bash.Profile import Profile
 builder_method = j.builders.system.builder_method
 
 
-class BuilderLua(j.builders.system._BaseClass):
+class BuilderLua(j.baseclasses.builder):
     """
     needs openresty and openssl
     """
 
-    NAME = "lua"
+    __jslocation__ = "j.builders.runtimes.lua"
 
     def _init(self):
         self.ROCKS_PATHS_PROFILE = self._replace("{DIR_BUILD}/rocks_paths")

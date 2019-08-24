@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderRust(j.builders.system._BaseClass):
-    NAME = "rust"
+class BuilderRust(j.baseclasses.builder):
+    __jslocation__ = "j.builders.runtimes.rust"
     DOWNLOAD_URL = "https://sh.rustup.rs"
 
     def _init(self, **kwargs):

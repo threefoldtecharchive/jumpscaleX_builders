@@ -4,7 +4,7 @@ from Jumpscale import j
 # TODO: *4 unfinished but ok for now
 
 
-class BuilderHadoop(j.builders.system._BaseClass):
+class BuilderHadoop(j.baseclasses.builder):
     def _install(self):
 
         if j.core.platformtype.myplatform.platform_is_ubuntu:

@@ -3,9 +3,9 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderOpenSSL(j.builders.system._BaseClass):
+class BuilderOpenSSL(j.baseclasses.builder):
 
-    NAME = "openssl"
+    __jslocation__ = "j.builders.libs.openssl"
 
     def __init__(self):
         if j.core.platformtype.myplatform.platform_is_osx:
@@ -13,7 +13,7 @@ class BuilderOpenSSL(j.builders.system._BaseClass):
         else:
             self.TARGET = "linux-generic64"
 
-        j.builders.system._BaseClass.__init__(self)
+        j.baseclasses.builder.__init__(self)
 
     @builder_method()
     def reset(self):

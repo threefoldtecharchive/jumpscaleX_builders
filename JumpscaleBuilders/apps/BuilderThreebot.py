@@ -4,8 +4,8 @@ import textwrap
 builder_method = j.builders.system.builder_method
 
 
-class BuilderThreebot(j.builders.system._BaseClass):
-    NAME = "threebot"
+class BuilderThreebot(j.baseclasses.builder):
+    __jslocation__ = "j.builders.apps.threebot"
 
     def _init(self, **kwargs):
         self.BUILD_LOCATION = self._replace("{DIR_BUILD}/threebot")

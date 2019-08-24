@@ -1,9 +1,9 @@
 from Jumpscale import j
 
 
-class BuilderGrafana(j.builders.system._BaseClass):
+class BuilderGrafana(j.baseclasses.builder):
 
-    NAME = "grafana-server"
+    __jslocation__ = "j.builders.monitoring.grafana"
 
     def build(self, reset=False):
 

@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderSockexec(j.builders.system._BaseClass):
-    NAME = "sockexec"
+class BuilderSockexec(j.baseclasses.builder):
+    __jslocation__ = "j.builders.apps.sockexec"
 
     @builder_method()
     def deps(self):

@@ -13,7 +13,7 @@ def shell_safe(path):
     return path
 
 
-class BuilderUser(j.builders.system._BaseClass):
+class BuilderUser(j.baseclasses.builder):
     def passwd(self, name, passwd, encrypted_passwd=False):
         """Sets the given user password."""
         self._log_info("set user:%s passwd for %s" % (name, self))

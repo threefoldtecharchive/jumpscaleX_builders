@@ -1,8 +1,8 @@
 from Jumpscale import j
 
 
-class BuilderGeoDns(j.builders.system._BaseClass):
-    NAME = "geodns"
+class BuilderGeoDns(j.baseclasses.builder):
+    __jslocation__ = "j.builders.network.geodns"
 
     def reset(self):
         app.reset(self)

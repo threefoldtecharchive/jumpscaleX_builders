@@ -3,8 +3,8 @@ import textwrap
 import time
 
 
-class BuilderWordpress(j.builders.system._BaseClass):
-    NAME = "wordpress"
+class BuilderWordpress(j.baseclasses.builder):
+    __jslocation__ = "j.builders.apps.wordpress"
 
     def _init(self, **kwargs):
         self.user = "wordpress"

@@ -4,11 +4,9 @@ import textwrap
 builder_method = j.builders.system.builder_method
 
 
-class BuilderHub(j.builders.system._BaseClass):
+class BuilderHub(j.baseclasses.builder):
 
     __jslocation__ = "j.builders.apps.zerohub"
-
-    NAME = "zerohub"
 
     def _init(self, **kwargs):
         self.DIR_CODE = self.tools.joinpaths(self.DIR_BUILD, "code")

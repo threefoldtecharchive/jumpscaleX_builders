@@ -1,7 +1,7 @@
 from Jumpscale import j
 
 
-class BuilderRocksDB(j.builders.system._BaseClass):
+class BuilderRocksDB(j.baseclasses.builder):
     def build(self, reset=True, install=True):
         self.install(reset=reset)
 

@@ -4,8 +4,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderNIM(j.builders.system._BaseClass):
-    NAME = "nim"
+class BuilderNIM(j.baseclasses.builder):
+    __jslocation__ = "j.builders.runtimes.nim"
 
     def _init(self, **kwargs):
 

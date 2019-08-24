@@ -3,8 +3,8 @@ import os
 import textwrap
 
 
-class BuilderDuplicacy(j.builders.system._BaseClass):
-    NAME = "duplicacy"
+class BuilderDuplicacy(j.baseclasses.builder):
+    __jslocation__ = "j.builders.storage.duplicacy"
 
     def build(self, reset=False, install=False):
         """

@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderBitcoin(j.builders.system._BaseClass):
-    NAME = "bitcoind"
+class BuilderBitcoin(j.baseclasses.builder):
+    __jslocation__ = "j.builders.blockchain.bitcoind"
 
     def _init(self, **kwargs):
         self.DIR_BUILD = self._replace("{DIR_VAR}/build/bitcoin")

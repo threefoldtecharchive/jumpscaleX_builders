@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderCmake(j.builders.system._BaseClass):
-    NAME = "cmake"
+class BuilderCmake(j.baseclasses.builder):
+    __jslocation__ = "j.builders.libs.cmake"
 
     def _init(self, **kwargs):
         self.package_path = self._replace("{DIR_TEMP}/CMake")

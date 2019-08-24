@@ -1,5 +1,5 @@
 from Jumpscale import j
-from Jumpscale.builders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
 
 builder_method = j.builders.system.builder_method
 import xml.etree.ElementTree as etree
@@ -7,7 +7,7 @@ import xml.etree.ElementTree as etree
 
 class BuilderSyncthing(BuilderGolangTools):
 
-    NAME = "syncthing"
+    __jslocation__ = "j.builders.storage.syncthing"
 
     def _init(self, **kwargs):
         super()._init()

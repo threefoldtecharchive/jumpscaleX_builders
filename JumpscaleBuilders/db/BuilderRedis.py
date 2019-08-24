@@ -4,8 +4,8 @@ from random import randint
 builder_method = j.builders.system.builder_method
 
 
-class BuilderRedis(j.builders.system._BaseClass):
-    NAME = "redis-server"
+class BuilderRedis(j.baseclasses.builder):
+    __jslocation__ = "j.builders.db.redis"
 
     @builder_method()
     def build(self):

@@ -2,8 +2,8 @@ from Jumpscale import j
 import os
 
 
-class BuilderLedis(j.builders.system._BaseClass):
-    NAME = "ledis-server"
+class BuilderLedis(j.baseclasses.builder):
+    __jslocation__ = "j.builders.db.ledis"
 
     def build(self, backend="leveldb", install=True, start=True, reset=False):
         if self._done_check("build", reset):

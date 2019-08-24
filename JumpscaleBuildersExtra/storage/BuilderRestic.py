@@ -3,9 +3,9 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderRestic(j.builders.system._BaseClass):
+class BuilderRestic(j.baseclasses.builder):
 
-    NAME = "restic"
+    __jslocation__ = "j.builders.storage.restic"
 
     def _init(self, **kwargs):
         self.DIR_BUILD = self._replace("{DIR_VAR}/build/restic")

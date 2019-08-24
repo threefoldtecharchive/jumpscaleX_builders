@@ -1,7 +1,7 @@
 from Jumpscale import j
 
 
-class BuilderNS(j.builders.system._BaseClass):
+class BuilderNS(j.baseclasses.builder):
     def hostfile_get(self):
         """
         """

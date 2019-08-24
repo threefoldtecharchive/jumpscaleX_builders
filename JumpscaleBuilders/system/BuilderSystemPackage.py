@@ -6,8 +6,8 @@ CMD_APT_GET = "apt-get "
 builder_method = j.builders.system.builder_method
 
 
-class BuilderSystemPackage(j.builders.system._BaseClass):
-    NAME = "SystemPackage"
+class BuilderSystemPackage(j.baseclasses.builder):
+    __jslocation__ = "j.builders.ubuntu_package"
 
     @builder_method()
     def _repository_ensure_apt(self, repository):

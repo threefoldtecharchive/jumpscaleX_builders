@@ -1,5 +1,5 @@
 from Jumpscale import j
-from Jumpscale.builders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
 
 builder_method = j.builders.system.builder_method
 
@@ -26,7 +26,7 @@ metastor: # required
 
 
 class BuilderZeroStor(BuilderGolangTools):
-    NAME = "zstor"
+    __jslocation__ = "j.builders.storage.zstor"
 
     def _init(self, **kwargs):
         super()._init()

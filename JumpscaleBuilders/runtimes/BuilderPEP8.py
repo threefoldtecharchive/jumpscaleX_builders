@@ -2,7 +2,7 @@ from os import path
 from Jumpscale import j
 
 
-class BuilderPEP8(j.builders.system._BaseClass):
+class BuilderPEP8(j.baseclasses.builder):
     def prepare(self, repo_path=None):
         """ Install pre-commit hook to run autopep8 """
         j.builders.system.python_pip.install("autopep8")

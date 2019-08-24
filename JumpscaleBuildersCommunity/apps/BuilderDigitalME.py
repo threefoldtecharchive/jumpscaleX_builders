@@ -4,7 +4,7 @@ import textwrap
 builder_method = j.builders.system.builder_method
 
 
-class BuilderDigitalME(j.builders.system._BaseClass):
+class BuilderDigitalME(j.baseclasses.builder):
     """
     specs:
 
@@ -15,7 +15,7 @@ class BuilderDigitalME(j.builders.system._BaseClass):
 
     """
 
-    NAME = "digitalme"
+    __jslocation__ = "j.builders.apps.digitalme"
 
     @builder_method()
     def _init(self, **kwargs):

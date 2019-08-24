@@ -1,11 +1,11 @@
 from Jumpscale import j
-from Jumpscale.builders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
 
 builder_method = j.builders.system.builder_method
 
 
 class BuilderInfluxdb(BuilderGolangTools):
-    NAME = "influxd"
+    __jslocation__ = "j.builders.db.influxd"
 
     def profile_builder_set(self):
         super().profile_builder_set()

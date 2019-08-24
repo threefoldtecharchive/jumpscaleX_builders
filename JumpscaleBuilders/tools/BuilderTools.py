@@ -8,7 +8,7 @@ from .BuilderToolsLib import *
 # from pygments.formatters import get_formatter_by_name
 
 
-class BuilderTools(j.builders.system._BaseClass):
+class BuilderTools(j.baseclasses.builder):
 
     __jslocation__ = "j.builders.tools"
 
@@ -574,7 +574,7 @@ class BuilderTools(j.builders.system._BaseClass):
     # =============================================================================
 
     def getNetworkInfoGenerator(self):
-        from Jumpscale.tools.nettools.NetTools import parseBlock, IPBLOCKS, IPMAC, IPIP, IPNAME
+        from Jumpscale.sal.nettools.NetTools import parseBlock, IPBLOCKS, IPMAC, IPIP, IPNAME
 
         exitcode, output, err = self.execute("ip a", showout=False)
         for m in IPBLOCKS.finditer(output):
@@ -583,7 +583,7 @@ class BuilderTools(j.builders.system._BaseClass):
 
     @property
     def networking_info(self):
-        from Jumpscale.tools.nettools.NetTools import getNetworkInfo
+        from Jumpscale.sal.nettools.NetTools import getNetworkInfo
 
         if not self._networking_info:
             all_info = list()

@@ -1,8 +1,8 @@
 from Jumpscale import j
 
 
-class BuilderAtomicswap(j.builders.system._BaseClass):
-    NAME = "atomicswap"
+class BuilderAtomicswap(j.baseclasses.builder):
+    __jslocation__ = "j.builders.blockchain.atomicswap"
 
     def build(self, branch=None, tag=None, revision=None, reset=False):
         if self._done_get("build") and reset is False:

@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderNodeJS(j.builders.system._BaseClass):
-    NAME = "nodejs"
+class BuilderNodeJS(j.baseclasses.builder):
+    __jslocation__ = "j.builders.runtimes.nodejs"
 
     def _init(self, **kwargs):
         self._version = "6.9.5"

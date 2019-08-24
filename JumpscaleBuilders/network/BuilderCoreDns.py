@@ -1,5 +1,5 @@
 from Jumpscale import j
-from Jumpscale.builders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
 
 builder_method = j.builders.system.builder_method
 
@@ -15,8 +15,8 @@ CONFIGTEMPLATE = """
 """
 
 
-class BuilderCoreDns(BuilderGolangTools, j.builders.system._BaseClass):
-    NAME = "coredns"
+class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
+    __jslocation__ = "j.builders.network.coredns"
 
     def _init(self, **kwargs):
         super()._init()

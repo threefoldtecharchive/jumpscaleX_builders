@@ -3,8 +3,9 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderZdb(j.builders.system._BaseClass):
-    NAME = "0-db"
+class BuilderZdb(j.baseclasses.builder):
+
+    __jslocation__ = "j.builders.db.zdb"
 
     def _init(self, **kwargs):
         self.git_url = "https://github.com/threefoldtech/0-db.git"

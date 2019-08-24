@@ -4,9 +4,9 @@ from Jumpscale import j
 # TODO: is this still correct
 
 
-class BuilderAydoStor(j.builders.system._BaseClass):
+class BuilderAydoStor(j.baseclasses.builder):
 
-    NAME = "stor"
+    __jslocation__ = "j.builders.storage.stor"
 
     def build(self, addr="0.0.0.0:8090", backend="{DIR_VAR}/aydostor", start=True, install=True, reset=False):
         """

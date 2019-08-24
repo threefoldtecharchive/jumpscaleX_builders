@@ -1,7 +1,7 @@
 from Jumpscale import j
 
 
-class BuilderSkyDns(j.builders.system._BaseClass):
+class BuilderSkyDns(j.baseclasses.builder):
     def build(self, start=True, install=True):
         if self.isInstalled():
             return

@@ -3,9 +3,7 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderDummy(j.builders.system._BaseClass):
-    NAME = "dummy"
-
+class BuilderDummy(j.baseclasses.builder):
     @builder_method()
     def _init(self, **kwargs):
         self.variable = "value"

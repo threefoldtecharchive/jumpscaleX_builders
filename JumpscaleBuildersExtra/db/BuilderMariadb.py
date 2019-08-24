@@ -4,8 +4,8 @@ import time
 builder_method = j.builders.system.builder_method
 
 
-class BuilderMariadb(j.builders.system._BaseClass):
-    NAME = "mariadb"
+class BuilderMariadb(j.baseclasses.builder):
+    __jslocation__ = "j.builders.db.mariadb"
     PORT = "3306"
 
     def _init(self, **kwargs):

@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderLibffi(j.builders.system._BaseClass):
-    NAME = "libffi"
+class BuilderLibffi(j.baseclasses.builder):
+    __jslocation__ = "j.builders.libs.libffi"
 
     def _init(self, **kwargs):
         self.LIBFFI_URL = "https://github.com/libffi/libffi"

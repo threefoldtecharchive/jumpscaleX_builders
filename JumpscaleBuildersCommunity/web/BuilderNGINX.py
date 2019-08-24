@@ -6,8 +6,8 @@ from time import sleep
 builder_method = j.builders.system.builder_method
 
 
-class BuilderNGINX(j.builders.system._BaseClass):
-    NAME = "nginx"
+class BuilderNGINX(j.baseclasses.builder):
+    __jslocation__ = "j.builders.web.nginx"
 
     def get_basic_nginx_conf(self):
         return """\

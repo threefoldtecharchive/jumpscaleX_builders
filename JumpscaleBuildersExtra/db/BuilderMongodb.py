@@ -4,8 +4,8 @@ from time import sleep
 builder_method = j.builders.system.builder_method
 
 
-class BuilderMongodb(j.builders.system._BaseClass):
-    NAME = "mongod"
+class BuilderMongodb(j.baseclasses.builder):
+    __jslocation__ = "j.builders.db.mongod"
 
     def _init(self, **kwargs):
         self.DIR_DATA = self._replace("{DIR_VAR}/mongodb/data")

@@ -3,8 +3,8 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderTFChain(j.builders.system._BaseClass):
-    NAME = "tfchain"
+class BuilderTFChain(j.baseclasses.builder):
+    __jslocation__ = "j.builders.blockchain.tfchain"
 
     @builder_method()
     def _init(self, reset=False):

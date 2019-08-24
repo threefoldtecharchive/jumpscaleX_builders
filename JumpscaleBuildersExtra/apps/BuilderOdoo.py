@@ -12,8 +12,8 @@ db_host = localhost
 db_user = root"""
 
 
-class BuilderOdoo(j.builders.system._BaseClass):
-    NAME = "odoo"
+class BuilderOdoo(j.baseclasses.builder):
+    __jslocation__ = "j.builders.apps.odoo"
 
     def _init(self, **kwargs):
         self.VERSION = "12.0"

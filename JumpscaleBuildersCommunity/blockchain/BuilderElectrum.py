@@ -6,12 +6,12 @@ Builder module to install electrum wallet
 from Jumpscale import j
 
 
-class BuilderElectrum(j.builders.system._BaseClass):
+class BuilderElectrum(j.baseclasses.builder):
     """
     Wrapps an electrum wallet application
     """
 
-    NAME = "electrum"
+    __jslocation__ = "j.builders.blockchain.electrum"
 
     def build(self, branch=None, tag=None, revision=None, reset=False):
         """

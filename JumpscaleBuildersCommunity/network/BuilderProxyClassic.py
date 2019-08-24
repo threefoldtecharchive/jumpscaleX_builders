@@ -5,7 +5,7 @@ import time
 import socket
 
 
-class BuilderProxyClassic(j.builders.system._BaseClass):
+class BuilderProxyClassic(j.baseclasses.builder):
     """
     all methods to do to allow a local lan to work more efficient with internet e.g. cache for apt-get, web proxy, ...
 

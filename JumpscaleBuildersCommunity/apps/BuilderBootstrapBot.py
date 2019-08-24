@@ -3,7 +3,7 @@ from Jumpscale import j
 builder_method = j.builders.system.builder_method
 
 
-class BuilderBootstrapBot(j.builders.system._BaseClass):
+class BuilderBootstrapBot(j.baseclasses.builder):
     """
     specs:
 
@@ -14,7 +14,7 @@ class BuilderBootstrapBot(j.builders.system._BaseClass):
 
     """
 
-    NAME = "bootstrapbot"
+    __jslocation__ = "j.builders.apps.bootstrapbot"
 
     @builder_method()
     def _init(self, **kwargs):

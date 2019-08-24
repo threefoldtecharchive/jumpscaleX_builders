@@ -2,8 +2,8 @@ from Jumpscale import j
 from time import sleep
 
 
-class BuilderVolumeDriver(j.builders.system._BaseClass):
-    NAME = "volumedriver"
+class BuilderVolumeDriver(j.baseclasses.builder):
+    __jslocation__ = "j.builders.storage.volumedriver"
 
     def build(self, reset=False):
         if reset is False and self.isInstalled():

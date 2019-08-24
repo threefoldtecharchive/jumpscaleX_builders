@@ -1,12 +1,12 @@
 from Jumpscale import j
 
-JSBASE = j.builders.system._BaseClass
+JSBASE = j.baseclasses.builder
 
 builder_method = j.builders.system.builder_method
 
 
 class BuilderCapnp(JSBASE):
-    NAME = "capnp"
+    __jslocation__ = "j.builders.libs.capnp"
 
     @builder_method()
     def build(self):

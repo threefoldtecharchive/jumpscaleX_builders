@@ -6,8 +6,8 @@ from time import sleep
 builder_method = j.builders.system.builder_method
 
 
-class BuilderOpenResty(j.builders.system._BaseClass):
-    NAME = "openresty"
+class BuilderOpenResty(j.baseclasses.builder):
+    __jslocation__ = "j.builders.web.openresty"
 
     @builder_method()
     def build(self, reset=False):

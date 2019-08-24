@@ -1,13 +1,13 @@
 import textwrap
 
 from Jumpscale import j
-from Jumpscale.builders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
 
 builder_method = j.builders.system.builder_method
 
 
 class BuilderGitea(BuilderGolangTools):
-    NAME = "gitea"
+    __jslocation__ = "j.builders.apps.gitea"
 
     def _init(self, **kwargs):
         super()._init()

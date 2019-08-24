@@ -1,7 +1,7 @@
 from Jumpscale import j
 
 
-class BuilderPyFTPServer(j.builders.system._BaseClass):
+class BuilderPyFTPServer(j.baseclasses.builder):
     def install(self, root="/storage/ftpserver", config="", port=2121, reset=False):
         """
         example config

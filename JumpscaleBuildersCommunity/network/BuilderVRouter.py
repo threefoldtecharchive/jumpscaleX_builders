@@ -5,7 +5,7 @@ import time
 import socket
 
 
-class BuilderVRouter(j.builders.system._BaseClass):
+class BuilderVRouter(j.baseclasses.builder):
     """
     """
 

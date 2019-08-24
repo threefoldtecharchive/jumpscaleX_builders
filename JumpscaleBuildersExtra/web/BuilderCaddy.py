@@ -1,5 +1,5 @@
 from Jumpscale import j
-from Jumpscale.builders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
 
 builder_method = j.builders.system.builder_method
 
@@ -67,7 +67,7 @@ func main() {
 
 
 class BuilderCaddy(BuilderGolangTools):
-    NAME = "caddy"
+    __jslocation__ = "j.builders.web.caddy"
     PLUGINS = ["iyo"]  # PLEASE ADD MORE PLUGINS #TODO:*1
     VERSION = "master"  # make sure the way to build with plugin is ok
 

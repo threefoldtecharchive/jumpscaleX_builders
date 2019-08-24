@@ -3,7 +3,7 @@ from Jumpscale import j
 import netaddr
 
 
-class BuilderSSH(j.builders.system._BaseClass):
+class BuilderSSH(j.baseclasses.builder):
 
     # def test_login(self, passwd, port=22, ip_range=None, onlyplatform='arch'):
     #     login = 'root'

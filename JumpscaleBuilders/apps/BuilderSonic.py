@@ -4,8 +4,8 @@ import textwrap
 builder_method = j.builders.system.builder_method
 
 
-class BuilderSonic(j.builders.system._BaseClass):
-    NAME = "sonic"
+class BuilderSonic(j.baseclasses.builder):
+    __jslocation__ = "j.builders.apps.sonic"
 
     @builder_method()
     def _init(self, **kwargs):

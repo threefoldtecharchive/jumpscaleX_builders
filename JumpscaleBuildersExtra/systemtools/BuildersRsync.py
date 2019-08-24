@@ -1,7 +1,7 @@
 from Jumpscale import j
 
 
-class BuilderRsync(j.builders.system._BaseClass):
+class BuilderRsync(j.baseclasses.builder):
     def __init(self, **kwargs):
 
         self.BUILDDIRL = self._replace("{DIR_VAR}/build/rsync/")

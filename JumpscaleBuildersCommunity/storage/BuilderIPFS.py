@@ -1,8 +1,8 @@
 from Jumpscale import j
 
 
-class BuilderIPFS(j.builders.system._BaseClass):
-    NAME = "ipfs"
+class BuilderIPFS(j.baseclasses.builder):
+    __jslocation__ = "j.builders.storage.ipfs"
 
     def isInstalled(self):
         """

@@ -5,8 +5,8 @@ import time
 builder_method = j.builders.system.builder_method
 
 
-class BuilderDocker(j.builders.system._BaseClass):
-    NAME = "docker"
+class BuilderDocker(j.baseclasses.builder):
+    __jslocation__ = "j.builders.virtualization.docker"
 
     @builder_method()
     def build(self, branch=None):

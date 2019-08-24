@@ -258,7 +258,7 @@ class MongoConfigSvr(Startable):
     __str__ = __repr__
 
 
-class BuilderMongoCluster(j.builders.system._BaseClass):
+class BuilderMongoCluster(j.baseclasses.builder):
     def mongoCluster(self, shards_nodes, config_nodes, mongos_nodes, shards_replica_set_counts=1):
         """
         shards_nodes: a list of executors of the shards

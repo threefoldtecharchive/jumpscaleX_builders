@@ -20,9 +20,9 @@ compileconfig["with_pdo_mysql"] = True
 compileconfig["with_mysql_sock"] = "/var/run/mysqld/mysqld.sock"
 
 
-class BuilderPHP(j.builders.system._BaseClass):
+class BuilderPHP(j.baseclasses.builder):
 
-    NAME = "php-fpm"
+    __jslocation__ = "j.builders.runtimes.php"
 
     @builder_method()
     def build(self, **config):
