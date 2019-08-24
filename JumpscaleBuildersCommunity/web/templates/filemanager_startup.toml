@@ -1,0 +1,7 @@
+[startup.filemanger]
+name = "core.system"
+protected = true #set protected to true to respawn the container if it crashed
+
+[startup.filemanger.args]
+name = "/sandbox/bin/caddy"
+args = ["-conf", "/sandbox/cfg/filemanager/filemanager_caddyfile"]

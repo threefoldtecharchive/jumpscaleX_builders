@@ -1,0 +1,11 @@
+[startup.hub]
+name = "bash"
+protected = true #set protected to true to respawn the container if it crashed
+
+[startup.hub.args]
+script = """
+pip3 install -r /sandbox/hub/requirements.txt;
+pip3 install jwt;
+tmux new-session -d -s 0-db '/sandbox/bin/zdb';
+tmux new-session -d -s hub 'cd /sandbox/hub/python/ && python3 flist-uploader.py';
+"""

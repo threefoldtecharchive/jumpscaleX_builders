@@ -1,0 +1,6 @@
+nose
+nose-progressive
+nose-testconfig
+requests>=2.11.1
+loguru
+git+https://github.com/AhmedHanafy725/junit2html_plugin

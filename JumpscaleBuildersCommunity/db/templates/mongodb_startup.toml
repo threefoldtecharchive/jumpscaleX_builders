@@ -1,0 +1,13 @@
+[startup.mongod]
+name = "bash"
+protected = true #set protected to true to respawn the container if it crashed
+
+[startup.mongod.args]
+script = """
+mkdir -p /sandbox/var/data/mongodb/
+mongod --dbpath '/sandbox/var/data/mongodb'
+"""
+
+[startup.mongod.args.env]
+LD_LIBRARY_PATH = "/sandbox/lib"
+PATH = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/sandbox/bin"

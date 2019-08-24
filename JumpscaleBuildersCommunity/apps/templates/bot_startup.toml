@@ -1,0 +1,9 @@
+[startup.mystartup]
+name = "core.system"
+
+[startup.mystartup.args]
+name = "bash"
+protected = true
+args = [
+    "/bot_startup.sh"
+]

@@ -1,0 +1,29 @@
+[startup.postgres]
+name = "bash"
+protected = true
+running_match = "database system is ready to accept connections"
+[startup.postgres.args]
+script = ". /sandbox/env.sh && /sandbox/bin/gitea_postgres_init.sh"
+
+[startup."postgres.create.db"]
+name = "bash"
+after = ["postgres"]
+running_delay = -1
+[startup."postgres.create.db".args]
+script = """
+sudo -u postgres /sandbox/bin/psql -c 'create database gitea;' || true
+"""
+
+[startup.gitea]
+name = "bash"
+protected = true
+after = ["postgres.create.db"]
+running_match = "Serving"
+[startup.gitea.args]
+script = ". /sandbox/env.sh && gitea web"
+
+[startup."gitea.init"]
+name = "bash"
+after = ["gitea"]
+[startup."gitea.init".args]
+script = ". /sandbox/env.sh && /sandbox/bin/gitea_init.sh"

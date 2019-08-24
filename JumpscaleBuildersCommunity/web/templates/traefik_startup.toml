@@ -1,0 +1,73 @@
+[startup.traefik]
+name = "bash"
+protected = true #set protected to true to respawn the container if it crashed
+
+[startup.traefik.args]
+script = """
+echo '''defaultEntryPoints = ["http", "https"]
+[web]
+address = ":8080"
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+
+  [entryPoints.http.redirect]
+    entryPoint = "https"
+  
+  [entryPoints.https]
+  address = ":443"
+        [entryPoints.https.tls]
+
+[acme]
+email = "nasrb@codescalers.com"
+entryPoint = "https"
+acmeLogging = true
+storage = "traefik/acme/account"
+overrideCertificates = true
+onHostRule = true
+    [acme.httpChallenge]
+    entryPoint = "http"
+################################################################
+# Etcd Provider
+################################################################
+
+# Enable Etcd Provider.
+[etcd]
+
+# Etcd server endpoint.
+#
+# Required
+# Default: "127.0.0.1:2379"
+#
+endpoint = "'$etcd_endpoints'"
+
+# Enable watch Etcd changes.
+#
+# Optional
+# Default: true
+#
+watch = true
+
+# Prefix used for KV store.
+#
+# Optional
+# Default: "/traefik"
+#
+prefix = "/traefik"
+
+# Force to use API V3 (otherwise still use API V2)
+#
+# Deprecated
+#
+# Optional
+# Default: false
+#
+useAPIV3 = true
+username = "'$etcd_user'"
+password = "'$etcd_password'"
+''' > traefik.conf
+
+/sandbox/bin/traefik  storeconfig -c traefik.conf
+/sandbox/bin/traefik  -c traefik.conf
+"""

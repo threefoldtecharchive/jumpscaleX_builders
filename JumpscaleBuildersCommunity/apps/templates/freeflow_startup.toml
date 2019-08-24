@@ -1,0 +1,141 @@
+[startup.ssh_init]
+name = "bash"
+running_delay = -1
+
+[startup.ssh_init.args]
+script = """
+chmod 400 -R /etc/ssh/
+mkdir -p /run/sshd
+[ -d /root/.ssh/ ] || mkdir /root/.ssh
+"""
+
+[startup.sshd]
+name = "core.system"
+after = ["ssh_init"]
+protected = true
+
+[startup.sshd.args]
+name = "/usr/sbin/sshd"
+args = ["-e", "-D"]
+
+[startup.mysql_init]
+name = "bash"
+running_delay = -1
+
+[startup.mysql_init.args.env]
+LD_LIBRARY_PATH="/sandbox/lib"
+
+[startup.mysql_init.args]
+script = """
+useradd mysql
+mkdir -p  /var/lib/mysql /var/log/mysql /var/run/mysqld /var/lib/mysql-files
+chown -R mysql /var/lib/mysql
+chown -R mysql /var/log/mysql
+chown -R mysql /var/run/mysqld
+chown -R mysql:mysql /var/lib/mysql-files/
+chmod 700 /var/lib/mysql-files/
+
+export LD_LIBRARY_PATH=\"/sandbox/lib\"
+[ -d /tmp ] || mkdir /tmp
+chmod 1777 /tmp
+find /var/lib/mysql/ -maxdepth 0 -empty -exec /sandbox/bin/mysqld --initialize-insecure --user=mysql --datadir=/var/lib/mysql/ --basedir=/sandbox \\;
+chown -R mysql /var/lib/mysql/
+"""
+
+[startup.mysql]
+name = "core.system"
+after = ["mysql_init"]
+protected = true
+
+[startup.mysql.args.env]
+LD_LIBRARY_PATH="/sandbox/lib"
+
+[startup.mysql.args]
+name = "/sandbox/bin/mysqld"
+args = ["--lc-messages-dir=/sandbox/share/mysql", "--user=mysql", "--datadir=/var/lib/mysql","--basedir=/sandbox"]
+
+[startup.db_create]
+name = "bash"
+running_delay = -1
+after = ["mysql"]
+
+[startup.db_create.args]
+script = """
+export LD_LIBRARY_PATH=\"/sandbox/lib\"
+user=\"humhub\"
+pass=\"Hum_flist_humhub\"
+if [ ! -d /var/lib/mysql/humhub/ ] ; then
+/sandbox/bin/mysql -e 'CREATE DATABASE IF NOT EXISTS humhub CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
+/sandbox/bin/mysql -e \"GRANT ALL ON humhub.* TO '$user'@'localhost' IDENTIFIED BY '$pass'\"
+/sandbox/bin/mysql -e 'FLUSH PRIVILEGES'
+fi
+"""
+
+[startup.apache]
+name = "core.system"
+protected = true
+after = ["setup"]
+
+[startup.apache.args.env]
+LD_LIBRARY_PATH="/sandbox/lib:/sandbox/usr/lib/php/20170718"
+APACHE_LOG_DIR="/var/log/apache2"
+APACHE_LOCK_DIR="/var/lock/apache2"
+APACHE_RUN_GROUP="www-data"
+APACHE_RUN_DIR="/var/run/apache2"
+APACHE_RUN_USER="www-data"
+APACHE_PID_FILE="/var/run/apache2/apache2.pid"
+PWD="/sandbox/etc/php/7.2/mods-available"
+PHP_INI_SCAN_DIR="/sandbox/etc/php/7.2/mods-available"
+PHPRC="/sandbox/etc/php/7.2/apache2/php.ini"
+
+[startup.apache.args]
+name = "/sandbox/bin/apache2"
+args = ["-d", "/sandbox/etc/apache2","-DFOREGROUND"]
+
+[startup.cron1]
+name = "bash"
+recurring_period = 60
+
+
+[startup.cron1.args.env]
+LD_LIBRARY_PATH="/sandbox/lib"
+
+[startup.cron1.args]
+script = """
+/sandbox/bin/php /var/www/html/humhub/protected/yii queue/run >/dev/null 2>&1
+"""
+
+[startup.cron2]
+name = "bash"
+recurring_period=60
+
+[startup.cron2.args.env]
+LD_LIBRARY_PATH="/sandbox/lib"
+
+[startup.cron2.args]
+script = """
+/sandbox/bin/php /var/www/html/humhub/protected/yii cron/run >/dev/null 2>&1
+/sandbox/bin/php /var/www/html/humhub/protected/yii search/rebuild >/dev/null 2>&1
+"""
+
+[startup.setup]
+name = "bash"
+running_delay = -1
+after = ["db_create"]
+
+[startup.setup.args]
+script = """
+sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen
+export HOME=/root
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export LD_LIBRARY_PATH=\"/sandbox/lib\"
+
+bash /.apache_prepare.sh
+[ -f /var/www/html/humhub/.htaccess.dist ] && mv /var/www/html/humhub/.htaccess.dist /var/www/html/humhub/.htaccess
+mkdir -p /var/run/apache2 /var/log/apache2 /var/lock/apache2 /var/www/html 
+chown -R www-data:www-data /var/run/apache2 /var/log/apache2 /var/lock/apache2 /var/www/html
+
+"""

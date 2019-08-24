@@ -1,0 +1,10 @@
+[[instruction]]
+instruction_method = "j.data.nacl.configure"
+name = "default"
+secret = "123"
+generate = true
+sshagent_use = false
+
+[[instruction]]
+instruction_method = "j.servers.tmux.execute"
+cmd = 'source /sandbox/env.sh && kosmos "j.servers.threebot.default.servers_start()"'

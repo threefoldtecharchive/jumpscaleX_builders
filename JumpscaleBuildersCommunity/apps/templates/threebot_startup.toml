@@ -1,0 +1,10 @@
+[startup.threebot]
+name = "core.system"
+protected = true #set protected to true to respawn the container if it crashed
+
+[startup.threebot.args]
+name = "bash"
+protected = true
+args = [
+    "/3bot_startup.sh"
+]

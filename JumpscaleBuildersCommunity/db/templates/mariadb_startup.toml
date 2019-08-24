@@ -1,0 +1,17 @@
+[startup.mysql]
+name = "bash"
+protected = true #set protected to true to respawn the container if it crashed
+
+[startup.mysql.args]
+
+script = """
+useradd -r mysql || true
+chmod 777 /sandbox/usr/local/mysql/
+chown -R mysql:mysql /sandbox/usr/local/mysql/
+cd /sandbox/usr/local/mysql/
+scripts/mysql_install_db --basedir=/sandbox/usr/local/mysql \
+    --datadir=/sandbox/usr/local/mysql/data
+chown -R mysql:mysql /sandbox/usr/local/mysql/
+/sandbox/usr/local/mysql/bin/mysqld --datadir=/sandbox/usr/local/mysql/data \
+    --basedir=/sandbox/usr/local/mysql --user=mysql
+"""

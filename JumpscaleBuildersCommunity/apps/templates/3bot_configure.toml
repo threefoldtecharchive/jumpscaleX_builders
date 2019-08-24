@@ -1,0 +1,3 @@
+[[instruction]]
+instruction_method = "j.servers.tmux.execute"
+cmd = 'source /sandbox/env.sh && kosmos "j.servers.threebot.default.start()"'
