@@ -9,7 +9,7 @@ class BuilderThreebot(j.baseclasses.builder):
 
     def _init(self, **kwargs):
         self.BUILD_LOCATION = self._replace("{DIR_BUILD}/threebot")
-        url = "https://github.com/threefoldtech/digitalmeX/tree/%s/sandbox" % j.core.myenv.DEFAULTBRANCH
+        url = "https://github.com/threefoldtech/jumpscaleX_threebot/tree/%s/sandbox" % j.core.myenv.DEFAULTBRANCH
         self._sandbox_source = j.clients.git.getContentPathFromURLorPath(url)
 
     @builder_method()
