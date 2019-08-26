@@ -3,11 +3,11 @@ import time
 
 CMD_APT_GET = "apt-get "
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderSystemPackage(j.baseclasses.builder):
-    __jslocation__ = "j.builders.ubuntu_package"
+    __jslocation__ = "j.builders.ubuntu.package"
 
     @builder_method()
     def _repository_ensure_apt(self, repository):

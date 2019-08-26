@@ -1,9 +1,11 @@
 from Jumpscale import j
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderDummy(j.baseclasses.builder):
+    __jslocation__ = "j.builders.dummy"
+
     @builder_method()
     def _init(self, **kwargs):
         self.variable = "value"

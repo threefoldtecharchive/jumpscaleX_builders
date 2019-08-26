@@ -1,7 +1,7 @@
 from Jumpscale import j
 from Jumpscale.tools.bash.Profile import Profile
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderLua(j.baseclasses.builder):

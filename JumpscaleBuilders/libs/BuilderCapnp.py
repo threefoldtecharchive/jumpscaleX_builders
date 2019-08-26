@@ -2,7 +2,7 @@ from Jumpscale import j
 
 JSBASE = j.baseclasses.builder
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderCapnp(JSBASE):

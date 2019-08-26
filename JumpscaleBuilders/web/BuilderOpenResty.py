@@ -3,7 +3,7 @@ import os
 import textwrap
 from time import sleep
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderOpenResty(j.baseclasses.builder):

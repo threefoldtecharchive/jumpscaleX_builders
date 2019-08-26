@@ -2,7 +2,7 @@ from Jumpscale import j
 import textwrap
 from copy import deepcopy
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 compileconfig = {}
 compileconfig["enable_mbstring"] = True
