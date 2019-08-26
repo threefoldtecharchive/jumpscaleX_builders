@@ -100,15 +100,13 @@ class BuilderFreeflowPages(j.baseclasses.builder):
         """
         j.builders.tools.execute(copy_php_share_script)
         startup_file = (
-            "/sandbox/code/github/threefoldtech/jumpscaleX/Jumpscale/builder/apps/templates/freeflow_startup.toml"
+            "/sandbox/code/github/threefoldtech/jumpscaleX_coreJumpscale/builder/apps/templates/freeflow_startup.toml"
         )
         startup = j.sal.fs.readFile(startup_file)
         startup_dest = j.sal.fs.joinPaths(dest_path, ".startup.toml")
         j.builders.tools.file_ensure(startup_dest)
         j.builders.tools.file_write(startup_dest, startup)
-        apache_file = (
-            "/sandbox/code/github/threefoldtech/jumpscaleX/Jumpscale/builder/apps/templates/freeflow_apache_prepare.sh"
-        )
+        apache_file = "/sandbox/code/github/threefoldtech/jumpscaleX_coreJumpscale/builder/apps/templates/freeflow_apache_prepare.sh"
         apache_conf = j.sal.fs.readFile(apache_file)
         apache_conf_dest = j.sal.fs.joinPaths(dest_path, ".apache_prepare.sh")
         j.builders.tools.file_ensure(apache_conf_dest)
