@@ -53,7 +53,7 @@ class BuilderGitea(BuilderGolangTools):
         j.builders.system.package.mdupdate()
         j.builders.system.package.ensure("git-core")
         j.builders.system.package.ensure("gcc")
-        j.builders.runtimes.golang.install()
+        j.builders.runtimes.golangtools.install()
         j.builders.db.postgres.install()
 
     def write_ini_config(self, path):

@@ -18,7 +18,7 @@ class BuilderEthereum(BuilderGolangTools):
         Keyword Arguments:
             reset {bool} -- reset the build process (default: {False})
         """
-        j.builders.runtimes.golang.install()
+        j.builders.runtimes.golangtools.install()
 
         self.get(self.geth_repo)
 

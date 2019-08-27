@@ -40,7 +40,7 @@ class BuilderZeroStor(BuilderGolangTools):
         """
         Builds zstor
         """
-        j.builders.runtimes.golang.install()
+        j.builders.runtimes.golangtools.install()
         self.get("github.com/threefoldtech/0-stor/cmd/zstor")
 
         # make to generate bin

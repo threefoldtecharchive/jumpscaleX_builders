@@ -25,10 +25,10 @@ class BuilderZDisk(j.baseclasses.builder):
 
         # install dependencies
         j.builders.system.package.ensure("git")
-        j.builders.runtimes.golang.install()
+        j.builders.runtimes.golangtools.install()
 
         # install 0-Disk
-        install_path = j.sal.fs.joinPaths(j.builders.runtimes.golang.GOPATH, "src", "github.com", "zero-os")
+        install_path = j.sal.fs.joinPaths(j.builders.runtimes.golangtools.GOPATH, "src", "github.com", "zero-os")
         j.core.tools.dir_ensure(install_path)
         cmd = """
         cd {0}

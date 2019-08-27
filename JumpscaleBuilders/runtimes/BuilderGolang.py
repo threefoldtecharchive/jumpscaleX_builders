@@ -190,7 +190,7 @@ class BuilderGolang(BuilderGolangTools):
     def install(self):
         """install goq
 
-        kosmos 'j.builders.runtimes.golang.install(reset=True)'
+        kosmos 'j.builders.runtimes.golangtools.install(reset=True)'
 
         """
         # only check for linux for now
@@ -223,13 +223,13 @@ class BuilderGolang(BuilderGolangTools):
         """test go installation
 
         to run:
-        kosmos 'j.builders.runtimes.golang.test()'
+        kosmos 'j.builders.runtimes.golangtools.test()'
         """
         self.install()
 
-        assert j.builders.runtimes.golang.is_installed
+        assert j.builders.runtimes.golangtools.is_installed
 
         # test go get
-        j.builders.runtimes.golang.get("github.com/containous/go-bindata")
-        package_path = j.builders.runtimes.golang.package_path_get("containous/go-bindata")
-        j.builders.runtimes.golang.execute("cd %s && go install" % package_path)
+        j.builders.runtimes.golangtools.get("github.com/containous/go-bindata")
+        package_path = j.builders.runtimes.golangtools.package_path_get("containous/go-bindata")
+        j.builders.runtimes.golangtools.execute("cd %s && go install" % package_path)

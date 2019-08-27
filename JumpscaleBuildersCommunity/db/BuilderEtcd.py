@@ -19,7 +19,7 @@ class BuilderEtcd(BuilderGolangTools):
         """
         Build etcd
         """
-        j.builders.runtimes.golang.install()
+        j.builders.runtimes.golangtools.install()
         # https://github.com/etcd-io/etcd/blob/master/Documentation/dl_build.md#build-the-latest-version
         self.get("go.etcd.io/etcd")
         self.get("go.etcd.io/etcd/etcdctl")
