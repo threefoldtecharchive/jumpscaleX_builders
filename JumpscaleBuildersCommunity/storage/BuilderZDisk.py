@@ -11,7 +11,7 @@ class BuilderZDisk(j.baseclasses.builder):
     Manages 0-Disk over prefab
     """
 
-    __jslocation__ = "j.builders.storage.0-disk"
+    __jslocation__ = "j.builders.storage.zdisk"
 
     def build(self, branch="master", reset=False):
         """

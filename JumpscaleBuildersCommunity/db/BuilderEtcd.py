@@ -1,7 +1,7 @@
 from Jumpscale import j
 from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderEtcd(BuilderGolangTools):
