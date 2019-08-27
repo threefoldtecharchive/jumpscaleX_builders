@@ -10,7 +10,7 @@ class BuilderTraefik(j.baseclasses.builder):
 
     def _init(self, **kwargs):
 
-        self.go_runtime = j.builders.runtimes.golangtools
+        self.go_runtime = j.builders.runtimes.go
 
     @builder_method()
     def install(self):

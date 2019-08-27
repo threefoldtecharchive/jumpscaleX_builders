@@ -1,5 +1,5 @@
 from Jumpscale import j
-from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
 builder_method = j.baseclasses.builder_method
 
@@ -19,7 +19,7 @@ class BuilderEtcd(BuilderGolangTools):
         """
         Build etcd
         """
-        j.builders.runtimes.golangtools.install()
+        j.builders.runtimes.go.install()
         # https://github.com/etcd-io/etcd/blob/master/Documentation/dl_build.md#build-the-latest-version
         self.get("go.etcd.io/etcd")
         self.get("go.etcd.io/etcd/etcdctl")

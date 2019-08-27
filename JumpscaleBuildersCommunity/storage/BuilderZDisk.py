@@ -1,12 +1,13 @@
 import os.path
 from Jumpscale import j
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
 
 _NBDSERVER_CONFIG_FILE = "{DIR_BASE}/config/nbdserver/config.yaml"
 _DEFAULT_LOCAL_CONFIG_FILE = "./config.yaml"
 
 
-class BuilderZDisk(j.baseclasses.builder):
+class BuilderZDisk(BuilderGolangTools):
     """
     Manages 0-Disk over prefab
     """
@@ -25,10 +26,10 @@ class BuilderZDisk(j.baseclasses.builder):
 
         # install dependencies
         j.builders.system.package.ensure("git")
-        j.builders.runtimes.golangtools.install()
+        j.builders.runtimes.go.install()
 
         # install 0-Disk
-        install_path = j.sal.fs.joinPaths(j.builders.runtimes.golangtools.GOPATH, "src", "github.com", "zero-os")
+        install_path = j.sal.fs.joinPaths(self.DIR_GO_PATH, "src", "github.com", "zero-os")
         j.core.tools.dir_ensure(install_path)
         cmd = """
         cd {0}

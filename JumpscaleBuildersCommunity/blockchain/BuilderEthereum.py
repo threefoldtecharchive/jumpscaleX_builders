@@ -1,5 +1,5 @@
 from Jumpscale import j
-from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
 builder_method = j.baseclasses.builder_method
 
@@ -18,7 +18,7 @@ class BuilderEthereum(BuilderGolangTools):
         Keyword Arguments:
             reset {bool} -- reset the build process (default: {False})
         """
-        j.builders.runtimes.golangtools.install()
+        j.builders.runtimes.go.install()
 
         self.get(self.geth_repo)
 

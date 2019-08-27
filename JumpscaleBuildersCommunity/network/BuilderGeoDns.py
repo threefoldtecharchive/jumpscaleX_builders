@@ -15,7 +15,7 @@ class BuilderGeoDns(j.baseclasses.builder):
         if reset is False and self.isInstalled():
             return
         # deps
-        # j.builders.runtimes.golangtools.install(force=False)
+        # j.builders.runtimes.go.install(force=False)
         j.builders.system.package.mdupdate()
         j.builders.system.package.ensure(["libgeoip-dev", "build-essential", "pkg-config"])
 

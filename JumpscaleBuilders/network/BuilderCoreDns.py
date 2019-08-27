@@ -1,5 +1,5 @@
 from Jumpscale import j
-from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
 builder_method = j.baseclasses.builder_method
 
@@ -32,7 +32,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
         """
 
         # install golang
-        j.builders.runtimes.golangtools.install()
+        j.builders.runtimes.go.install()
         self.tools.dir_ensure(self.package_path)
         # redis as backend
         j.builders.db.redis.sandbox()

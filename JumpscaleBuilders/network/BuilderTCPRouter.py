@@ -1,5 +1,5 @@
 from Jumpscale import j
-from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
 builder_method = j.baseclasses.builder_method
 
@@ -30,7 +30,7 @@ class BuilderTCPRouter(BuilderGolangTools):
 
     @builder_method()
     def build(self):
-        j.builders.runtimes.golangtools.install()
+        j.builders.runtimes.go.install()
 
         self.get("github.com/xmonader/tcprouter")
         build_cmd = """

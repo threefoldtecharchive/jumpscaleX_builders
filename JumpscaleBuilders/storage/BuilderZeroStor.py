@@ -1,5 +1,5 @@
 from Jumpscale import j
-from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
 builder_method = j.baseclasses.builder_method
 
@@ -40,7 +40,7 @@ class BuilderZeroStor(BuilderGolangTools):
         """
         Builds zstor
         """
-        j.builders.runtimes.golangtools.install()
+        j.builders.runtimes.go.install()
         self.get("github.com/threefoldtech/0-stor/cmd/zstor")
 
         # make to generate bin
