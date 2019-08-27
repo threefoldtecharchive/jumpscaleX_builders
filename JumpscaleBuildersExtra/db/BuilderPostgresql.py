@@ -1,6 +1,6 @@
 from Jumpscale import j
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 import time
 
 
@@ -51,7 +51,7 @@ class BuilderPostgresql(j.baseclasses.builder):
 
         self.init()
 
-    def init(self):
+    def init(self, **kwargs):
 
         if not self.tools.group_exists("postgres"):
             self._execute(

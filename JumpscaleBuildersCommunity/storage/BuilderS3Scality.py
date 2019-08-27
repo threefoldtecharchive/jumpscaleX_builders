@@ -33,8 +33,8 @@ class BuilderS3Scality(j.baseclasses.builder):
 
         j.builders.tools.dir_remove(self.path, recursive=True)
         j.core.tools.dir_ensure("{DIR_BASE}/apps/")
-        j.builders.tools.execute("mv %s/%s %s" % (self.DIR_BUILD, self.NAME, self.path))
-        j.builders.tools.execute("cd %s && npm install" % self.path)
+        self._execute("mv %s/%s %s" % (self.DIR_BUILD, self.NAME, self.path))
+        self._execute("cd %s && npm install" % self.path)
 
         cmd = "S3DATAPATH={data} S3METADATAPATH={meta} npm start".format(
             data=self._replace(storage), meta=self._replace(meta)

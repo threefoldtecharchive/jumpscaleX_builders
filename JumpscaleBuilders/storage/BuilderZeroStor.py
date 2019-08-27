@@ -45,7 +45,7 @@ class BuilderZeroStor(BuilderGolangTools):
 
         # make to generate bin
         cmd = "cd {}/src/github.com/threefoldtech/0-stor && make".format(self.DIR_GO_PATH)
-        j.sal.process.execute(cmd)
+        self._execute(cmd)
 
     @builder_method()
     def install(self):
@@ -70,7 +70,7 @@ class BuilderZeroStor(BuilderGolangTools):
         cmd = "zstor --config /sandbox/cfg/zstor.yaml daemon --listen 127.0.0.1:8000"
         cmd_zdb = j.builders.db.zdb.startup_cmds
         cmd_etcd = j.builders.db.etcd.startup_cmds
-        cmds = [j.servers.startupcmd.get(name=self.NAME, cmd_start=cmd)]
+        cmds = [j.servers.startupcmd.get(name=self._name, cmd_start=cmd)]
         return cmd_zdb + cmd_etcd + cmds
 
     @builder_method()
@@ -89,7 +89,7 @@ class BuilderZeroStor(BuilderGolangTools):
         # Copy zstor bins
         bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
         self.tools.dir_ensure(bin_dest)
-        bin_path = j.sal.fs.joinPaths(self._replace("{DIR_BIN}"), self.NAME)
+        bin_path = j.sal.fs.joinPaths(self._replace("{DIR_BIN}"), self._name)
         bin_bench_path = j.sal.fs.joinPaths(self._replace("{DIR_BIN}"), "zstorbench")
         self._copy(bin_path, bin_dest)
         self._copy(bin_bench_path, bin_dest)
@@ -120,7 +120,7 @@ class BuilderZeroStor(BuilderGolangTools):
             self.stop()
 
         self.start()
-        pid = j.sal.process.getProcessPid(self.NAME)
+        pid = j.sal.process.getProcessPid(self._name)
         assert pid is not []
         self.stop()
 
@@ -131,7 +131,7 @@ class BuilderZeroStor(BuilderGolangTools):
         """
         Uninstall zstor by removing all related files from bin directory and build destination
         """
-        bin_path = self.tools.joinpaths("{DIR_BIN}", self.NAME)
+        bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
         bin_bench_path = self.tools.joinpaths("{DIR_BIN}", "zstorbench")
         self._remove(bin_path)
         self._remove(bin_bench_path)

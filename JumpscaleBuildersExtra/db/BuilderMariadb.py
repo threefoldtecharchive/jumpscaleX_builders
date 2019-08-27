@@ -1,7 +1,7 @@
 from Jumpscale import j
 import time
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderMariadb(j.baseclasses.builder):
@@ -162,7 +162,7 @@ class BuilderMariadb(j.baseclasses.builder):
 
 
 class MariaClient:
-    def init(self):
+    def init(self, **kwargs):
         """Initialize the data directory
         """
         cmd = "mysql_install_db"

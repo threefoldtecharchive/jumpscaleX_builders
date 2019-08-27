@@ -4,7 +4,7 @@ from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
 import os
 import textwrap
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderMinio(BuilderGolangTools):

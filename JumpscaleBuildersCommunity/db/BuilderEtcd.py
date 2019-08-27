@@ -7,7 +7,7 @@ builder_method = j.builders.system.builder_method
 class BuilderEtcd(BuilderGolangTools):
     __jslocation__ = "j.builders.db.etcd"
 
-    def _init(self):
+    def _init(self, **kwargs):
         super()._init()
 
     def profile_builder_set(self):

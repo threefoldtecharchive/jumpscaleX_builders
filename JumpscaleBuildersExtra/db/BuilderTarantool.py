@@ -59,7 +59,7 @@ class BuilderTarantool(j.baseclasses.builder):
 
             popd
             """
-            j.builders.tools.execute(C)
+            self._execute(C)
         elif j.core.platformtype.myplatform.platform_is_ubuntu:
             if not self._done_check("dependencies", reset):
                 # j.builders.system.package.ensure('build-essential,cmake,coreutils,sed,libreadline-dev,'
@@ -140,7 +140,7 @@ class BuilderTarantool(j.baseclasses.builder):
             """.format(
             name=name
         )
-        j.builders.tools.execute(command)
+        self._execute(command)
 
     def install_tarantool_rock(self, name):
         """
@@ -158,7 +158,7 @@ class BuilderTarantool(j.baseclasses.builder):
         """.format(
             name=name
         )
-        j.builders.tools.execute(command)
+        self._execute(command)
 
     def start(self, port=3301, passwd="admin007"):
         """

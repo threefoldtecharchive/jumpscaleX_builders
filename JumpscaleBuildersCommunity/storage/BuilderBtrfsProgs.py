@@ -34,7 +34,7 @@ class BuilderBtrfsProgs(BuilderApp):
     def build(self, reset=False):
         if reset is False and (self.isInstalled() or self._done_get("build")):
             return
-        j.builders.tools.execute("apt-get -y install asciidoc xmlto --no-install-recommends")
+        self._execute("apt-get -y install asciidoc xmlto --no-install-recommends")
         deps = """
         uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev autoconf
         """
