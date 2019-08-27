@@ -30,7 +30,7 @@ class BuilderTCPRouter(BuilderGolangTools):
 
     @builder_method()
     def build(self):
-        j.builders.runtimes.golang.install()
+        j.builders.runtimes.golangtools.install()
 
         self.get("github.com/xmonader/tcprouter")
         build_cmd = """

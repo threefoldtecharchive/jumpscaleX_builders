@@ -5,8 +5,8 @@ class BuilderSkyDns(j.baseclasses.builder):
     def build(self, start=True, install=True):
         if self.isInstalled():
             return
-        j.builders.runtimes.golang.install()
-        j.builders.runtimes.golang.get("github.com/skynetservices/skydns")
+        j.builders.runtimes.golangtools.install()
+        j.builders.runtimes.golangtools.get("github.com/skynetservices/skydns")
         if install:
             self.install(start)
 

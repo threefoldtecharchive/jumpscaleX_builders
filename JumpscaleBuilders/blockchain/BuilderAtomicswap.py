@@ -9,7 +9,7 @@ class BuilderAtomicswap(j.baseclasses.builder):
             return
         j.builders.system.package.mdupdate()
         j.builders.system.package.ensure("git")
-        golang = j.builders.runtimes.golang
+        golang = j.builders.runtimes.golangtools
         golang.install()
         GOPATH = golang.GOPATH
         url = "github.com/rivine"
@@ -27,8 +27,8 @@ class BuilderAtomicswap(j.baseclasses.builder):
             return
 
         self.build(branch=branch, tag=tag, revision=revision, reset=reset)
-        tfchaindpath = j.builders.tools.joinpaths(j.builders.runtimes.golang.GOPATH, "bin", "btcatomicswap")
-        tfchaincpath = j.builders.tools.joinpaths(j.builders.runtimes.golang.GOPATH, "bin", "ethatomicswap")
+        tfchaindpath = j.builders.tools.joinpaths(j.builders.runtimes.golangtools.GOPATH, "bin", "btcatomicswap")
+        tfchaincpath = j.builders.tools.joinpaths(j.builders.runtimes.golangtools.GOPATH, "bin", "ethatomicswap")
 
         j.builders.tools.file_copy(tfchaindpath, "{DIR_BIN}/")
         j.builders.tools.file_copy(tfchaincpath, "{DIR_BIN}/")

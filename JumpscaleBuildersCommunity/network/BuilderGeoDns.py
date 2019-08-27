@@ -15,12 +15,12 @@ class BuilderGeoDns(j.baseclasses.builder):
         if reset is False and self.isInstalled():
             return
         # deps
-        # j.builders.runtimes.golang.install(force=False)
+        # j.builders.runtimes.golangtools.install(force=False)
         j.builders.system.package.mdupdate()
         j.builders.system.package.ensure(["libgeoip-dev", "build-essential", "pkg-config"])
 
         # build
-        j.builders.runtimes.golang.get("github.com/abh/geodns")
+        j.builders.runtimes.golangtools.get("github.com/abh/geodns")
 
         # moving files and creating config
         j.core.tools.dir_ensure("{DIR_BIN}")

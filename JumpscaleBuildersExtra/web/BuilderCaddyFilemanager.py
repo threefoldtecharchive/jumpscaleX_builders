@@ -8,7 +8,7 @@ class BuilderCaddyFilemanager(j.baseclasses.builder):
     PLUGINS = ["iyo", "filemanager"]
 
     def _init(self, **kwargs):
-        self.go_runtime = j.builders.runtimes.golang
+        self.go_runtime = j.builders.runtimes.golangtools
         self.templates_dir = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates")
         # self.root_dirs = {
         #     '/sandbox/cfg/ssl/certs': '/sandbox/cfg/ssl/certs'

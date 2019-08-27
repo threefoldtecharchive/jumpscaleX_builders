@@ -22,7 +22,7 @@ class BuilderAydoStor(j.baseclasses.builder):
         j.builders.system.package.ensure("build-essential")
 
         j.builders.tools.dir_remove("%s/src" % j.builders.sandbox.env_get("GOPATH"))
-        j.builders.runtimes.golang.get("github.com/g8os/stor")
+        j.builders.runtimes.golangtools.get("github.com/g8os/stor")
 
         if install:
             self.install(addr, backend, start)

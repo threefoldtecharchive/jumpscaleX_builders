@@ -27,7 +27,7 @@ class BuilderMinio(BuilderGolangTools):
         self.system.package.mdupdate()
         self.system.package.install("gnutls-bin")
 
-        j.builders.runtimes.golang.install()
+        j.builders.runtimes.golangtools.install()
         self.get("github.com/minio/minio")
 
     @builder_method()
@@ -57,7 +57,7 @@ class BuilderMinio(BuilderGolangTools):
     @builder_method()
     def clean(self):
         self._remove(self.DIR_SANDBOX)
-        self._remove("{}/bin/minio".format(j.builders.runtimes.golang.DIR_GO_PATH))
+        self._remove("{}/bin/minio".format(j.builders.runtimes.golangtools.DIR_GO_PATH))
 
     @builder_method()
     def sandbox(
