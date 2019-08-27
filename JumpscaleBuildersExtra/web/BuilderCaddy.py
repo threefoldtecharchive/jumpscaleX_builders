@@ -115,7 +115,7 @@ class BuilderCaddy(BuilderGolangTools):
             raise j.exceptions.RuntimeError("only ubuntu supported")
 
         # install go runtime
-        j.builders.runtimes.golangtools.install()
+        j.builders.runtimes.go.install()
 
         # get caddy and plugins
         if not plugins:

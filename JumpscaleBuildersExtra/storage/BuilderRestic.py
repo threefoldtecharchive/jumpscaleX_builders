@@ -15,7 +15,7 @@ class BuilderRestic(j.baseclasses.builder):
     def build(self):
 
         # install golang dependancy
-        j.builders.runtimes.golangtools.install()
+        j.builders.runtimes.go.install()
 
         # clone the repo
         C = """

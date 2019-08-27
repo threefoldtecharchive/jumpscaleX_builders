@@ -17,7 +17,7 @@ class BuilderInfluxdb(BuilderGolangTools):
         self.system.package.mdupdate()
         self.system.package.install(["npm", "bzr"])
         # golang dependancy
-        j.builders.runtimes.golangtools.install()
+        j.builders.runtimes.go.install()
 
         # build from source
         cmd = """

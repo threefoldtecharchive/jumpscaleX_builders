@@ -162,9 +162,7 @@ class BuilderSystemPackage(j.baseclasses.builder):
                 cmd = "apt-cyg install %s\n" % package
             else:
                 raise j.exceptions.RuntimeError("could not install:%s, platform not supported" % package)
-            from pudb import set_trace
 
-            set_trace()
             self._execute(cmd)
         else:
             for package in packages:

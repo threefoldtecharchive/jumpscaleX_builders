@@ -100,6 +100,6 @@ class BuilderGolang(BuilderGolangTools):
         assert j.builders.runtimes.go.is_installed
 
         # test go get
-        j.builders.runtimes.golangtools.get("github.com/containous/go-bindata")
-        package_path = j.builders.runtimes.golangtools.package_path_get("containous/go-bindata")
-        j.builders.runtimes.golangtools._execute("cd %s && go install" % package_path)
+        self.get("github.com/containous/go-bindata")
+        package_path = self.package_path_get("containous/go-bindata")
+        self._execute("cd %s && go install" % package_path)
