@@ -33,7 +33,7 @@ class BuilderFreeflowPages(j.baseclasses.builder):
         mysql -e "GRANT ALL ON humhub.* TO 'humhub'@'localhost' IDENTIFIED BY 'Hum_flist_hubB';"
         mysql -e "FLUSH PRIVILEGES;"
         """
-        j.builders.tools.execute(sql_init_script)
+        self._execute(sql_init_script)
         j.sal.fs.chmod("/var/www", 0o775)
         j.sal.fs.chown("/var/www", "www-data", "www-data")
         self._done_set("install")
@@ -98,7 +98,7 @@ class BuilderFreeflowPages(j.baseclasses.builder):
         chmod +x -R /tmp/package/freeflow/sandbox/lib
         cd 
         """
-        j.builders.tools.execute(copy_php_share_script)
+        self._execute(copy_php_share_script)
         startup_file = (
             "/sandbox/code/github/threefoldtech/jumpscaleX_core/Jumpscale/builder/apps/templates/freeflow_startup.toml"
         )
@@ -121,7 +121,7 @@ class BuilderFreeflowPages(j.baseclasses.builder):
         /etc/init.d/apache2 stop
         /etc/init.d/mysql stop
         """
-        j.builders.tools.execute(stop_script)
+        self._execute(stop_script)
 
     def start(self):
         start_script = """
@@ -132,7 +132,7 @@ class BuilderFreeflowPages(j.baseclasses.builder):
         /etc/init.d/mysql start
         /etc/init.d/apache2 start
         """
-        j.builders.tools.execute(start_script)
+        self._execute(start_script)
 
     def test(self):
         self.stop()

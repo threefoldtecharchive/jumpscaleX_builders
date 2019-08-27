@@ -11,7 +11,7 @@ class BuilderLua(j.baseclasses.builder):
 
     __jslocation__ = "j.builders.runtimes.lua"
 
-    def _init(self):
+    def _init(self, **kwargs):
         self.ROCKS_PATHS_PROFILE = self._replace("{DIR_BUILD}/rocks_paths")
 
     @builder_method()

@@ -7,7 +7,7 @@ builder_method = j.builders.system.builder_method
 class BuilderGraphql(j.baseclasses.builder):
     __jslocation__ = "j.builders.apps.graphql"
 
-    def _init(self):
+    def _init(self, **kwargs):
         self.APP_DIR = self._replace("{DIR_BASE}/apps/graphql")
 
     @builder_method()

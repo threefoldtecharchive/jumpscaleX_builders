@@ -7,12 +7,12 @@ builder_method = j.baseclasses.builder_method
 
 
 class BuilderSystemPackage(j.baseclasses.builder):
-    __jslocation__ = "j.builders.ubuntu.package"
+    __jslocation__ = "j.builders.system.package"
 
     @builder_method()
     def _repository_ensure_apt(self, repository):
         self.ensure("python-software-properties")
-        j.sal.process.execute("add-apt-repository --yes " + repository)
+        self._execute("add-apt-repository --yes " + repository)
 
     def _apt_wait_free(self):
         timeout = time.time() + 300
@@ -28,13 +28,13 @@ class BuilderSystemPackage(j.baseclasses.builder):
     def _apt_get(self, cmd):
 
         cmd = CMD_APT_GET + cmd
-        result = j.sal.process.execute(cmd)
+        result = self._execute(cmd)
         # If the installation process was interrupted, we might get the following message
-        # E: dpkg was interrupted, you must manually j.sal.process.execute 'run
+        # E: dpkg was interrupted, you must manually self._execute 'run
         # dpkg --configure -a' to correct the problem.
         if "run dpkg --configure -a" in result:
-            j.sal.process.execute("DEBIAN_FRONTEND=noninteractive dpkg --configure -a")
-            result = j.sal.process.execute(cmd)
+            self._execute("DEBIAN_FRONTEND=noninteractive dpkg --configure -a")
+            result = self._execute(cmd)
         return result
 
     # def upgrade(self, package=None, reset=True):
@@ -49,8 +49,8 @@ class BuilderSystemPackage(j.baseclasses.builder):
     #                 package = " ".join(package)
     #             return self._apt_get(' upgrade ' + package)
     #     elif j.builders.tools.isAlpine:
-    #         j.builders.tools.execute("apk update")
-    #         j.builders.tools.execute("apk upgrade")
+    #         self._execute("apk update")
+    #         self._execute("apk upgrade")
     #     else:
     #         raise j.exceptions.RuntimeError(
     #             "could not install:%s, platform not supported" % package)
@@ -63,15 +63,15 @@ class BuilderSystemPackage(j.baseclasses.builder):
         """
         self._log_info("packages mdupdate")
         if j.core.platformtype.myplatform.platform_is_ubuntu:
-            j.sal.process.execute("apt-get update")
+            self._execute("apt-get update")
         elif j.builders.tools.platform_is_alpine:
-            j.builders.tools.execute("apk update")
+            self._execute("apk update")
         elif j.core.platformtype.myplatform.platform_is_osx:
             location = j.builders.tools.command_location("brew")
-            # j.sal.process.execute("run chown root %s" % location)
-            j.sal.process.execute("brew update")
+            # self._execute("run chown root %s" % location)
+            self._execute("brew update")
         elif j.builders.tools.isArch:
-            j.sal.process.execute("pacman -Syy")
+            self._execute("pacman -Syy")
 
     @builder_method()
     def upgrade(self, distupgrade=False):
@@ -87,13 +87,13 @@ class BuilderSystemPackage(j.baseclasses.builder):
             else:
                 self._apt_get("upgrade -y")
         # elif j.builders.tools.isArch:
-        #     j.sal.process.execute(
+        #     self._execute(
         #         "pacman -Syu --noconfirm;pacman -Sc --noconfirm")
         elif j.core.platformtype.myplatform.platform_is_osx:
-            j.sal.process.execute("brew upgrade")
+            self._execute("brew upgrade")
         elif j.builders.tools.isAlpine:
-            j.builders.tools.execute("apk update")
-            j.builders.tools.execute("apk upgrade")
+            self._execute("apk update")
+            self._execute("apk upgrade")
         elif j.builders.tools.isCygwin:
             return  # no such functionality in apt-cyg
         else:
@@ -155,14 +155,16 @@ class BuilderSystemPackage(j.baseclasses.builder):
                 if package in ["run", "net-tools"]:
                     return
 
-                installed = j.sal.process.execute("apt-cyg list&")[1].splitlines()
+                installed = self._execute("apt-cyg list&")[1].splitlines()
                 if package in installed:
                     return  # means was installed
 
                 cmd = "apt-cyg install %s\n" % package
             else:
                 raise j.exceptions.RuntimeError("could not install:%s, platform not supported" % package)
+            from pudb import set_trace
 
+            set_trace()
             self._execute(cmd)
         else:
             for package in packages:
@@ -190,7 +192,7 @@ class BuilderSystemPackage(j.baseclasses.builder):
                 if package is not None:
                     return self._apt_get("-y --purge remove %s" % package)
                 else:
-                    j.sal.process.execute("apt-get autoremove -y")
+                    self._execute("apt-get autoremove -y")
 
                 self._apt_get("autoclean")
                 C = """
@@ -206,26 +208,26 @@ class BuilderSystemPackage(j.baseclasses.builder):
                 mkdir -p /var/tmp
 
                 """
-                j.sal.process.execute(C)
+                self._execute(C)
 
             # elif j.builders.tools.isArch:
             #     cmd = "pacman -Sc"
             #     if agressive:
             #         cmd += "c"
-            #     j.sal.process.execute(cmd)
+            #     self._execute(cmd)
             #     if agressive:
-            #         j.sal.process.execute("pacman -Qdttq", showout=False)
+            #         self._execute("pacman -Qdttq", showout=False)
 
             elif j.core.platformtype.myplatform.platform_is_osx:
                 if package:
-                    j.sal.process.execute("brew cleanup %s" % package)
-                    j.sal.process.execute("brew remove %s" % package)
+                    self._execute("brew cleanup %s" % package)
+                    self._execute("brew remove %s" % package)
                 else:
-                    j.sal.process.execute("brew cleanup")
+                    self._execute("brew cleanup")
 
             elif j.builders.tools.isCygwin:
                 if package:
-                    j.sal.process.execute("apt-cyg remove %s" % package)
+                    self._execute("apt-cyg remove %s" % package)
                 else:
                     pass
 
@@ -243,4 +245,4 @@ class BuilderSystemPackage(j.baseclasses.builder):
             if autoclean:
                 self._apt_get("autoclean")
         elif j.core.platformtype.myplatform.platform_is_osx:
-            j.sal.process.execute("brew remove %s 2>&1 > /dev/null|echo " "" % package)
+            self._execute("brew remove %s 2>&1 > /dev/null|echo " "" % package)

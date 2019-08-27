@@ -162,7 +162,7 @@ class BuilderMariadb(j.baseclasses.builder):
 
 
 class MariaClient:
-    def init(self):
+    def init(self, **kwargs):
         """Initialize the data directory
         """
         cmd = "mysql_install_db"

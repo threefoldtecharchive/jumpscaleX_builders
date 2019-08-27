@@ -32,8 +32,8 @@ class BuilderNodeJS(j.baseclasses.builder):
                 url, expand=True, overwrite=False, to="{DIR_TEMP}/phantomjs", removeTopDir=True, deletedest=True
             )
 
-            j.builders.tools.execute("mv %s/bin/phantomjs /opt/bin/phantomjs" % cdest)
-            j.builders.tools.execute("rm -rf %s" % cdest)
+            self._execute("mv %s/bin/phantomjs /opt/bin/phantomjs" % cdest)
+            self._execute("rm -rf %s" % cdest)
 
             j.builders.system.package.ensure("libfontconfig")
 
@@ -77,7 +77,7 @@ class BuilderNodeJS(j.baseclasses.builder):
     @builder_method()
     def install(self, reset=False):
 
-        j.builders.tools.execute("rm -rf %s;cp -r %s %s" % (self.path, self.DIR_BUILD, self.path))
+        self._execute("rm -rf %s;cp -r %s %s" % (self.path, self.DIR_BUILD, self.path))
         j.builders.tools.file_link("%s/bin/node" % self.path, "{DIR_BIN}/node")
         j.builders.tools.file_link("%s/bin/npm" % self.path, "{DIR_BIN}/npm")
 

@@ -97,4 +97,4 @@ class BuilderFW(j.baseclasses.builder):
         pscript = pscript.replace("$ruleset", ruleset)
         pscript = pscript.replace("$pinghost", pinghost)
 
-        j.builders.tools.execute(content=pscript, die=True, interpreter="python3", tmux=True)
+        self._execute(content=pscript, die=True, interpreter="python3", tmux=True)

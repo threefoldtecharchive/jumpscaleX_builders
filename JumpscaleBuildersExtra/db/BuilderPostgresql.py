@@ -51,7 +51,7 @@ class BuilderPostgresql(j.baseclasses.builder):
 
         self.init()
 
-    def init(self):
+    def init(self, **kwargs):
 
         if not self.tools.group_exists("postgres"):
             self._execute(
