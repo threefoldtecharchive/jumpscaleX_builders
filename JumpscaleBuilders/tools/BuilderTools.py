@@ -286,15 +286,15 @@ class BuilderTools(j.baseclasses.builder):
         elif path.endswith(".bz2"):
             cmd = "cd %s;bzip2 -d %s" % (j.sal.fs.getDirName(path), path)
         elif path.endswith(".zip"):
-            cmd = "cd %s;rm -rf %s;mkdir -p %s;cd %s;unzip %s" % (j.sal.fs.getDirName(path), base, base, base, path)
+            cmd = "cd %sn;rm -rf %s;mkdir -p %s;cd %s;unzip %s" % (j.sal.fs.getDirName(path), base, base, base, path)
         else:
             raise j.exceptions.RuntimeError("file_expand format not supported yet for %s" % path)
 
         # print(cmd)
         self.execute(cmd)
-
         if removeTopDir:
             res = self.find(destination, recursive=False, type="d")
+            res = [i for i in res if not i.endswith("OK")]
             if len(res) == 1:
                 self.copyTree(res[0], destination, keepsymlinks=keepsymlinks)
                 self.dir_remove(res[0])
