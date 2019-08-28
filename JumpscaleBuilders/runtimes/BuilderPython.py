@@ -6,7 +6,7 @@ builder_method = j.baseclasses.builder_method
 class BuilderPython(j.baseclasses.builder):
     """
     : Determine version using
-    : > j.builders.runtimes.python.TAG = "vX.Y.Z"
+    : > j.builders.runtimes.python3.TAG = "vX.Y.Z"
     """
 
     __jslocation__ = "j.builders.runtimes.python3"
@@ -20,8 +20,8 @@ class BuilderPython(j.baseclasses.builder):
     @builder_method()
     def build(self):
         """
-        kosmos 'j.builders.runtimes.python.build()'
-            kosmos 'j.builders.runtimes.python.build(reset=True)'
+        kosmos 'j.builders.runtimes.python3.build()'
+            kosmos 'j.builders.runtimes.python3.build(reset=True)'
         will build python
         :param reset: choose to reset the build process even if it was done before
         :type reset: bool
@@ -70,7 +70,7 @@ class BuilderPython(j.baseclasses.builder):
     @builder_method()
     def install(self):
         """
-        kosmos 'j.builders.runtimes.python.install()'
+        kosmos 'j.builders.runtimes.python3.install()'
         """
         install_cmd = """
         cd {DIR_CODE_L}/cpython
@@ -84,7 +84,7 @@ class BuilderPython(j.baseclasses.builder):
     @builder_method()
     def build_pip(self):
         """
-        kosmos 'j.builders.runtimes.python.build_pip()'
+        kosmos 'j.builders.runtimes.python3.build_pip()'
         :return:
         """
         # test openssl is working
@@ -98,7 +98,7 @@ class BuilderPython(j.baseclasses.builder):
     @builder_method()
     def _pip_install(self):
         """
-        kosmos 'j.builders.runtimes.python._pip_install()'
+        kosmos 'j.builders.runtimes.python3._pip_install()'
         will make sure we add env scripts to it as well as add all the required pip modules
         """
         script = """
@@ -113,7 +113,7 @@ class BuilderPython(j.baseclasses.builder):
     @builder_method()
     def _pip_packages_all(self):
         """
-        kosmos 'j.builders.runtimes.python._pip_packages_all()'
+        kosmos 'j.builders.runtimes.python3._pip_packages_all()'
         """
         j.builders.libs.capnp.install(reset=True)
         # list comes from /sandbox/code/github/threefoldtech/jumpscale_core/install/InstallTools.py
@@ -188,7 +188,7 @@ class BuilderPython(j.baseclasses.builder):
     @builder_method()
     def test(self):
         """
-        js_shell 'j.builders.runtimes.python.test(build=True)'
+        js_shell 'j.builders.runtimes.python3.test(build=True)'
         """
         self.profile_builder_select()
         assert self._execute("python3 -c \"print('python')\"")[1] == "python\n"

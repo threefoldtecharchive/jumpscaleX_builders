@@ -57,8 +57,8 @@ class Runtimes_TestCases(BaseTest):
         """ BLD-010
         *Test python builer sandbox*
         """
-        j.builders.runtimes.python.build(reset=True)
-        j.builders.runtimes.python.install()
+        j.builders.runtimes.python3.build(reset=True)
+        j.builders.runtimes.python3.install()
         try:
             j.sal.process.execute("which python")
         except:
