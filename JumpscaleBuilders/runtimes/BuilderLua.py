@@ -255,8 +255,6 @@ class BuilderLua(j.baseclasses.builder):
         rm -rf /sandbox/openresty/pod
         rm -rf /sandbox/openresty/luarocks
         rm -rf /sandbox/openresty/luajit/include
-        rm -rf /sandbox/openresty/luajit/lib/lua
-        rm -rf /sandbox/openresty/luajit/lib/pkgconfig
         rm -rf /sandbox/openresty/luajit/share
         rm -rf /sandbox/var/build
         rm -rf /sandbox/root

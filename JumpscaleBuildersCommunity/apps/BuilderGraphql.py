@@ -1,7 +1,7 @@
 from Jumpscale import j
 import textwrap
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderGraphql(j.baseclasses.builder):

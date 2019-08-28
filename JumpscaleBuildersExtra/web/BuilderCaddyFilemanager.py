@@ -1,6 +1,6 @@
 from Jumpscale import j
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderCaddyFilemanager(j.baseclasses.builder):
@@ -8,7 +8,7 @@ class BuilderCaddyFilemanager(j.baseclasses.builder):
     PLUGINS = ["iyo", "filemanager"]
 
     def _init(self, **kwargs):
-        self.go_runtime = j.builders.runtimes.golang
+        self.go_runtime = j.builders.runtimes.go
         self.templates_dir = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates")
         # self.root_dirs = {
         #     '/sandbox/cfg/ssl/certs': '/sandbox/cfg/ssl/certs'

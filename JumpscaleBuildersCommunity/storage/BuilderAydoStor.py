@@ -1,10 +1,11 @@
 from Jumpscale import j
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
 
 # TODO: is this still correct
 
 
-class BuilderAydoStor(j.baseclasses.builder):
+class BuilderAydoStor(BuilderGolangTools):
 
     __jslocation__ = "j.builders.storage.stor"
 
@@ -22,7 +23,7 @@ class BuilderAydoStor(j.baseclasses.builder):
         j.builders.system.package.ensure("build-essential")
 
         j.builders.tools.dir_remove("%s/src" % j.builders.sandbox.env_get("GOPATH"))
-        j.builders.runtimes.golang.get("github.com/g8os/stor")
+        self.get("github.com/g8os/stor")
 
         if install:
             self.install(addr, backend, start)

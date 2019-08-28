@@ -1,6 +1,6 @@
 from Jumpscale import j
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderTraefik(j.baseclasses.builder):
@@ -10,7 +10,7 @@ class BuilderTraefik(j.baseclasses.builder):
 
     def _init(self, **kwargs):
 
-        self.go_runtime = j.builders.runtimes.golang
+        self.go_runtime = j.builders.runtimes.go
 
     @builder_method()
     def install(self):

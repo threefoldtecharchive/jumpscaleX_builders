@@ -1,5 +1,5 @@
 from Jumpscale import j
-from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
 builder_method = j.baseclasses.builder_method
 
@@ -20,7 +20,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
 
     def _init(self, **kwargs):
         super()._init()
-        self.package_path = self.package_path_get(self.NAME)
+        self.package_path = self.package_path_get(self._name)
         self.templates_dir = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates")
 
     @builder_method()
@@ -32,7 +32,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
         """
 
         # install golang
-        j.builders.runtimes.golang.install()
+        j.builders.runtimes.go.install()
         self.tools.dir_ensure(self.package_path)
         # redis as backend
         j.builders.db.redis.sandbox()
@@ -58,7 +58,8 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
 
         installs and runs coredns server with redis plugin
         """
-        src = self.tools.joinpaths(self.package_path, self.NAME, self.NAME)
+        name = "coredns"
+        src = self.tools.joinpaths(self.package_path, name, name)
         self._copy(src, "{DIR_BIN}/coredns")
         j.sal.fs.writeFile(filename="/sandbox/cfg/coredns.conf", contents=CONFIGTEMPLATE)
         self._execute("service systemd-resolved stop", die=False)
@@ -80,7 +81,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
         self.tools.copyTree(j.builders.db.redis.DIR_SANDBOX, self.DIR_SANDBOX)
 
         # copy bins
-        coredns_bin = j.sal.fs.joinPaths("{DIR_BIN}", self.NAME)
+        coredns_bin = j.sal.fs.joinPaths("{DIR_BIN}", self._name)
         bin_dir_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
         self.tools.dir_ensure(bin_dir_dest)
         self._copy(coredns_bin, bin_dir_dest)
@@ -109,7 +110,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
 
     @builder_method()
     def uninstall(self):
-        bin_path = self.tools.joinpaths("{DIR_BIN}", self.NAME)
+        bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
         self._remove(bin_path)
         self.clean()
 

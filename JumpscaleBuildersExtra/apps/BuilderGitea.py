@@ -1,9 +1,9 @@
 import textwrap
 
 from Jumpscale import j
-from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderGitea(BuilderGolangTools):
@@ -53,7 +53,7 @@ class BuilderGitea(BuilderGolangTools):
         j.builders.system.package.mdupdate()
         j.builders.system.package.ensure("git-core")
         j.builders.system.package.ensure("gcc")
-        j.builders.runtimes.golang.install()
+        j.builders.runtimes.go.install()
         j.builders.db.postgres.install()
 
     def write_ini_config(self, path):

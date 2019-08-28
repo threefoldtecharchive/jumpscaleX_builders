@@ -1,7 +1,7 @@
 from Jumpscale import j
-from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderInfluxdb(BuilderGolangTools):
@@ -17,7 +17,7 @@ class BuilderInfluxdb(BuilderGolangTools):
         self.system.package.mdupdate()
         self.system.package.install(["npm", "bzr"])
         # golang dependancy
-        j.builders.runtimes.golang.install()
+        j.builders.runtimes.go.install()
 
         # build from source
         cmd = """

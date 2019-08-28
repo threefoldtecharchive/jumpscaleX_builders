@@ -1,15 +1,16 @@
 from Jumpscale import j
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
 builder_method = j.baseclasses.builder_method
 
 
-class BuilderTFChain(j.baseclasses.builder):
+class BuilderTFChain(BuilderGolangTools):
     __jslocation__ = "j.builders.blockchain.tfchain"
 
     @builder_method()
     def _init(self, reset=False):
         self.GIT_BRANCH = "master"
-        self.DIR_BUILD = j.builders.runtimes.golang.package_path_get(
+        self.DIR_BUILD = self.package_path_get(
             self.__class__.NAME, host="github.com/threefoldfoundation"
         )
 
@@ -19,9 +20,9 @@ class BuilderTFChain(j.baseclasses.builder):
             return
         j.builders.system.package.mdupdate()
         j.builders.system.package.ensure("git")
-        golang = j.builders.runtimes.golang
+        golang = j.builders.runtimes.go
         golang.install()
-        GOPATH = golang.GOPATH
+        GOPATH = golang.DIR_GO_PATH
         url = "github.com/threefoldfoundation"
         path = "%s/src/%s/tfchain" % (GOPATH, url)
         pullurl = "https://%s/tfchain.git" % url
@@ -32,8 +33,8 @@ class BuilderTFChain(j.baseclasses.builder):
     @builder_method()
     def install(self):
         self.build(branch=branch, tag=tag, revision=revision, reset=reset)
-        tfchaindpath = j.builders.tools.joinpaths(j.builders.runtimes.golang.GOPATH, "bin", "tfchaind")
-        tfchaincpath = j.builders.tools.joinpaths(j.builders.runtimes.golang.GOPATH, "bin", "tfchainc")
+        tfchaindpath = j.builders.tools.joinpaths(self.DIR_GO_PATH, "bin", "tfchaind")
+        tfchaincpath = j.builders.tools.joinpaths(self.DIR_GO_PATH, "bin", "tfchainc")
         j.builders.tools.file_copy(tfchaindpath, "{DIR_BIN}/")
         j.builders.tools.file_copy(tfchaincpath, "{DIR_BIN}/")
 

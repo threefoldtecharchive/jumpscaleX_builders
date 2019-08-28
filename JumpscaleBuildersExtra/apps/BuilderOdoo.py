@@ -2,7 +2,7 @@ import textwrap
 
 from Jumpscale import j
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 # /tmp is the default directory for postgres unix socket
 SIMPLE_CFG = """
