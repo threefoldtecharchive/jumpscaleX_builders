@@ -1,13 +1,17 @@
 from Jumpscale import j
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
+
+builder_method = j.baseclasses.builder_method
 
 
-class BuilderGeoDns(j.baseclasses.builder):
+class BuilderGeoDns(BuilderGolangTools):
     __jslocation__ = "j.builders.network.geodns"
 
     def reset(self):
         app.reset(self)
         self._init()
 
+    @builder_method()
     def install(self, reset=False):
         """
         installs and builds geodns from github.com/abh/geodns
@@ -15,12 +19,12 @@ class BuilderGeoDns(j.baseclasses.builder):
         if reset is False and self.isInstalled():
             return
         # deps
-        # j.builders.runtimes.golang.install(force=False)
+        # j.builders.runtimes.go.install(force=False)
         j.builders.system.package.mdupdate()
         j.builders.system.package.ensure(["libgeoip-dev", "build-essential", "pkg-config"])
 
         # build
-        j.builders.runtimes.golang.get("github.com/abh/geodns")
+        self.get("github.com/abh/geodns")
 
         # moving files and creating config
         j.core.tools.dir_ensure("{DIR_BIN}")

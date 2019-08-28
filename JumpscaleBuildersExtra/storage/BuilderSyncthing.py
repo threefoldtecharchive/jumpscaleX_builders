@@ -1,7 +1,7 @@
 from Jumpscale import j
-from JumpscaleBuilders.runtimes.BuilderGolang import BuilderGolangTools
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 import xml.etree.ElementTree as etree
 
 
@@ -24,7 +24,7 @@ class BuilderSyncthing(BuilderGolangTools):
         build and setup syncthing to run on :8384 , this can be changed from the config file in /optvar/cfg/syncthing
         version e.g. 'v0.14.5'
         """
-        j.builders.runtimes.golang.install()
+        j.builders.runtimes.go.install()
         self.get("github.com/syncthing/syncthing/...", install=False, update=True)
 
         if version is not None:

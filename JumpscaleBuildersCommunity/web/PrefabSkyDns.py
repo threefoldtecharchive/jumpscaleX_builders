@@ -1,12 +1,16 @@
 from Jumpscale import j
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
+
+builder_method = j.baseclasses.builder_method
 
 
-class BuilderSkyDns(j.baseclasses.builder):
+class BuilderSkyDns(BuilderGolangTools):
+    @builder_method()
     def build(self, start=True, install=True):
         if self.isInstalled():
             return
-        j.builders.runtimes.golang.install()
-        j.builders.runtimes.golang.get("github.com/skynetservices/skydns")
+        j.builders.runtimes.go.install()
+        self.get("github.com/skynetservices/skydns")
         if install:
             self.install(start)
 

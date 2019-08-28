@@ -34,7 +34,6 @@ class BuilderRust(j.baseclasses.builder):
             "cargo",
             "cargo-clippy",
             "cargo-fmt",
-            "_moon.lua",
             "cargo-miri",
             "clippy-driver",
             "rls",

@@ -36,11 +36,11 @@ class Runtimes_TestCases(BaseTest):
         *Test golang builer sandbox*
         """
         self.info("golang builder: run build method.")
-        j.builders.runtimes.golang.build(reset=True)
+        j.builders.runtimes.go.build(reset=True)
         self.info("golang builder: run install method.")
-        j.builders.runtimes.golang.install()
+        j.builders.runtimes.go.install()
         self.info("Check that golang builder installed successfully")
-        self.assertTrue(j.builders.runtimes.golang.is_installed)
+        self.assertTrue(j.builders.runtimes.go.is_installed)
 
     def test003_nimlang(self):
         """ BLD-009

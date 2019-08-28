@@ -140,7 +140,6 @@ class BuilderSystemPackage(j.baseclasses.builder):
                     "libpq-dev",
                     "libsqlite3-dev",
                 ]:
-
                     if "libsnappy-dev" in package or "libsnappy1v5" in package:
                         package = "snappy"
 
@@ -163,6 +162,7 @@ class BuilderSystemPackage(j.baseclasses.builder):
                 cmd = "apt-cyg install %s\n" % package
             else:
                 raise j.exceptions.RuntimeError("could not install:%s, platform not supported" % package)
+
             self._execute(cmd)
         else:
             for package in packages:

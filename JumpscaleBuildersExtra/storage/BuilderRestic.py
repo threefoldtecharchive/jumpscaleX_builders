@@ -1,6 +1,6 @@
 from Jumpscale import j
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderRestic(j.baseclasses.builder):
@@ -15,7 +15,7 @@ class BuilderRestic(j.baseclasses.builder):
     def build(self):
 
         # install golang dependancy
-        j.builders.runtimes.golang.install()
+        j.builders.runtimes.go.install()
 
         # clone the repo
         C = """

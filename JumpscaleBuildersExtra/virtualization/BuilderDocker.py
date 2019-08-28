@@ -2,7 +2,7 @@ from Jumpscale import j
 import random
 import time
 
-builder_method = j.builders.system.builder_method
+builder_method = j.baseclasses.builder_method
 
 
 class BuilderDocker(j.baseclasses.builder):

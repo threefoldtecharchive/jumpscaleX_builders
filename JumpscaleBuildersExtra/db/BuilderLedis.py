@@ -21,7 +21,7 @@ class BuilderLedis(j.baseclasses.builder):
 
             make
             """
-            j.builders.runtimes.golang.install()
+            j.builders.runtimes.go.install()
             j.clients.git.pullGitRepo(
                 "https://github.com/siddontang/ledisdb", dest="{DIR_BASE}/go/src/github.com/siddontang/ledisdb"
             )
