@@ -1,6 +1,8 @@
 from Jumpscale import j
 from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
+builder_method = j.baseclasses.builder_method
+
 
 class BuilderGeoDns(BuilderGolangTools):
     __jslocation__ = "j.builders.network.geodns"
@@ -9,6 +11,7 @@ class BuilderGeoDns(BuilderGolangTools):
         app.reset(self)
         self._init()
 
+    @builder_method()
     def install(self, reset=False):
         """
         installs and builds geodns from github.com/abh/geodns

@@ -1,8 +1,11 @@
 from Jumpscale import j
 from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
+builder_method = j.baseclasses.builder_method
+
 
 class BuilderSkyDns(BuilderGolangTools):
+    @builder_method()
     def build(self, start=True, install=True):
         if self.isInstalled():
             return
