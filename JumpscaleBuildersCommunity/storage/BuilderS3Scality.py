@@ -13,7 +13,7 @@ class BuilderS3Scality(j.baseclasses.builder):
 
     @builder_method()
     def build(self, reset=False):
-        j.builders.runtimes.python.build(reset=reset)
+        j.builders.runtimes.python3.build(reset=reset)
         j.builders.runtimes.nodejs.build(reset=reset)
 
         path = "%s/%s" % (self.DIR_BUILD, self.NAME)
@@ -22,7 +22,7 @@ class BuilderS3Scality(j.baseclasses.builder):
 
     @builder_method()
     def install(self, reset=False, storage="{DIR_VAR}/scality/data/", meta="{DIR_VAR}/scality/meta/"):
-        j.builders.runtimes.python.install(reset=reset)
+        j.builders.runtimes.python3.install(reset=reset)
         j.builders.runtimes.nodejs.install(reset=reset)
         j.builders.runtimes.nodejs.npm_install("npm-run-all")
         j.builders.system.package.mdupdate()
