@@ -2,6 +2,8 @@ from Jumpscale import j
 
 
 class BuilderTarantool(j.baseclasses.builder):
+    __jslocation__ = "j.builders.db.tarantool"
+
     def _init(self, **kwargs):
         self.git_url = "https://github.com/tarantool/tarantool.git"
 
@@ -79,7 +81,7 @@ class BuilderTarantool(j.baseclasses.builder):
                 download_to = "/tmp/tarantool_requirements.txt"
                 j.builders.tools.file_download(requirements, to=download_to, minsizekb=0)
                 cmd = "pip3 install -r %s" % download_to
-                j.sal.process.execute(cmd, profile=True)
+                self._execute(cmd)
 
                 self._done_set("dependencies")
 
