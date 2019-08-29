@@ -18,13 +18,13 @@ class BuilderSonic(j.baseclasses.builder):
         :param reset:
         :return:
         """
-
         j.builders.runtimes.rust.install()
 
         if not j.core.platformtype.myplatform.platform_is_osx:
             self.system.package.install("clang")
         self.profile.env_set_part("PATH", j.builders.runtimes.rust.DIR_CARGOBIN)
         self._execute("rustup update")
+        self._remove("/sandbox/bin/sonic")
         self._execute("cargo install sonic-server --force", timeout=60 * 60)
 
     @builder_method()
