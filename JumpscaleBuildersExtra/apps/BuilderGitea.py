@@ -54,7 +54,7 @@ class BuilderGitea(BuilderGolangTools):
         j.builders.system.package.ensure("git-core")
         j.builders.system.package.ensure("gcc")
         j.builders.runtimes.go.install()
-        j.builders.db.postgres.install()
+        j.builders.db.psql.install()
 
     def write_ini_config(self, path):
         # Configure Database
@@ -90,7 +90,7 @@ class BuilderGitea(BuilderGolangTools):
             # not started
             pass
 
-        j.builders.db.postgres.start()
+        j.builders.db.psql.start()
 
         _, out, _ = self._execute("sudo -u postgres {DIR_BIN}/psql -l")
         if "gitea" not in out:
@@ -125,11 +125,11 @@ class BuilderGitea(BuilderGolangTools):
     @property
     def startup_cmds(self):
         cmd = j.servers.startupcmd.get("gitea", "gitea web", path="/sandbox/bin")
-        return j.builders.db.postgres.startup_cmds + [cmd]
+        return j.builders.db.psql.startup_cmds + [cmd]
 
     @builder_method()
     def sandbox(self):
-        j.builders.db.postgres.sandbox()
+        j.builders.db.psql.sandbox()
 
         # add certs
         dir_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "etc/ssl/certs/")
