@@ -31,7 +31,7 @@ class BuilderEtcd(BuilderGolangTools):
 
     @property
     def startup_cmds(self):
-        return [j.servers.startupcmd.get(name=self.NAME, cmd_start=self.NAME)]
+        return [j.servers.startupcmd.get(name=self._name, cmd_start=self._name)]
 
     @builder_method()
     def sandbox(
@@ -55,14 +55,14 @@ class BuilderEtcd(BuilderGolangTools):
         """
         bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
         self.tools.dir_ensure(bin_dest)
-        etcd_bin_path = self.tools.joinpaths(self._replace("{DIR_BIN}"), self.NAME)
+        etcd_bin_path = self.tools.joinpaths(self._replace("{DIR_BIN}"), self._name)
         etcdctl_bin_path = self.tools.joinpaths(self._replace("{DIR_BIN}"), "etcdctl")
         self.tools.file_copy(etcd_bin_path, bin_dest)
         self.tools.file_copy(etcdctl_bin_path, bin_dest)
 
         lib_dest = self.tools.joinpaths(self.DIR_SANDBOX, "sandbox/lib")
         self.tools.dir_ensure(lib_dest)
-        for bin in [self.NAME, "etcdctl"]:
+        for bin in [self._name, "etcdctl"]:
             dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, bin)
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest, exclude_sys_libs=False)
 

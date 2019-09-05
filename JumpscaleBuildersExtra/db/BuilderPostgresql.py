@@ -29,8 +29,8 @@ class BuilderPostgresql(j.baseclasses.builder):
     @builder_method()
     def install(self, port=5432):
         """
-        kosmos 'j.builders.db.postgres.install()'
-        kosmos 'j.builders.db.postgres.stop()'
+        kosmos 'j.builders.db.psql.install()'
+        kosmos 'j.builders.db.psql.stop()'
 
         :param port:
         :return:
@@ -86,7 +86,7 @@ class BuilderPostgresql(j.baseclasses.builder):
 
     def start(self):
         """
-        kosmos 'j.builders.db.postgres.start()'
+        kosmos 'j.builders.db.psql.start()'
         :return:
         """
         self.startup_cmds.start()
@@ -94,7 +94,7 @@ class BuilderPostgresql(j.baseclasses.builder):
 
     def test(self):
         """
-        kosmos 'j.builders.db.postgres.test()'
+        kosmos 'j.builders.db.psql.test()'
         :return:
         """
         self.stop()

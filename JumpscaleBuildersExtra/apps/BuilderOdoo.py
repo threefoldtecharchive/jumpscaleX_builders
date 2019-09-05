@@ -32,7 +32,7 @@ class BuilderOdoo(j.baseclasses.builder):
         kosmos 'j.builders.apps.odoo.start()'
         install odoo
         """
-        j.builders.db.postgres.install(reset=True)
+        j.builders.db.psql.install(reset=True)
         j.builders.runtimes.nodejs.install(reset=True)
 
         self.tools.dir_ensure(self.APP_DIR)
@@ -75,14 +75,14 @@ class BuilderOdoo(j.baseclasses.builder):
         kosmos 'j.builders.apps.odoo.start()'
         :return:
         """
-        j.builders.db.postgres.start()
+        j.builders.db.psql.start()
         cl = j.clients.postgres.db_client_get()
         self._write("{DIR_CFG}/odoo.conf", SIMPLE_CFG)
         self.startup_cmds.start()
         print("INSTALLED OK, PLEASE GO TO http://localhost:8069    masterpasswd:rooter")
 
     def stop(self):
-        j.builders.db.postgres.stop()
+        j.builders.db.psql.stop()
         self.startup_cmds.stop()
 
     def set_dbname(self, name):
