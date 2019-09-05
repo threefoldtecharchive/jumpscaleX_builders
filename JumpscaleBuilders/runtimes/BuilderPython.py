@@ -50,7 +50,7 @@ class BuilderPython(j.baseclasses.builder):
         self._execute(
             """
         export DEBIAN_FRONTEND=noninteractive
-        apt install tk tk-dev linux-headers-generic tcl-dev libgdbm-dev -yq
+        apt-get install tk tk-dev linux-headers-generic tcl-dev libgdbm-dev -yq
         """
         )
         python_url = "https://github.com/python/cpython.git"
@@ -102,7 +102,7 @@ class BuilderPython(j.baseclasses.builder):
         will make sure we add env scripts to it as well as add all the required pip modules
         """
         script = """
-        apt -f install
+        apt-get -f install
         rm -rf get-pip.py
         curl https://bootstrap.pypa.io/get-pip.py > get-pip.py
         python3 get-pip.py
