@@ -143,9 +143,7 @@ class BuilderTaiga(j.baseclasses.builder):
 
     @builder_method()
     def backend_install(self):
-        j.clients.git.pullGitRepo(
-            "https://github.com/taigaio/taiga-back.git", self.backend_repo_dir, branch="stable"
-        )
+        j.clients.git.pullGitRepo("https://github.com/taigaio/taiga-back.git", self.backend_repo_dir, branch="stable")
         command = f"""
         chown -R {TAIGA_USER} {self.backend_repo_dir}
         su {TAIGA_USER} -c '
@@ -161,24 +159,16 @@ class BuilderTaiga(j.baseclasses.builder):
         '
         """
         self._execute(command)
-        j.sal.fs.writeFile(
-            f"{self.backend_repo_dir}/settings/local.py", MEDIA_CONF_FILE
-        )
+        j.sal.fs.writeFile(f"{self.backend_repo_dir}/settings/local.py", MEDIA_CONF_FILE)
 
     @builder_method()
     def frontend_install(self, host, port, protocol):
         j.clients.git.pullGitRepo(
-            "https://github.com/taigaio/taiga-front-dist.git",
-            self.frontend_repo_dir,
-            branch="stable",
+            "https://github.com/taigaio/taiga-front-dist.git", self.frontend_repo_dir, branch="stable"
         )
-        conf_dict = j.data.serializers.json.load(
-            f"{self.frontend_repo_dir}/dist/conf.example.json"
-        )
+        conf_dict = j.data.serializers.json.load(f"{self.frontend_repo_dir}/dist/conf.example.json")
         conf_dict["api"] = f"{protocol}://{host}:{port}/api/v1/"
-        j.data.serializers.json.dump(
-            f"{self.frontend_repo_dir}/dist/conf.json", conf_dict
-        )
+        j.data.serializers.json.dump(f"{self.frontend_repo_dir}/dist/conf.json", conf_dict)
 
     @builder_method()
     def install(self, host, port, protocol="http"):
