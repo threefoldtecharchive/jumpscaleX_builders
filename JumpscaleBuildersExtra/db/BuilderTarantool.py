@@ -10,7 +10,7 @@ class BuilderTarantool(j.baseclasses.builder):
     def install(self, reset=False, branch="2.1.1"):  # branch='1.10.1'
         """
 
-
+        kosmos 'j.builders.db.tarantool.install()'
 
         Install tarantool
         :param reset: reinstall if reset is True
