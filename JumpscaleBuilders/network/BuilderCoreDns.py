@@ -20,7 +20,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
 
     def _init(self, **kwargs):
         super()._init()
-        self.package_path = self.package_path_get(self._name)
+        self.package_path = self.package_path_get(self._classname)
         self.templates_dir = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates")
 
     @builder_method()
@@ -81,7 +81,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
         self.tools.copyTree(j.builders.db.redis.DIR_SANDBOX, self.DIR_SANDBOX)
 
         # copy bins
-        coredns_bin = j.sal.fs.joinPaths("{DIR_BIN}", self._name)
+        coredns_bin = j.sal.fs.joinPaths("{DIR_BIN}", self._classname)
         bin_dir_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
         self.tools.dir_ensure(bin_dir_dest)
         self._copy(coredns_bin, bin_dir_dest)
@@ -110,7 +110,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
 
     @builder_method()
     def uninstall(self):
-        bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
+        bin_path = self.tools.joinpaths("{DIR_BIN}", self._classname)
         self._remove(bin_path)
         self.clean()
 

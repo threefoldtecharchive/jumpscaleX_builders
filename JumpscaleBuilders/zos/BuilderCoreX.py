@@ -106,16 +106,16 @@ class BuilderCoreX(j.baseclasses.builder):
 
     def start(self, port=7681):
         cmd = "/sandbox/bin/corex --port {}".format(port)
-        j.servers.startupcmd.get(name=self._name, cmd_start=cmd).start()
+        j.servers.startupcmd.get(name=self._classname, cmd_start=cmd).start()
 
     def running(self):
-        if len(j.sal.process.getProcessPid(self._name)) > 0:
+        if len(j.sal.process.getProcessPid(self._classname)) > 0:
             return True
         return False
 
     def stop(self):
         # killing the daemon
-        pane = j.servers.tmux.pane_get(self._name)
+        pane = j.servers.tmux.pane_get(self._classname)
         pane.kill()
 
     @builder_method()
