@@ -7,7 +7,7 @@ class GrafanaComponent(j.baseclasses.object_config):
 
     _SCHEMATEXT = """
         @url = jumpscale.builder.grafana.1
-        name* = "" (S)
+        name** = "" (S)
         addr = "" (S)
         port = 7777 (I)
         secret = "" (S)
