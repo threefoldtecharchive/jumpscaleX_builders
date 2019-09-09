@@ -147,12 +147,12 @@ class BuilderPHP(j.baseclasses.builder):
     @property
     def startup_cmds(self):
         cmd = "/sandbox/sbin/php-fpm -F -y /sandbox/etc/php-fpm.conf"  # foreground
-        cmds = [j.servers.startupcmd.get(name=self.NAME, cmd_start=cmd)]
+        cmds = [j.servers.startupcmd.get(name=self._name, cmd_start=cmd)]
         return cmds
 
     def stop(self):
         super().stop()
-        j.sal.process.killProcessByName(self.NAME)
+        j.sal.process.killProcessByName(self._name)
 
     @builder_method()
     def sandbox(

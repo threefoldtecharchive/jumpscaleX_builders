@@ -143,7 +143,7 @@ class BuilderCaddy(BuilderGolangTools):
 
         """
 
-        caddy_bin_path = self.tools.joinpaths(self.DIR_GO_PATH_BIN, self.NAME)
+        caddy_bin_path = self.tools.joinpaths(self.DIR_GO_PATH_BIN, self._name)
         j.builders.tools.file_copy(caddy_bin_path, "{DIR_BIN}/caddy")
 
     @property
@@ -155,7 +155,7 @@ class BuilderCaddy(BuilderGolangTools):
     def sandbox(self, reset=False, zhub_client=None, flist_create=False):
         bin_dest = j.sal.fs.joinPaths("/sandbox/var/build", "{}/sandbox".format(self.DIR_SANDBOX))
         self.tools.dir_ensure(bin_dest)
-        caddy_bin_path = self.tools.joinpaths(self.package_path, "/caddy", self.NAME)
+        caddy_bin_path = self.tools.joinpaths(self.package_path, "/caddy", self._name)
         self.tools.file_copy(caddy_bin_path, bin_dest)
 
     def _test(self, name=""):

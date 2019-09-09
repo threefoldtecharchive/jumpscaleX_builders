@@ -55,7 +55,7 @@ class BuilderZeroFlist(j.baseclasses.builder):
         # Copy zstor bins
         bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
         self.tools.dir_ensure(bin_dest)
-        bin_path = j.sal.fs.joinPaths(self._replace("{DIR_BIN}"), self.NAME)
+        bin_path = j.sal.fs.joinPaths(self._replace("{DIR_BIN}"), self._name)
         self._copy(bin_path, bin_dest)
 
     @builder_method()
@@ -63,6 +63,6 @@ class BuilderZeroFlist(j.baseclasses.builder):
         """
         Uninstall zflist by removing all related files from bin directory and build destination
         """
-        bin_path = self.tools.joinpaths("{DIR_BIN}", self.NAME)
+        bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
         self._remove(bin_path)
         self.clean()

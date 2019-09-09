@@ -41,7 +41,7 @@ class BuilderCockroachDB(j.baseclasses.builder):
         http_port = 8581
 
         cmd = "/sandbox/bin/cockroach start --host={} --insecure --port={} --http-port={}".format(host, port, http_port)
-        cmds = [j.servers.startupcmd.get(name=self.NAME, cmd_start=cmd)]
+        cmds = [j.servers.startupcmd.get(name=self._name, cmd_start=cmd)]
         return cmds
 
     @builder_method()
@@ -53,7 +53,7 @@ class BuilderCockroachDB(j.baseclasses.builder):
     def sandbox(self):
         bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox")
         self.tools.dir_ensure(bin_dest)
-        bin_path = self.tools.joinpaths("{DIR_BIN}", self.NAME)
+        bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
         self._copy(bin_path, bin_dest)
 
     @builder_method()
@@ -62,7 +62,7 @@ class BuilderCockroachDB(j.baseclasses.builder):
             self.stop()
 
         self.start()
-        pid = j.sal.process.getProcessPid(self.NAME)
+        pid = j.sal.process.getProcessPid(self._name)
         assert pid is not []
         self.stop()
 
@@ -70,6 +70,6 @@ class BuilderCockroachDB(j.baseclasses.builder):
 
     @builder_method()
     def uninstall(self):
-        bin_path = self.tools.joinpaths("{DIR_BIN}", self.NAME)
+        bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
         self._remove(bin_path)
         self.clean()
