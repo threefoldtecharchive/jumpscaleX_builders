@@ -82,12 +82,12 @@ class BuilderSyncthing(BuilderGolangTools):
     @builder_method()
     def stop(self):
         # stop syncthing
-        j.sal.process.killProcessByName(self.NAME)
+        j.sal.process.killProcessByName(self._name)
 
     @property
     def startup_cmds(self):
         cmd = self._replace("{DIR_BIN}/syncthing -home  {DIR_CFG}/syncthing")
-        cmds = [j.servers.startupcmd.get(name=self.NAME, cmd_start=cmd)]
+        cmds = [j.servers.startupcmd.get(name=self._name, cmd_start=cmd)]
         return cmds
 
     @builder_method()

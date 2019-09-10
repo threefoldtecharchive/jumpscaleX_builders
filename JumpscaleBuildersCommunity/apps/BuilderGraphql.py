@@ -58,13 +58,13 @@ class BuilderGraphql(j.baseclasses.builder):
         sudo -H -u graphuser python3 app.py
         """
         )
-        start_cmd = j.servers.startupcmd.get(self.NAME, cmd_start=start_script, ports=[8000])
+        start_cmd = j.servers.startupcmd.get(self._name, cmd_start=start_script, ports=[8000])
         return [start_cmd]
 
     @builder_method()
     def stop(self):
         # killing the daemon
-        j.servers.tmux.pane_get(self.NAME).kill()
+        j.servers.tmux.pane_get(self._name).kill()
         j.builders.db.zdb.stop()
 
     @builder_method()

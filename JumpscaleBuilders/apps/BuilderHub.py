@@ -201,13 +201,13 @@ class BuilderHub(j.baseclasses.builder):
         cd {DIR_CODE}/hub/python/ && python3 flist-uploader.py
         """
         )
-        start_cmd = j.servers.startupcmd.get(self.NAME, cmd_start=start_script)
+        start_cmd = j.servers.startupcmd.get(self._name, cmd_start=start_script)
         return [start_cmd]
 
     @builder_method()
     def stop(self):
         # killing the daemon
-        j.servers.tmux.pane_get(self.NAME).kill()
+        j.servers.tmux.pane_get(self._name).kill()
         j.builders.db.zdb.stop()
 
     @builder_method()

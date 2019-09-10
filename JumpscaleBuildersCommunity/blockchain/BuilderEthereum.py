@@ -30,7 +30,7 @@ class BuilderEthereum(BuilderGolangTools):
         """
         Install the binaries of ethereum
         """
-        bin_path = self.tools.joinpaths(self.package_path, self.NAME)
+        bin_path = self.tools.joinpaths(self.package_path, self._name)
         self.tools.dir_ensure("{DIR_BIN}")
         self.tools.file_copy(bin_path, self._replace("{DIR_BIN}"))
 

@@ -76,7 +76,7 @@ class BuilderNodeJS(j.baseclasses.builder):
 
     @builder_method()
     def install(self, reset=False):
-
+        self._profile_sandbox_set()
         self._execute("rm -rf %s;cp -r %s %s" % (self.path, self.DIR_BUILD, self.path))
         j.builders.tools.file_link("%s/bin/node" % self.path, "{DIR_BIN}/node")
         j.builders.tools.file_link("%s/bin/npm" % self.path, "{DIR_BIN}/npm")
