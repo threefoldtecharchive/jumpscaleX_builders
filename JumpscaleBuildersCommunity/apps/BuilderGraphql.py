@@ -24,12 +24,16 @@ class BuilderGraphql(j.baseclasses.builder):
     def build(self):
         # TODO : Build from source
         graphql_websockets_url = "https://github.com/threefoldfoundation/graphql_websockets"
-        j.clients.git.pullGitRepo(dest=self.DIR_BUILD, url=graphql_websockets_url, depth=1)
+        j.clients.git.pullGitRepo(
+            dest=self.tools.joinpaths(self.DIR_BUILD, "graphql_websockets"), url=graphql_websockets_url, depth=1
+        )
 
     @builder_method()
     def install(self):
         self.system.package.install("sudo")
-        self.tools.copyTree(self.DIR_BUILD, self.APP_DIR, deletefirst=True, createdir=True)
+        self.tools.copyTree(
+            self.tools.joinpaths(self.DIR_BUILD, "graphql_websockets"), self.APP_DIR, deletefirst=True, createdir=True
+        )
 
         # install graphql_ws,sanic, graphene, s
         # sanic-graphql
