@@ -87,8 +87,8 @@ class BuilderRipple(JSBASE):
 
     @property
     def startup_cmds(self):
-        cmd = "/sandbox/bin/{}".format(self.NAME)
-        cmds = [j.servers.startupcmd.get(name=self.NAME, cmd_start=cmd)]
+        cmd = "/sandbox/bin/{}".format(self._name)
+        cmds = [j.servers.startupcmd.get(name=self._name, cmd_start=cmd)]
         return cmds
 
     @builder_method()
@@ -98,7 +98,7 @@ class BuilderRipple(JSBASE):
 
     @builder_method()
     def stop(self):
-        j.sal.process.killProcessByName(self.NAME)
+        j.sal.process.killProcessByName(self._name)
 
     @builder_method()
     def test(self):

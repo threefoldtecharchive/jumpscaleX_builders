@@ -49,7 +49,7 @@ class BuilderZdb(j.baseclasses.builder):
         cmd = "/sandbox/bin/zdb --listen {} --port {} --index {} --data {} --mode {} --admin {} --protect".format(
             addr, port, idir, ddir, mode, adminsecret
         )
-        cmds = [j.servers.startupcmd.get(name=self._classname, cmd_start=cmd)]
+        cmds = [j.servers.startupcmd.get(name=self._name, cmd_start=cmd)]
         return cmds
 
     @builder_method()

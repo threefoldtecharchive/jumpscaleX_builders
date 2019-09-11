@@ -123,13 +123,13 @@ class BuilderBitcoin(j.baseclasses.builder):
     @property
     def startup_cmds(self):
         # bitcoin daemon
-        cmd = j.servers.startupcmd.get(self.NAME, cmd_start="bitcoind")
+        cmd = j.servers.startupcmd.get(self._name, cmd_start="bitcoind")
         return [cmd]
 
     @builder_method()
     def stop(self):
         # killing the daemon
-        j.sal.process.killProcessByName(self.NAME)
+        j.sal.process.killProcessByName(self._name)
 
     @builder_method()
     def clean(self):

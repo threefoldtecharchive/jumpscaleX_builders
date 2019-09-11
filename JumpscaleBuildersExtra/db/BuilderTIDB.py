@@ -63,7 +63,7 @@ class BuilderTIDB(j.baseclasses.builder):
             self.stop()
 
         self.start()
-        pid = j.sal.process.getProcessPid(self.NAME)
+        pid = j.sal.process.getProcessPid(self._name)
         assert pid is not []
         response = requests.get("http://127.0.0.1:10080/status")
         assert response.status_code == requests.codes.ok

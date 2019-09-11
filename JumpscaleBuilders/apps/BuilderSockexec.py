@@ -64,16 +64,16 @@ class BuilderSockexec(j.baseclasses.builder):
 
     # def start(self, port=7681):
     #     cmd = "/sandbox/bin/sockexec --port {}".format(port)
-    #     j.servers.startupcmd.get(name=self.NAME, cmd_start=cmd).start()
+    #     j.servers.startupcmd.get(name=self._name, cmd_start=cmd).start()
     #
     # def running(self):
-    #     if len(j.sal.process.getProcessPid(self.NAME)) > 0:
+    #     if len(j.sal.process.getProcessPid(self._name)) > 0:
     #         return True
     #     return False
     #
     # def stop(self):
     #     # killing the daemon
-    #     pane = j.servers.tmux.pane_get(self.NAME)
+    #     pane = j.servers.tmux.pane_get(self._name)
     #     pane.kill()
     #
     # @builder_method()

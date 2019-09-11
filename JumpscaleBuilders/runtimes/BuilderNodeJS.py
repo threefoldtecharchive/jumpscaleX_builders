@@ -11,15 +11,15 @@ class BuilderNodeJS(j.baseclasses.builder):
 
     @property
     def npm(self):
-        return self._replace("{DIR_BASE}/%s/bin/npm" % self.NAME)
+        return self._replace("{DIR_BASE}/%s/bin/npm" % self._name)
 
     @property
     def NODE_PATH(self):
-        return self._replace("{DIR_BASE}/%s/lib/node_modules" % self.NAME)
+        return self._replace("{DIR_BASE}/%s/lib/node_modules" % self._name)
 
     @property
     def path(self):
-        return self._replace("{DIR_BASE}/%s" % self.NAME)
+        return self._replace("{DIR_BASE}/%s" % self._name)
 
     def phantomjs(self, reset=False):
         """
@@ -76,7 +76,7 @@ class BuilderNodeJS(j.baseclasses.builder):
 
     @builder_method()
     def install(self, reset=False):
-
+        self._profile_sandbox_set()
         self._execute("rm -rf %s;cp -r %s %s" % (self.path, self.DIR_BUILD, self.path))
         j.builders.tools.file_link("%s/bin/node" % self.path, "{DIR_BIN}/node")
         j.builders.tools.file_link("%s/bin/npm" % self.path, "{DIR_BIN}/npm")
@@ -104,7 +104,7 @@ class BuilderNodeJS(j.baseclasses.builder):
         merge_base_flist="tf-autobuilder/threefoldtech-jumpscaleX-development.flist",
     ):
         self.tools.dir_ensure(self.DIR_SANDBOX)
-        self._copy(self.path, "%s/%s/%s" % (self.DIR_SANDBOX, j.core.dirs.BASEDIR[1:], self.NAME))
+        self._copy(self.path, "%s/%s/%s" % (self.DIR_SANDBOX, j.core.dirs.BASEDIR[1:], self._name))
 
         bin_dest = self.tools.joinpaths(self.DIR_SANDBOX, j.core.dirs.BINDIR[1:])
         self.tools.dir_ensure(bin_dest)
