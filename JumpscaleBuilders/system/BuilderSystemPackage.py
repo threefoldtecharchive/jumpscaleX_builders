@@ -104,6 +104,10 @@ class BuilderSystemPackage(j.baseclasses.builder):
             raise j.exceptions.NotImplemented()
         self._execute(f"{CMD_APT_GET} update -y")
 
+    def set_non_interactive(self):
+        self.profile_builder_select()
+        self.profile.env_set("DEBIAN_FRONTEND", "noninteractive")
+
     @builder_method()
     def install(self, packages):
         """
