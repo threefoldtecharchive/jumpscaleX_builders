@@ -13,6 +13,7 @@ class BuilderSockexec(j.baseclasses.builder):
         build sockexec
         :return:
         """
+        # build skalibs from tag v2.8.1.0, because sockexec is depends on stuff removed in newer versions
 
         self.tools.dir_ensure(self.DIR_BUILD)
         C = """
@@ -20,6 +21,7 @@ class BuilderSockexec(j.baseclasses.builder):
         rm -rf skalibs/
         git clone https://github.com/skarnet/skalibs
         cd {DIR_BUILD}/skalibs
+        git checkout v2.8.1.0 # 
         ./configure
         make
         make install
