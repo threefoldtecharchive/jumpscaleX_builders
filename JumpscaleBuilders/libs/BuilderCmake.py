@@ -19,7 +19,7 @@ class BuilderCmake(j.baseclasses.builder):
         """.format(
             self.package_path
         )
-        self._execute(cmd)
+        self._execute(cmd, timeout=15 * 60)
 
     @builder_method()
     def install(self):
