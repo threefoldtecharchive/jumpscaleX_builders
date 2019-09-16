@@ -60,7 +60,7 @@ class BuilderOpenResty(j.baseclasses.builder):
         ln -sf /sandbox/openresty/bin/resty /sandbox/bin/resty
         ln -sf /sandbox/openresty/bin/restydoc /sandbox/bin/restydoc
         ln -sf /sandbox/openresty/bin/restydoc-index /sandbox/bin/restydoc-index
-        ln -f -s /sandbox/openresty/luajit/bin/luajit /sandbox/bin/lua        
+        ln -f -s /sandbox/openresty/luajit/bin/luajit /sandbox/bin/lua
         rm  -rf /sandbox/openresty/pod
         rm  -rf /sandbox/openresty/site
         """
