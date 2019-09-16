@@ -285,6 +285,7 @@ class BuilderLua(j.baseclasses.builder):
         set -e
         pushd /sandbox/openresty/luarocks/lib/luarocks/rocks-5.1/lapis/1.7.0-1/bin/
         cp lapis /sandbox/bin/_lapis.lua
+        cp lapis /sandbox/bin/lapis
         popd
         pushd '/sandbox/openresty/luarocks/lib/luarocks/rocks-5.1/moonscript/0.5.0-1/bin'
         cp moon /sandbox/bin/_moon.lua
