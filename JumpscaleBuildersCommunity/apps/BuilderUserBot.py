@@ -1,6 +1,5 @@
 from Jumpscale import j
 import textwrap
-from .BuilderDigitalME import BuilderDigitalME
 
 builder_method = j.baseclasses.builder_method
 
