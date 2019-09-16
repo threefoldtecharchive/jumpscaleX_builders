@@ -175,7 +175,6 @@ class BuilderLua(j.baseclasses.builder):
 
         # lua-resty-influx
         lua-resty-repl
-        lua-resty-auto-ssl
         #
         # lua-resty-iputils
         #
@@ -305,13 +304,11 @@ class BuilderLua(j.baseclasses.builder):
         kosmos 'j.builders.runtimes.lua.install_autossl()'
         :return:
         """
-
         if self.tools.platform_is_ubuntu:
             C = """
-            ln -sf /sandbox/openresty/luarocks/bin/resty-auto-ssl /sandbox/openresty/resty-auto-ssl        
-            ln -sf /sandbox/openresty/resty-auto-ssl /bin/resty-auto-ssl
-            ln -sf /sandbox/openresty/resty-auto-ssl /bin/resty-auto-ssl
-            mkdir -p /etc/resty-auto-ssl/storage/file            
+            ln -sf /sandbox/openresty/luarocks/bin/resty-auto-ssl/ /sandbox/openresty/resty-auto-ssl
+            ln -sf /sandbox/openresty/luarocks/bin/resty-auto-ssl/ /bin/resty-auto-ssl
+            mkdir -p /etc/resty-auto-ssl/storage/file
             """
             self._execute(C)
         else:
