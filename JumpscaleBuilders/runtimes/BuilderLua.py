@@ -257,6 +257,7 @@ class BuilderLua(j.baseclasses.builder):
         rm -rf /sandbox/openresty/luajit/share
         rm -rf /sandbox/var/build
         rm -rf /sandbox/root
+        rm -rf /bin/resty-auto-ssl
 
         """
         self._execute(C)
