@@ -258,7 +258,8 @@ class BuilderLua(j.baseclasses.builder):
         rm -rf /sandbox/var/build
         rm -rf /sandbox/root
         rm -rf /bin/resty-auto-ssl
-
+        rm -rf {DIR_BUILD}
+        rm -rf /tmp/luarocks*
         """
         self._execute(C)
 
@@ -423,13 +424,6 @@ class BuilderLua(j.baseclasses.builder):
             self._copy(item, dest_full)
 
         self.clean()
-
-    def clean(self):
-        C = """
-        rm -rf {DIR_BUILD}
-        rm -rf /tmp/luarocks*
-        """
-        self._execute(C)
 
     @property
     def startup_cmds(self):
