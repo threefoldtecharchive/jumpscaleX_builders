@@ -5,19 +5,33 @@ from parameterized import parameterized
 
 
 class Apps_TestCases(BaseTest):
-    @parameterized.expand([("digitalme", "openresty"), ("freeflow", "apache2"), ("hub", "zerohub"), ("odoo", "odoo")])
+    @parameterized.expand(
+        [
+            ("bootstrapbot", "zdb"),
+            ("digitalme", "openresty"),
+            ("freeflow", "apache2"),
+            ("gitea", "gitea"),
+            ("graphql", "psql"),
+            ("micro", "micro"),
+            ("zerohub", "hub"),
+            ("odoo", "odoo"),
+            ("sockexec", "sockexec"),
+            ("userbot", "zdb"),
+            ("sonic", "sonic"),
+            ("threebot", "lua"),
+            ("wordpress", "caddy")
+        ]
+    )
     def test_apps_flists(self, flist, binary):
         """ SAN-006
         *Test apps builers sandbox*
         """
         skipped_flists = {
-            "hub": "https://github.com/threefoldtech/jumpscaleX/issues/669",
-            "odoo": "https://github.com/threefoldtech/jumpscaleX/issues/676",
-            "digitalme": "https://github.com/threefoldtech/jumpscaleX/issues/675",
+            "wordpress": "not done yet",
+            "micro": "not done yet"
         }
         if flist in skipped_flists:
-            self.skipTest(skipped_flists[flist])
-        self.info("run {} sandbox.".format(flist))
+            self.info("run {} sandbox.".format(flist))
         getattr(j.builders.apps, flist).sandbox(**self.sandbox_args)
         self.info("Deploy container with uploaded {} flist.".format(flist))
         self.deploy_flist_container("{}".format(flist))

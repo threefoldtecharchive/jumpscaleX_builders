@@ -4,10 +4,18 @@ from parameterized import parameterized
 
 
 class Network_TestCases(BaseTest):
-    @parameterized.expand([("coredns", "coredns"), ("zerotier", "zerotier-one")])
+    @parameterized.expand(
+        [
+            ("coredns", "coredns"),
+            ("zerotier", "zerotier-one"),
+            ("gateone", "gateone"),
+            ("geodns", "geodns"),
+            ("tcprouter", "tcprouter")
+        ]
+    )
     def test_network_builders(self, builder, process):
         """ BLD-001
-        *Test network builers sandbox*
+        *Test network builers*
         """
         self.info(" * {} builder: run build method.".format(builder))
         getattr(j.builders.network, builder).build(reset=True)

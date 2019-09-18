@@ -5,14 +5,24 @@ from parameterized import parameterized
 
 
 class Blockchain_TestCases(BaseTest):
-    @parameterized.expand([("bitcoin", "bitcoind"), ("ethereum", "geth"), ("ripple", "ripple")])
+    @parameterized.expand(
+        [
+            ("bitcoind", "bitcoind"),
+            ("electrum", "electrum"),
+            ("rippled", "ripple"),
+            ("atomicswap", "atomicswap"),
+            ("geth", "geth"),
+            ("tfchain", "tfchaind")
+
+        ]
+    )
     def test_blockchain_builders(self, builder, process):
-        """ BLD-014
-        *Test blockchain builers sandbox*
+        """ BLD
+        *Test blockchain builers*
         """
 
         self.info(" * {} builder: run build method.".format(builder))
-        getattr(j.builders.blockchain, builder).build()
+        getattr(j.builders.blockchain, builder).build(reset=True)
         self.info(" * {} builder: run install  method.".format(builder))
         getattr(j.builders.blockchain, builder).install()
         self.info(" * {} builder: run start method.".format(builder))

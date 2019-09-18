@@ -14,6 +14,10 @@ class DBTestCases(BaseTest):
             ("influxdb", "influx"),
             ("mongodb", "mongod"),
             ("mariadb", "mysql"),
+            ("cockroach", "cockroach"),
+            ("ledis", "leveldb"),
+            ("psql", "psql"),
+            ("rocksdb", "rocksdb")
         ]
     )
     def test_db_builders(self, builder, process):
@@ -21,8 +25,9 @@ class DBTestCases(BaseTest):
         *Test db builers sandbox*
         """
         skipped_builders = {
-            "mariadb": "https://github.com/threefoldtech/jumpscaleX/issues/652",
-            "influxdb": "https://github.com/threefoldtech/jumpscaleX/issues/690",
+            "ledis": "not done yet",
+            "mongodb": "not done yet",
+            "rocksdb": "where is it"
         }
         if builder in skipped_builders:
             self.skipTest(skipped_builders[builder])

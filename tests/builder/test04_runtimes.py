@@ -5,13 +5,18 @@ from parameterized import parameterized
 
 
 class Runtimes_TestCases(BaseTest):
-    @parameterized.expand([("lua", "openresty"), ("php", "php-fpm")])
+    @parameterized.expand(
+        [
+            ("lua", "lua"),
+            ("php", "php-fpm")
+        ]
+    )
     def test_runtimes_builders(self, builder, process):
         """ BLD-001
-        *Test runtimes builers sandbox*
+        *Test runtimes builers*
         """
         self.info("%s builder: run build method." % builder)
-        getattr(j.builders.runtimes, builder).build()
+        getattr(j.builders.runtimes, builder).build(reset=True)
         self.info(" * {} builder: run install  method.".format(builder))
         getattr(j.builders.runtimes, builder).install()
         self.info(" * {} builder: run start method.".format(builder))
@@ -31,60 +36,32 @@ class Runtimes_TestCases(BaseTest):
         self.small_sleep()
         self.assertFalse(len(j.sal.process.getProcessPid(process)))
 
-    def test002_golang(self):
+    @parameterized.expand(
+        [
+            ("nim", "nim"),
+            ("python3", "python3"),
+            ("rust", "rustup"),
+            ("nodejs", "nodejs")
+        ]
+    )
+    def test002_runtime_builders(self, builder, binary):
+        """ BLD
+        *Test runtime builers*
+        """
+        self.info("%s builder: run build method." % builder)
+        getattr(j.builders.runtimes, builder).build(reset=True)
+        self.info(" * {} builder: run install  method.".format(builder))
+        getattr(j.builders.runtimes, builder).install()
+        self.info("check that %s installed successfully." % builder)
+        self.assertTrue(j.sal.process.execute("which %s") % binary)
+
+    def test003_go(self):
         """ BLD-007
-        *Test golang builer sandbox*
+        *Test go builer*
         """
-        self.info("golang builder: run build method.")
+        self.info("go builder: run build method.")
         j.builders.runtimes.go.build(reset=True)
-        self.info("golang builder: run install method.")
+        self.info("go builder: run install method.")
         j.builders.runtimes.go.install()
-        self.info("Check that golang builder installed successfully")
+        self.info("Check that go builder installed successfully")
         self.assertTrue(j.builders.runtimes.go.is_installed)
-
-    def test003_nimlang(self):
-        """ BLD-009
-        *Test nimlang builer sandbox*
-        """
-        j.builders.runtimes.nimlang.build(reset=True)
-        j.builders.runtimes.nimlang.install()
-        try:
-            j.sal.process.execute("which nim")
-        except:
-            self.assertTrue(False)
-
-    def test004_python(self):
-        """ BLD-010
-        *Test python builer sandbox*
-        """
-        j.builders.runtimes.python.build(reset=True)
-        j.builders.runtimes.python.install()
-        try:
-            j.sal.process.execute("which python")
-        except:
-            self.assertTrue(False)
-
-    def test005_rust(self):
-        """ BLD-011
-        *Test rust builer sandbox*
-        """
-        self.info("rust builder: run build method.")
-        j.builders.runtimes.rust.build(reset=True)
-        self.info("rust builder: run install method.")
-        j.builders.runtimes.rust.install()
-        self.info("rust that nodejs installed successfully.")
-        try:
-            j.sal.process.execute("which rustup")
-        except:
-            self.assertTrue(False)
-
-    def test006_nodejs(self):
-        """ BLD-012
-        *Test nodejs builer sandbox*
-        """
-        self.info("nodejs builder: run build method.")
-        j.builders.runtimes.nodejs.build(reset=True)
-        self.info("nodejs builder: run install method.")
-        j.builders.runtimes.nodejs.install()
-        self.info("check that nodejs installed successfully.")
-        self.assertTrue(j.sal.process.execute("which nodejs"))

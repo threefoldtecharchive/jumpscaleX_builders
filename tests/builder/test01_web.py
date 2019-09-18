@@ -4,19 +4,20 @@ from parameterized import parameterized
 
 
 class WebTestCases(BaseTest):
-    @parameterized.expand([("caddy", "caddy"), ("traefik", "traefik"), ("nginx", "nginx"), ("openresty", "resty")])
+    @parameterized.expand(
+        [
+            ("caddy", "caddy"),
+            ("traefik", "traefik"),
+            ("nginx", "nginx"),
+            ("openresty", "resty"),
+            ("apachectl", "apache2"),
+            ("lapis", "lapis")
+        ]
+    )
     def test_web_builders(self, builder, process):
         """ BLD-001
         *Test web builers sandbox*
         """
-        skipped_builders = {
-            "caddy": "https://github.com/threefoldtech/jumpscaleX/issues/654",
-            "traefik": "https://github.com/threefoldtech/jumpscaleX/issues/676",
-            "openresty": "https://github.com/threefoldtech/jumpscaleX/issues/661",
-        }
-        if builder in skipped_builders:
-            self.skipTest(skipped_builders[builder])
-
         self.info(" * {} builder: run build method.".format(builder))
         getattr(j.builders.web, builder).build(reset=True)
         self.info(" * {} builder: run install  method.".format(builder))

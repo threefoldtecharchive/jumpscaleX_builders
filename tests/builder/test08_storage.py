@@ -1,17 +1,34 @@
 from Jumpscale import j
-from .base_test import BaseTest
-from loguru import logger
-import unittest, time
 from parameterized import parameterized
+from .base_test import BaseTest
 
 
 class StorageTestCases(BaseTest):
-    @parameterized.expand([("minio", "minio"), ("syncthing", "syncthing"), ("s3scality", "s3scality")])
+    @parameterized.expand(
+        [
+            ("btrfs", "btrfs"),
+            ("duplicacy", "duplicacy"),
+            ("fuse", "fuse"),
+            ("ipfs", "ipfs"),
+            ("minio", "minio"),
+            ("syncthing", "syncthing"),
+            ("s3scality", "s3scality"),
+            ("stor", "stor"),
+            ("zflist", "zflist"),
+            ("zstor", "zdb")
+        ]
+    )
     def test001_storage_builders(self, builder, process):
         """ BLD-001
-        *Test db builers sandbox*
+        *Test db builers*
         """
-        skipped_builders = {"s3scality": "https://github.com/threefoldtech/jumpscaleX/issues/671"}
+        skipped_builders = {
+            "btrfs": "not done yet",
+            "duplicacy": "not done yet",
+            "fuse": "not done yet",
+            "stor": "not done yet",
+            "zflist": "not done yet"
+        }
         if builder in skipped_builders:
             self.skipTest(skipped_builders[builder])
         self.info(" * {} builder: run build method.".format(builder))
@@ -37,7 +54,7 @@ class StorageTestCases(BaseTest):
 
     def test002_restic(self):
         """ BLD-033
-        *Test restic builer sandbox*
+        *Test restic builer*
         """
         self.info(" * restic builder: run build method.")
         j.builders.storage.restic.build(reset=True)
