@@ -79,6 +79,7 @@ class BuilderThreebot(j.baseclasses.builder):
         for dir_dest in new_dirs:
             dir_dest = self.tools.joinpaths(self.DIR_SANDBOX, self.tools.path_relative(dir_dest))
             self.tools.dir_ensure(dir_dest)
+            self.tools.touch(f"{dir_dest}/.keep")
 
         for file_dest, content in root_files.items():
             file_dest = self.tools.joinpaths(self.DIR_SANDBOX, self.tools.path_relative(file_dest))
@@ -104,7 +105,7 @@ class BuilderThreebot(j.baseclasses.builder):
 
         js_dir = self.DIR_SANDBOX + "/sandbox/lib/jumpscale"
         self.tools.dir_ensure(js_dir)
-        self.tools.copyTree("/sandbox/lib/jumpscale/", js_dir)
+        self.tools.copyTree("/sandbox/lib/jumpscale/", js_dir, ignoredir=[".git"])
 
         if push_to_repo:
             repo_path = j.clients.git.pullGitRepo(self.prebuilt_url)
