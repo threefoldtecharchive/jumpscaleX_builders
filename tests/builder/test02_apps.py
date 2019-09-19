@@ -26,8 +26,8 @@ class AppsTestCases(BaseTest):
         *Test web builers *
         """
         skipped_builders = {
-            "wordpress": "not done yet",
-            "micro": "not done yet"
+            "wordpress": "https://github.com/threefoldtech/jumpscaleX_builders/issues/13",
+            "micro": "https://github.com/threefoldtech/jumpscaleX_builders/issues/24"
         }
         if builder in skipped_builders:
             self.skipTest(skipped_builders[builder])

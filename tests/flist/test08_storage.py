@@ -24,11 +24,10 @@ class Storage_TestCases(BaseTest):
         *Test storage builers sandbox*
         """
         skipped_flists = {
-            "btrfs": "not done yet",
-            "duplicacy": "not done yet",
-            "fuse": "not done yet",
-            "stor": "not done yet",
-            "zflist": "not done yet"
+            "btrfs": "https://github.com/threefoldtech/jumpscaleX_builders/issues/20",
+            "duplicacy": "https://github.com/threefoldtech/jumpscaleX_builders/issues/19",
+            "fuse": "https://github.com/threefoldtech/jumpscaleX_builders/issues/21",
+            "stor": "https://github.com/threefoldtech/jumpscaleX_builders/issues/22",
         }
         if flist in skipped_flists:
             self.skipTest(skipped_flists[flist])

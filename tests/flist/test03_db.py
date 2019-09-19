@@ -26,10 +26,7 @@ class Db_TestCases(BaseTest):
         *Test DB builers sandbox*
         """
         skipped_flists = {
-            "ledis": "not done yet",
-            "mongodb": "not done yet",
-            "rocksdb": "where is it",
-            "cockroach": "not done yet"
+            "ledis": "https://github.com/threefoldtech/jumpscaleX_builders/issues/26",
         }
         if flist in skipped_flists:
             self.skipTest(skipped_flists[flist])

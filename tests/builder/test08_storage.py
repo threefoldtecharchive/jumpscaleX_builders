@@ -23,11 +23,10 @@ class StorageTestCases(BaseTest):
         *Test db builers*
         """
         skipped_builders = {
-            "btrfs": "not done yet",
-            "duplicacy": "not done yet",
-            "fuse": "not done yet",
-            "stor": "not done yet",
-            "zflist": "not done yet"
+            "btrfs": "https://github.com/threefoldtech/jumpscaleX_builders/issues/20",
+            "duplicacy": "https://github.com/threefoldtech/jumpscaleX_builders/issues/19",
+            "fuse": "https://github.com/threefoldtech/jumpscaleX_builders/issues/21",
+            "stor": "https://github.com/threefoldtech/jumpscaleX_builders/issues/22",
         }
         if builder in skipped_builders:
             self.skipTest(skipped_builders[builder])

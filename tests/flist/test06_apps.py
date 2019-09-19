@@ -27,8 +27,8 @@ class Apps_TestCases(BaseTest):
         *Test apps builers sandbox*
         """
         skipped_flists = {
-            "wordpress": "not done yet",
-            "micro": "not done yet"
+            "wordpress": "https://github.com/threefoldtech/jumpscaleX_builders/issues/13",
+            "micro": "https://github.com/threefoldtech/jumpscaleX_builders/issues/24"
         }
         if flist in skipped_flists:
             self.info("run {} sandbox.".format(flist))
