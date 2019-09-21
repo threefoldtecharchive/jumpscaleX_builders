@@ -11,6 +11,7 @@ class BuilderThreebot(j.baseclasses.builder):
         self.BUILD_LOCATION = self._replace("{DIR_BUILD}/threebot")
         url = "https://github.com/threefoldtech/jumpscaleX_core/tree/%s/sandbox" % j.core.myenv.DEFAULT_BRANCH
         self._sandbox_source = j.clients.git.getContentPathFromURLorPath(url)
+        self.prebuilt_url = "https://github.com/threefoldtech/threebot_prebuilt"
 
     @builder_method()
     def install(self, reset=False):
@@ -31,7 +32,7 @@ class BuilderThreebot(j.baseclasses.builder):
         # DO NOT CHANGE ANYTHING HERE BEFORE YOU REALLY KNOW WHAT YOU'RE DOING
 
     @builder_method()
-    def sandbox(self, reset=False, zhub_client=None, flist_create=True):
+    def sandbox(self, reset=False, zhub_client=None, flist_create=True, push_to_repo=False):
         j.builders.runtimes.lua.sandbox(reset=reset)
         j.builders.db.zdb.sandbox(reset=reset)
         j.builders.apps.sonic.sandbox(reset=reset)
@@ -78,6 +79,7 @@ class BuilderThreebot(j.baseclasses.builder):
         for dir_dest in new_dirs:
             dir_dest = self.tools.joinpaths(self.DIR_SANDBOX, self.tools.path_relative(dir_dest))
             self.tools.dir_ensure(dir_dest)
+            self.tools.touch(f"{dir_dest}/.keep")
 
         for file_dest, content in root_files.items():
             file_dest = self.tools.joinpaths(self.DIR_SANDBOX, self.tools.path_relative(file_dest))
@@ -86,10 +88,12 @@ class BuilderThreebot(j.baseclasses.builder):
             self.tools.file_ensure(file_dest)
             self.tools.file_write(file_dest, content)
 
-        self.tools.dir_ensure(self.DIR_SANDBOX + "etc/ssl/")
-        self.tools.dir_ensure(self.DIR_SANDBOX + "etc/resty-auto-ssl")
-        self.tools.copyTree("/sandbox/cfg/ssl/", self.DIR_SANDBOX + "etc/ssl/")
-        self.tools.copyTree("/etc/resty-auto-ssl", self.DIR_SANDBOX + "etc/resty-auto-ssl")
+        self.tools.dir_ensure(self.DIR_SANDBOX + "/etc/ssl/")
+        self.tools.dir_ensure(self.DIR_SANDBOX + "/etc/resty-auto-ssl")
+        self.tools.dir_ensure(self.DIR_SANDBOX + "/bin")
+        self.tools.copyTree("/sandbox/cfg/ssl/", self.DIR_SANDBOX + "/etc/ssl/")
+        self.tools.copyTree("/etc/resty-auto-ssl", self.DIR_SANDBOX + "/etc/resty-auto-ssl")
+        self.tools.copyTree("/bin/resty-auto-ssl", self.DIR_SANDBOX + "/bin/")
 
         file = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates", "threebot_startup.toml")
         file_dest = self.tools.joinpaths(self.DIR_SANDBOX, ".startup.toml")
@@ -98,6 +102,17 @@ class BuilderThreebot(j.baseclasses.builder):
         startup_file = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates", "3bot_startup.sh")
         file_dest = self.tools.joinpaths(self.DIR_SANDBOX, "3bot_startup.sh")
         self._copy(startup_file, file_dest)
+
+        js_dir = self.DIR_SANDBOX + "/sandbox/lib/jumpscale"
+        self.tools.dir_ensure(js_dir)
+        self.tools.copyTree("/sandbox/lib/jumpscale/", js_dir, ignoredir=[".git"])
+
+        if push_to_repo:
+            repo_path = j.clients.git.pullGitRepo(self.prebuilt_url)
+            self.tools.copyTree(self.DIR_SANDBOX, repo_path)
+            git_client = j.clients.git.get(repo_path)
+            git_client.commit("update prebuilt file")
+            git_client.push()
 
     def start(self):
         j.servers.threebot.default.start()

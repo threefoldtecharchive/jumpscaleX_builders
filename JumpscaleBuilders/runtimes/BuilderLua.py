@@ -175,7 +175,6 @@ class BuilderLua(j.baseclasses.builder):
 
         # lua-resty-influx
         lua-resty-repl
-        lua-resty-auto-ssl
         #
         # lua-resty-iputils
         #
@@ -258,7 +257,9 @@ class BuilderLua(j.baseclasses.builder):
         rm -rf /sandbox/openresty/luajit/share
         rm -rf /sandbox/var/build
         rm -rf /sandbox/root
-
+        rm -rf /bin/resty-auto-ssl
+        rm -rf {DIR_BUILD}
+        rm -rf /tmp/luarocks*
         """
         self._execute(C)
 
@@ -286,6 +287,7 @@ class BuilderLua(j.baseclasses.builder):
         set -e
         pushd /sandbox/openresty/luarocks/lib/luarocks/rocks-5.1/lapis/1.7.0-1/bin/
         cp lapis /sandbox/bin/_lapis.lua
+        cp lapis /sandbox/bin/lapis
         popd
         pushd '/sandbox/openresty/luarocks/lib/luarocks/rocks-5.1/moonscript/0.5.0-1/bin'
         cp moon /sandbox/bin/_moon.lua
@@ -305,13 +307,11 @@ class BuilderLua(j.baseclasses.builder):
         kosmos 'j.builders.runtimes.lua.install_autossl()'
         :return:
         """
-
         if self.tools.platform_is_ubuntu:
             C = """
-            ln -sf /sandbox/openresty/luarocks/bin/resty-auto-ssl /sandbox/openresty/resty-auto-ssl        
-            ln -sf /sandbox/openresty/resty-auto-ssl /bin/resty-auto-ssl
-            ln -sf /sandbox/openresty/resty-auto-ssl /bin/resty-auto-ssl
-            mkdir -p /etc/resty-auto-ssl/storage/file            
+            ln -sf /sandbox/openresty/luarocks/bin/resty-auto-ssl/ /sandbox/openresty/resty-auto-ssl
+            ln -sf /sandbox/openresty/luarocks/bin/resty-auto-ssl/ /bin/resty-auto-ssl
+            mkdir -p /etc/resty-auto-ssl/storage/file
             """
             self._execute(C)
         else:
@@ -424,13 +424,6 @@ class BuilderLua(j.baseclasses.builder):
             self._copy(item, dest_full)
 
         self.clean()
-
-    def clean(self):
-        C = """
-        rm -rf {DIR_BUILD}
-        rm -rf /tmp/luarocks*
-        """
-        self._execute(C)
 
     @property
     def startup_cmds(self):
