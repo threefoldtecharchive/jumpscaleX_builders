@@ -11,7 +11,7 @@ class BuilderThreebot(j.baseclasses.builder):
         self.BUILD_LOCATION = self._replace("{DIR_BUILD}/threebot")
         url = "https://github.com/threefoldtech/jumpscaleX_core/tree/%s/sandbox" % j.core.myenv.DEFAULT_BRANCH
         self._sandbox_source = j.clients.git.getContentPathFromURLorPath(url)
-        self.prebuilt_url = "https://github.com/threefoldtech/threebot_prebuilt"
+        self.prebuilt_url = "https://github.com/threefoldtech/sandbox_threebot_linux64"
 
     @builder_method()
     def install(self, reset=False):
@@ -32,17 +32,36 @@ class BuilderThreebot(j.baseclasses.builder):
         # DO NOT CHANGE ANYTHING HERE BEFORE YOU REALLY KNOW WHAT YOU'RE DOING
 
     @builder_method()
-    def sandbox(self, reset=False, zhub_client=None, flist_create=True, push_to_repo=False):
-        j.builders.runtimes.lua.sandbox(reset=reset)
-        j.builders.db.zdb.sandbox(reset=reset)
-        j.builders.apps.sonic.sandbox(reset=reset)
+    def sandbox(self, reset=False, reset_deps=False, zhub_client=None, flist_create=False, push_to_repo=False):
+        """
+
+        kosmos 'j.builders.apps.threebot.sandbox(reset=True)'
+
+        :param reset:
+        :param zhub_client:
+        :param flist_create:
+        :param push_to_repo:
+        :return:
+        """
+        j.builders.runtimes.lua.sandbox(reset=reset_deps)
+        j.builders.db.zdb.sandbox(reset=reset_deps)
+        j.builders.apps.sonic.sandbox(reset=reset_deps)
+        j.builders.runtimes.python3.sandbox(reset=reset_deps)
 
         self.tools.copyTree(j.builders.web.openresty.DIR_SANDBOX, self.DIR_SANDBOX)
         self.tools.copyTree(j.builders.runtimes.lua.DIR_SANDBOX, self.DIR_SANDBOX)
         self.tools.copyTree(j.builders.db.zdb.DIR_SANDBOX, self.DIR_SANDBOX)
         self.tools.copyTree(j.builders.apps.sonic.DIR_SANDBOX, self.DIR_SANDBOX)
+        self.tools.copyTree(j.builders.runtimes.python3.DIR_SANDBOX, self.DIR_SANDBOX)
 
-        # sandbox openresty
+        script = """
+        rsync -rav /sandbox/code/github/threefoldtech/jumpscaleX_core/sandbox/cfg/ {DIR_SANDBOX}/sandbox/cfg/
+        rsync -rav /sandbox/code/github/threefoldtech/jumpscaleX_core/sandbox/bin/ {DIR_SANDBOX}/sandbox/bin/
+        rsync -rav /sandbox/code/github/threefoldtech/jumpscaleX_core/sandbox/env.sh {DIR_SANDBOX}/sandbox/env.sh
+        """
+        self._execute(script)
+
+        # sandbox openresty, THINK NO LONGER NEEDED, IS PART OF OPENRESTY FACTORY NOW
         bins = ["openresty", "lua", "resty", "restydoc", "restydoc-index"]
         dirs = {
             self.tools.joinpaths(j.core.dirs.BASEDIR, "cfg/nginx/openresty.cfg"): "sandbox/cfg/nginx",

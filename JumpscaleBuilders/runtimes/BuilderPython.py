@@ -118,6 +118,10 @@ class BuilderPython(j.baseclasses.builder):
         j.builders.libs.capnp.install(reset=True)
         # list comes from /sandbox/code/github/threefoldtech/jumpscale_core/install/InstallTools.py
         self.pip_package_install(j.core.installer_base.pips_list(0))
+
+        # get the zerohub client
+        self._execute("pip3 install -e 'git+https://github.com/threefoldtech/0-hub#egg=zerohub&subdirectory=client'")
+
         self._log_info("PIP DONE")
 
     @builder_method()
@@ -152,7 +156,10 @@ class BuilderPython(j.baseclasses.builder):
         flist_create=False,
         merge_base_flist="tf-autobuilder/threefoldtech-jumpscaleX-development.flist",
     ):
-        """Copy built bins to dest_path and create flist if create_flist = True
+        """
+        kosmos 'j.builders.runtimes.python3.sandbox()'
+
+        Copy built bins to dest_path and create flist if create_flist = True
         :param dest_path: destination path to copy files into
         :type dest_path: str
         :param sandbox_dir: path to sandbox

@@ -38,7 +38,9 @@ class BuilderSonic(j.baseclasses.builder):
 
     @builder_method()
     def sandbox(self, zhub_client=None):
-        """Copy built bins to dest_path and reate flist if create_flist = True
+        """
+        kosmos  'j.builders.apps.sonic.sandbox()'
+        Copy built bins to dest_path and reate flist if create_flist = True
 
         :param dest_path: destination path to copy files into
         :type dest_path: str

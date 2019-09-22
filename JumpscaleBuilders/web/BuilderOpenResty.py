@@ -74,7 +74,11 @@ class BuilderOpenResty(j.baseclasses.builder):
         flist_create=False,
         merge_base_flist="tf-autobuilder/threefoldtech-jumpscaleX-development.flist",
     ):
-        """Copy built bins to dest_path and create flist if create_flist = True
+        """
+
+        kosmos 'j.builders.web.openresty.sandbox()'
+
+        Copy built bins to dest_path and create flist if create_flist = True
 
         :param dest_path: destination path to copy files into
         :type dest_path: str
