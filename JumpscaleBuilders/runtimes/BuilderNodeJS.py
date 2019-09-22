@@ -7,7 +7,7 @@ class BuilderNodeJS(j.baseclasses.builder):
     __jslocation__ = "j.builders.runtimes.nodejs"
 
     def _init(self, **kwargs):
-        self._version = "6.9.5"
+        self._version = "10.16.3"  # latest lts
 
     @property
     def npm(self):
@@ -81,10 +81,6 @@ class BuilderNodeJS(j.baseclasses.builder):
         j.builders.tools.file_link("%s/bin/node" % self.path, "{DIR_BIN}/node")
         j.builders.tools.file_link("%s/bin/npm" % self.path, "{DIR_BIN}/npm")
 
-        rc, out, err = j.sal.process.execute("npm -v")
-        if out.replace("\n", "") != "3.10.10":
-            raise j.exceptions.Base("npm version error")
-
         rc, initmodulepath, err = j.sal.process.execute("npm config get init-module")
         j.builders.tools.file_unlink(initmodulepath)
         j.sal.process.execute("npm config set global true -g")
@@ -114,5 +110,5 @@ class BuilderNodeJS(j.baseclasses.builder):
 
     @builder_method()
     def test(self):
-        rc, out, err = j.sal.process.execute("npm -v")
-        assert out.replace("\n", "") == "3.10.10"
+        rc, out, err = j.sal.process.execute("node -v")
+        assert self._version in out
