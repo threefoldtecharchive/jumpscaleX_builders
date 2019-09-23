@@ -146,7 +146,7 @@ class BuilderLua(j.baseclasses.builder):
         """
         self.profile_luarocks_select()
 
-        C = """        
+        C = """
         luaossl
         lua-resty-auto-ssl
         # luasec
@@ -248,15 +248,7 @@ class BuilderLua(j.baseclasses.builder):
 
         set -ex
 
-        rm -rf /sandbox/openresty/luajit/lib/lua
-        rm -rf /sandbox/openresty/luajit/lib/luarocks
-        rm -rf /sandbox/openresty/luajit/lib/pkgconfig
-        rm -rf /sandbox/openresty/pod
         rm -rf /sandbox/openresty/luarocks
-        rm -rf /sandbox/openresty/luajit/include
-        rm -rf /sandbox/openresty/luajit/share
-        rm -rf /sandbox/var/build
-        rm -rf /sandbox/root
         rm -rf /bin/resty-auto-ssl
         rm -rf {DIR_BUILD}
         rm -rf /tmp/luarocks*
