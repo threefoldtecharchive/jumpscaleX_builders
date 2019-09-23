@@ -82,21 +82,16 @@ class BuilderOdoo(j.baseclasses.builder):
         cl = j.clients.postgres.db_client_get()
         self._write("{DIR_CFG}/odoo.conf", SIMPLE_CFG)
 
-        for cmd in self.startup_cmds:
-            cmd.start()
+        j.servers.psql.default.start()
         print("INSTALLED OK, PLEASE GO TO http://localhost:8069    masterpasswd:rooter")
 
     def set_dbname(self, name):
         self.dbname = name
 
-    @property
-    def startup_cmds(self):
+    def stop(self):
         """
-        j.builders.apps.odoo.startup_cmds
+        kosmos 'j.builders.apps.odoo.stop()'
         :return:
         """
-        self.install()
-        if not j.builders.db.psql.running():
-            j.builders.db.psql.start()
+        j.servers.psql.default.stop()
 
-        return j.servers.odoo.get().startupcmd
