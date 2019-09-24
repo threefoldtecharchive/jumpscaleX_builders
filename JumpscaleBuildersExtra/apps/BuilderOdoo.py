@@ -82,7 +82,7 @@ class BuilderOdoo(j.baseclasses.builder):
         cl = j.clients.postgres.db_client_get()
         self._write("{DIR_CFG}/odoo.conf", SIMPLE_CFG)
 
-        j.servers.psql.default.start()
+        j.servers.odoo.default.start()
         print("INSTALLED OK, PLEASE GO TO http://localhost:8069    masterpasswd:rooter")
 
     def set_dbname(self, name):
@@ -93,5 +93,5 @@ class BuilderOdoo(j.baseclasses.builder):
         kosmos 'j.builders.apps.odoo.stop()'
         :return:
         """
-        j.servers.psql.default.stop()
+        j.servers.odoo.default.stop()
 
