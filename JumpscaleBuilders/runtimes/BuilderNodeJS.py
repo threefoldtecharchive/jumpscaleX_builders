@@ -83,10 +83,8 @@ class BuilderNodeJS(j.baseclasses.builder):
 
         rc, initmodulepath, err = j.sal.process.execute("npm config get init-module")
         j.builders.tools.file_unlink(initmodulepath)
-        j.sal.process.execute("npm config set global true -g")
         j.sal.process.execute(self._replace("npm config set init-module %s/.npm-init.js -g" % self.path))
         j.sal.process.execute(self._replace("npm config set init-cache %s/.npm -g" % self.path))
-        j.sal.process.execute("npm config set global true ")
         j.sal.process.execute(self._replace("npm config set init-module %s/.npm-init.js" % self.path))
         j.sal.process.execute(self._replace("npm config set init-cache %s/.npm" % self.path))
         j.sal.process.execute("npm install -g parcel-bundler")
