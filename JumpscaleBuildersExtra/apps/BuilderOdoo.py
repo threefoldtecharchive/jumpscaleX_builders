@@ -94,4 +94,3 @@ class BuilderOdoo(j.baseclasses.builder):
         :return:
         """
         j.servers.odoo.default.stop()
-
