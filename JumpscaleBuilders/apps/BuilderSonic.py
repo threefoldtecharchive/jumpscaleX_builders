@@ -25,7 +25,7 @@ class BuilderSonic(j.baseclasses.builder):
         self.profile.env_set_part("PATH", j.builders.runtimes.rust.DIR_CARGOBIN)
         self._execute("rustup update")
         self._remove("/sandbox/bin/sonic")
-        self._execute("cargo install sonic-server --force", timeout=60 * 60)
+        self._execute("cargo install sonic-server --force", timeout=3600 * 2, retry=2)
 
     @builder_method()
     def install(self, reset=False):
