@@ -12,7 +12,7 @@ class Web_TestCases(BaseTest):
             ("nginx", "nginx"),
             ("openresty", "resty"),
             ("apachectl", "apache2"),
-            ("lapis", "lapis")
+            ("lapis", "lapis"),
         ]
     )
     def test_web_flists(self, flist, binary):

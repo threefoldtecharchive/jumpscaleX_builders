@@ -5,12 +5,7 @@ from parameterized import parameterized
 
 
 class Runtimes_TestCases(BaseTest):
-    @parameterized.expand(
-        [
-            ("lua", "lua"),
-            ("php", "php-fpm")
-        ]
-    )
+    @parameterized.expand([("lua", "lua"), ("php", "php-fpm")])
     def test_runtimes_builders(self, builder, process):
         """ BLD-001
         *Test runtimes builers*
@@ -36,14 +31,7 @@ class Runtimes_TestCases(BaseTest):
         self.small_sleep()
         self.assertFalse(len(j.sal.process.getProcessPid(process)))
 
-    @parameterized.expand(
-        [
-            ("nim", "nim"),
-            ("python3", "python3"),
-            ("rust", "rustup"),
-            ("nodejs", "nodejs")
-        ]
-    )
+    @parameterized.expand([("nim", "nim"), ("python3", "python3"), ("rust", "rustup"), ("nodejs", "nodejs")])
     def test002_runtime_builders(self, builder, binary):
         """ BLD
         *Test runtime builers*

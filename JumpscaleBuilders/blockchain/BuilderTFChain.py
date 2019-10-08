@@ -10,9 +10,7 @@ class BuilderTFChain(BuilderGolangTools):
     @builder_method()
     def _init(self, reset=False):
         self.GIT_BRANCH = "master"
-        self.DIR_BUILD = self.package_path_get(
-            self.__class__.NAME, host="github.com/threefoldfoundation"
-        )
+        self.DIR_BUILD = self.package_path_get(self.__class__.NAME, host="github.com/threefoldfoundation")
 
     @builder_method()
     def build(self, branch=None, tag=None, revision=None, reset=False):

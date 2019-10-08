@@ -11,7 +11,7 @@ class WebTestCases(BaseTest):
             ("nginx", "nginx"),
             ("openresty", "resty"),
             ("apachectl", "apache2"),
-            ("lapis", "lapis")
+            ("lapis", "lapis"),
         ]
     )
     def test_web_builders(self, builder, process):

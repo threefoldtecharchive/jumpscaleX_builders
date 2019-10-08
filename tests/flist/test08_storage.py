@@ -16,7 +16,7 @@ class Storage_TestCases(BaseTest):
             ("s3scality", "s3scality"),
             ("stor", "stor"),
             ("zflist", "zflist"),
-            ("zstor", "zdb")
+            ("zstor", "zdb"),
         ]
     )
     def test_storage_flists(self, flist, binary):

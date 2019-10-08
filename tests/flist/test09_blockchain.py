@@ -12,7 +12,7 @@ class Blockchain_TestCases(BaseTest):
             ("rippled", "ripple"),
             ("atomicswap", "atomicswap"),
             ("geth", "geth"),
-            ("tfchain", "tfchaind")
+            ("tfchain", "tfchaind"),
         ]
     )
     def test_blockchain_flists(self, flist, binary):

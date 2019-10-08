@@ -36,7 +36,7 @@ class BaseTest(TestCase):
             zhub_client=self.zhub,
             reset=True,
             flist_create=True,
-            merge_base_flist="tf-autobuilder/threefoldtech-jumpscaleX-development.flist",
+            merge_base_flist="tf-autobuilder/threefoldtech-jumpscaleX_core-development.flist",
         )
         self.info("* Test case : {}".format(self._testMethodName))
 
@@ -48,7 +48,7 @@ class BaseTest(TestCase):
 
     def deploy_flist_container(self, builder):
         self.cont = self.node.client.container.create(
-            "https://hub.grid.tf/{}/{}_merged_tf-autobuilder_threefoldtech-jumpscaleX-development.flist".format(
+            "https://hub.grid.tf/{}/{}_merged_tf-autobuilder_threefoldtech-jumpscaleX_core-development.flist".format(
                 self.username, builder
             )
         )

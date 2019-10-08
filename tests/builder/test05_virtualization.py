@@ -4,11 +4,7 @@ from parameterized import parameterized
 
 
 class VirtualizationTestCases(BaseTest):
-    @parameterized.expand(
-        [
-            ("docker", "containerd")
-        ]
-    )
+    @parameterized.expand([("docker", "containerd")])
     def test_virtualization_builders(self, builder, process):
         """ BLD-001
         *Test virtualization builers sandbox*

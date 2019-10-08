@@ -10,22 +10,19 @@ class DBTestCases(BaseTest):
             ("etcd", "etcd"),
             ("redis", "redis-server"),
             ("ardb", "ardb"),
-            ("postgres", "postgres"),
             ("influxdb", "influx"),
-            ("mongodb", "mongod"),
+            ("mongod", "mongod"),
             ("mariadb", "mysql"),
             ("cockroach", "cockroach"),
             ("ledis", "leveldb"),
-            ("psql", "psql")
+            ("psql", "psql"),
         ]
     )
     def test_db_builders(self, builder, process):
         """ BLD-001
         *Test db builers sandbox*
         """
-        skipped_builders = {
-            "ledis": "https://github.com/threefoldtech/jumpscaleX_builders/issues/26",
-        }
+        skipped_builders = {"ledis": "https://github.com/threefoldtech/jumpscaleX_builders/issues/26"}
         if builder in skipped_builders:
             self.skipTest(skipped_builders[builder])
         self.info(" * {} builder: run build method.".format(builder))

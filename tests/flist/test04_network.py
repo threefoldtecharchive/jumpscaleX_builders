@@ -11,7 +11,7 @@ class Network_TestCases(BaseTest):
             ("zerotier", "zerotier-one"),
             ("gateone", "gateone"),
             ("geodns", "geodns"),
-            ("tcprouter", "tcprouter")
+            ("tcprouter", "tcprouter"),
         ]
     )
     def test_network_flists(self, flist, binary):

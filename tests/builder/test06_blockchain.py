@@ -12,8 +12,7 @@ class Blockchain_TestCases(BaseTest):
             ("rippled", "ripple"),
             ("atomicswap", "atomicswap"),
             ("geth", "geth"),
-            ("tfchain", "tfchaind")
-
+            ("tfchain", "tfchaind"),
         ]
     )
     def test_blockchain_builders(self, builder, process):
@@ -32,7 +31,7 @@ class Blockchain_TestCases(BaseTest):
             self.fail(e)
         self.info(" Check that {} server started successfully.".format(builder))
         self.small_sleep()
-        self.assertTrue(len(j.sal.process.getProcessPid(process)))
+        self.assertTrue(len(j.sal.process.getProcessPid(builder)))
         self.info(" * {} builder: run stop method.".format(builder))
         try:
             getattr(j.builders.blockchain, builder).stop()
@@ -40,4 +39,4 @@ class Blockchain_TestCases(BaseTest):
             self.fail(e)
         self.info(" * Check that {} server stopped successfully.".format(builder))
         self.small_sleep()
-        self.assertFalse(len(j.sal.process.getProcessPid(process)))
+        self.assertFalse(len(j.sal.process.getProcessPid(builder)))
