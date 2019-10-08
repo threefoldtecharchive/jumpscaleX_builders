@@ -49,7 +49,14 @@ class BaseTest(TestCase):
                 self.username, builder
             )
         )
+        self.container_id = self.cont.get()
+        self.container_name = "{}_container".format(builder)
         self.cont_client = self.node.client.container.client(self.cont.get())
+
+    def tearDown(self):
+        self.info(" * Tear_down!")
+        self.info("deleting container {}".format(self.container_name))
+        self.node.client.container.terminate(self.container_id)
 
     def check_container_flist(self, command):
         data = self.cont_client.system(command).get()

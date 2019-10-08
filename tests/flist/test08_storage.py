@@ -40,12 +40,3 @@ class Storage_TestCases(BaseTest):
             self.assertIn("USAGE:", self.check_container_flist("/sandbox/bin/minio --help"))
         else:
             self.assertIn("Usage", self.check_container_flist("/sandbox/bin/{} help".format(binary)))
-
-    @parameterized.expand([
-        "btrfs", "duplicacy", "fuse", "ipfs", "minio", "syncthing", "s3scality", "stor", "zflist", "zstor"
-    ])
-    def tearDownClass(self, cont_name):
-        self.info(" * Tear_down!")
-        self.info("deleting container {}".format(cont_name))
-        container = self.node.containers.get(cont_name)
-        self.node.client.container.terminate(container.id)

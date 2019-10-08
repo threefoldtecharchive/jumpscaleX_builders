@@ -25,12 +25,3 @@ class Blockchain_TestCases(BaseTest):
         self.deploy_flist_container("{}".format(flist))
         self.info("Check that {} flist works.".format(flist))
         self.assertIn("Usage: ", self.check_container_flist("/sandbox/bin/{} help".format(binary)))
-
-    @parameterized.expand([
-        "bitcoind", "electrum", "rippled", "atomicswap", "geth", "tfchain"
-    ])
-    def tearDownClass(self, cont_name):
-        self.info(" * Tear_down!")
-        self.info("deleting container {}".format(cont_name))
-        container = self.node.containers.get(cont_name)
-        self.node.client.container.terminate(container.id)

@@ -38,23 +38,3 @@ class Apps_TestCases(BaseTest):
         self.info("Check that {} flist works.".format(flist))
         self.assertIn("Usage: ", self.check_container_flist("/sandbox/bin/{} -h".format(binary)))
 
-    @parameterized.expand([
-        "bootstrapbot",
-        "digitalme",
-        "freeflow",
-        "gitea",
-        "graphql",
-        "micro",
-        "zerohub",
-        "odoo",
-        "sockexec",
-        "userbot",
-        "sonic",
-        "threebot",
-        "wordpress"
-    ])
-    def tearDown(self, cont_name):
-        self.info(" * Tear_down!")
-        self.info("deleting container {}".format(cont_name))
-        container = self.node.containers.get(cont_name)
-        self.node.client.container.terminate(container.id)
