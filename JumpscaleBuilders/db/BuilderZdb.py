@@ -31,6 +31,7 @@ class BuilderZdb(j.baseclasses.builder):
     def install(self):
         """
         Installs the zdb binary to the correct location
+        kosmos 'j.builders.db.zdb.install()'
         """
         zdb_bin_path = j.builders.tools.joinpaths(self.DIR_BUILD, "0-db/bin/zdb")
         self._copy(zdb_bin_path, "{DIR_BIN}")
@@ -60,7 +61,10 @@ class BuilderZdb(j.baseclasses.builder):
         flist_create=False,
         merge_base_flist="tf-autobuilder/threefoldtech-jumpscaleX-development.flist",
     ):
-        """Copy built bins to dest_path and create flist if create_flist = True
+        """
+        kosmos 'j.builders.db.zdb.sandbox()'
+
+        Copy built bins to dest_path and create flist if create_flist = True
 
         :param dest_path: destination path to copy files into
         :type dest_path: str

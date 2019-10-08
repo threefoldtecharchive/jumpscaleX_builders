@@ -31,7 +31,7 @@ class BuilderTraefik(j.baseclasses.builder):
         else:
             raise j.exceptions.RuntimeError("platform not supported")
 
-        dest = self.tools.joinpaths(self._replace("{DIR_BIN}"), self.NAME)
+        dest = self.tools.joinpaths(self._replace("{DIR_BIN}"), self._name)
         self.tools.file_download(download_url, dest, overwrite=True, retry=3, timeout=0)
         self.tools.file_attribs(dest, mode=0o770)
 
@@ -46,7 +46,7 @@ class BuilderTraefik(j.baseclasses.builder):
         :return: tmux pane
         :rtype: tmux.Pane
         """
-        cmd = self.tools.joinpaths(self._replace("{DIR_BIN}"), self.NAME)
+        cmd = self.tools.joinpaths(self._replace("{DIR_BIN}"), self._name)
         if config_file and self.tools.file_exists(config_file):
             cmd += " --configFile=%s" % config_file
 
@@ -56,7 +56,7 @@ class BuilderTraefik(j.baseclasses.builder):
             if value:
                 cmd += "=%s" % value
 
-        p = j.servers.tmux.execute(cmd, window=self.NAME, pane=self.NAME, reset=True)
+        p = j.servers.tmux.execute(cmd, window=self._name, pane=self._name, reset=True)
         return p
 
     def stop(self, pid=None, sig=None):
@@ -70,7 +70,7 @@ class BuilderTraefik(j.baseclasses.builder):
         if pid:
             j.sal.process.kill(pid, sig)
         else:
-            j.sal.process.killProcessByName(self.NAME, sig)
+            j.sal.process.killProcessByName(self._name, sig)
 
     def test(self):
         """Run tests under tests directory

@@ -9,7 +9,7 @@ class Apps_TestCases(BaseTest):
         [
             ("bootstrapbot", "zdb"),
             ("digitalme", "openresty"),
-            ("freeflow", "apache2"),
+            ("freeflowpages", "apache2"),
             ("gitea", "gitea"),
             ("graphql", "psql"),
             ("micro", "micro"),
@@ -19,7 +19,7 @@ class Apps_TestCases(BaseTest):
             ("userbot", "zdb"),
             ("sonic", "sonic"),
             ("threebot", "lua"),
-            ("wordpress", "caddy")
+            ("wordpress", "caddy"),
         ]
     )
     def test_apps_flists(self, flist, binary):
@@ -28,7 +28,7 @@ class Apps_TestCases(BaseTest):
         """
         skipped_flists = {
             "wordpress": "https://github.com/threefoldtech/jumpscaleX_builders/issues/13",
-            "micro": "https://github.com/threefoldtech/jumpscaleX_builders/issues/24"
+            "micro": "https://github.com/threefoldtech/jumpscaleX_builders/issues/24",
         }
         if flist in skipped_flists:
             self.info("run {} sandbox.".format(flist))

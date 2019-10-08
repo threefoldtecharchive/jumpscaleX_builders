@@ -11,23 +11,20 @@ class Db_TestCases(BaseTest):
             ("etcd", "etcd"),
             ("redis", "redis-server"),
             ("ardb", "ardb"),
-            ("postgres", "postgres"),
             ("influxdb", "influx"),
-            ("mongodb", "mongod"),
+            ("mongod", "mongod"),
             ("mariadb", "mysql"),
             ("cockroach", "cockroach"),
             ("ledis", "leveldb"),
             ("psql", "psql"),
-            ("rocksdb", "rocksdb")
+            ("rocksdb", "rocksdb"),
         ]
     )
     def test_db_flists(self, flist, binary):
         """ SAN-003
         *Test DB builers sandbox*
         """
-        skipped_flists = {
-            "ledis": "https://github.com/threefoldtech/jumpscaleX_builders/issues/26",
-        }
+        skipped_flists = {"ledis": "https://github.com/threefoldtech/jumpscaleX_builders/issues/26"}
         if flist in skipped_flists:
             self.skipTest(skipped_flists[flist])
         self.info("run {} sandbox.".format(flist))

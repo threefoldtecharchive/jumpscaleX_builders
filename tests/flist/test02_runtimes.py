@@ -13,7 +13,7 @@ class Runtimes_TestCases(BaseTest):
             ("nim", "nim"),
             ("python3", "python3"),
             ("rust", "rustup"),
-            ("nodejs", "nodejs")
+            ("nodejs", "nodejs"),
         ]
     )
     def test_runtimes_flists(self, flist, binary):

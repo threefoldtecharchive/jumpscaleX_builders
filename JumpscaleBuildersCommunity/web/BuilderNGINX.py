@@ -187,7 +187,7 @@ class BuilderNGINX(j.baseclasses.builder):
 
         if self.tools.file_exists(nginxconfpath):
             # foreground
-            nginxcmd = "%s -c %s -g 'daemon off;'" % (self.NAME, nginxconfpath)
+            nginxcmd = "%s -c %s -g 'daemon off;'" % (self._name, nginxconfpath)
             nginxcmd = self._replace(nginxcmd)
 
             self._log_info("cmd: %s" % nginxcmd)
@@ -240,14 +240,14 @@ class BuilderNGINX(j.baseclasses.builder):
         """
         dir_dest = j.sal.fs.joinPaths("/sandbox/var/build", "{}/sandbox".format(self.DIR_SANDBOX))
         self.tools.dir_ensure(dir_dest)
-        bin_path = self.tools.joinpaths(self._replace("{DIR_BIN}"), self.NAME)
-        bin_dest = self.tools.joinpaths(dir_dest, "bin", self.NAME)
+        bin_path = self.tools.joinpaths(self._replace("{DIR_BIN}"), self._name)
+        bin_dest = self.tools.joinpaths(dir_dest, "bin", self._name)
         self.tools.file_copy(bin_path, bin_dest)
 
         self.tools.file_copy(self._replace("{DIR_BUILD}/conf/fastcgi.conf"), "{}/cfg/fastcgi.conf".format(dir_dest))
         self.tools.file_copy(self._replace("{DIR_BUILD}/conf/nginx.conf"), "{}/cfg/nginx.conf".format(dir_dest))
 
-        bins = [self.NAME]
+        bins = [self._name]
         lib_dest = self.tools.joinpaths(self.DIR_SANDBOX, "sandbox/lib")
         self.tools.dir_ensure(lib_dest)
         for bin in bins:

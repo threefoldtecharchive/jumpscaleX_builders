@@ -4,11 +4,7 @@ from parameterized import parameterized
 
 
 class LibsTestCases(BaseTest):
-    @parameterized.expand(
-        [
-            ("capnp", "capnp")
-        ]
-    )
+    @parameterized.expand([("capnp", "capnp")])
     def test001_libs_builders(self, builder, process):
         """ BLD
         *Test libs builers*
@@ -34,14 +30,7 @@ class LibsTestCases(BaseTest):
         self.small_sleep()
         self.assertFalse(len(j.sal.process.getProcessPid(process)))
 
-    @parameterized.expand(
-        [
-            ("libffi", "libtoolize"),
-            ("brotli", "brotli"),
-            ("openssl", "openssl"),
-            ("cmake", "cmake")
-        ]
-    )
+    @parameterized.expand([("libffi", "libtoolize"), ("brotli", "brotli"), ("openssl", "openssl"), ("cmake", "cmake")])
     def test002_libs_builders(self, builder, binary):
         """ BLD
         *Test libs builers*
@@ -52,4 +41,3 @@ class LibsTestCases(BaseTest):
         getattr(j.builders.libs, builder).install()
         self.info(" * check that {} installed successfully.".format(builder))
         self.assertTrue(j.sal.process.execute("which %s") % binary)
-

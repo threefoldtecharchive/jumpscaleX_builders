@@ -15,7 +15,7 @@ class StorageTestCases(BaseTest):
             ("s3scality", "s3scality"),
             ("stor", "stor"),
             ("zflist", "zflist"),
-            ("zstor", "zdb")
+            ("zstor", "zdb"),
         ]
     )
     def test001_storage_builders(self, builder, process):

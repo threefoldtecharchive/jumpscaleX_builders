@@ -8,7 +8,7 @@ class AppsTestCases(BaseTest):
         [
             ("bootstrapbot", "zdb"),
             ("digitalme", "openresty"),
-            ("freeflow", "apache2"),
+            ("freeflowpages", "apache2"),
             ("gitea", "gitea"),
             ("graphql", "psql"),
             ("micro", "micro"),
@@ -18,7 +18,7 @@ class AppsTestCases(BaseTest):
             ("userbot", "zdb"),
             ("sonic", "sonic"),
             ("threebot", "lua"),
-            ("wordpress", "caddy")
+            ("wordpress", "caddy"),
         ]
     )
     def test_apps_builders(self, builder, process):
@@ -27,7 +27,7 @@ class AppsTestCases(BaseTest):
         """
         skipped_builders = {
             "wordpress": "https://github.com/threefoldtech/jumpscaleX_builders/issues/13",
-            "micro": "https://github.com/threefoldtech/jumpscaleX_builders/issues/24"
+            "micro": "https://github.com/threefoldtech/jumpscaleX_builders/issues/24",
         }
         if builder in skipped_builders:
             self.skipTest(skipped_builders[builder])

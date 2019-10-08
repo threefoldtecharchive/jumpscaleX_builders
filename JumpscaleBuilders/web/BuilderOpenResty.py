@@ -58,7 +58,9 @@ class BuilderOpenResty(j.baseclasses.builder):
 
         C = """
         ln -sf /sandbox/openresty/bin/resty /sandbox/bin/resty
-        ln -f -s /sandbox/openresty/luajit/bin/luajit /sandbox/bin/lua        
+        ln -sf /sandbox/openresty/bin/restydoc /sandbox/bin/restydoc
+        ln -sf /sandbox/openresty/bin/restydoc-index /sandbox/bin/restydoc-index
+        ln -f -s /sandbox/openresty/luajit/bin/luajit /sandbox/bin/lua
         rm  -rf /sandbox/openresty/pod
         rm  -rf /sandbox/openresty/site
         """
@@ -72,7 +74,11 @@ class BuilderOpenResty(j.baseclasses.builder):
         flist_create=False,
         merge_base_flist="tf-autobuilder/threefoldtech-jumpscaleX-development.flist",
     ):
-        """Copy built bins to dest_path and create flist if create_flist = True
+        """
+
+        kosmos 'j.builders.web.openresty.sandbox()'
+
+        Copy built bins to dest_path and create flist if create_flist = True
 
         :param dest_path: destination path to copy files into
         :type dest_path: str
@@ -94,10 +100,6 @@ class BuilderOpenResty(j.baseclasses.builder):
             "/lib/x86_64-linux-gnu/libnss_files.so.2": "sandbox/lib/",
         }
         new_dirs = ["sandbox/var/pid/", "sandbox/var/log/"]
-        root_files = {
-            "etc/passwd": "nobody:x:65534:65534:nobody:/:/sandbox/bin/openresty",
-            "etc/group": "nogroup:x:65534:",
-        }
         lua_files = j.sal.fs.listFilesInDir(self.tools.joinpaths(j.core.dirs.BASEDIR, "bin/"), filter="*.lua")
         for file in lua_files:
             dirs[file] = "sandbox/bin/"
@@ -122,13 +124,6 @@ class BuilderOpenResty(j.baseclasses.builder):
         for dir_dest in new_dirs:
             dir_dest = self.tools.joinpaths(self.DIR_SANDBOX, self.tools.path_relative(dir_dest))
             self.tools.dir_ensure(dir_dest)
-
-        for file_dest, content in root_files.items():
-            file_dest = self.tools.joinpaths(self.DIR_SANDBOX, self.tools.path_relative(file_dest))
-            dir = j.sal.fs.getDirName(file_dest)
-            self.tools.dir_ensure(dir)
-            self.tools.file_ensure(file_dest)
-            self.tools.file_write(file_dest, content)
 
         cur_dir = j.sal.fs.getDirName(__file__)
         startup_file = self.tools.joinpaths(cur_dir, "templates", "openresty_startup.toml")

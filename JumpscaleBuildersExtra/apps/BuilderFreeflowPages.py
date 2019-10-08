@@ -10,11 +10,9 @@ class BuilderFreeflowPages(j.baseclasses.builder):
 
     @builder_method()
     def install(self, reset=False, humhub_version="1.3.13"):
-        if self._done_check("install") and reset is False:
-            return
         self.HUMHUB_VERSION = humhub_version
         self.HUMHUB_PATH = "/var/www/html/humhub"
-        self.profile.env_set("DEBIAN_FRONTEND", "noninteractive")
+        j.builders.system.package.set_non_interactive()
         j.builders.system.package.install(["lamp-server^"])
         j.builders.system.package._apt_wait_free()
         j.builders.system.package.install(

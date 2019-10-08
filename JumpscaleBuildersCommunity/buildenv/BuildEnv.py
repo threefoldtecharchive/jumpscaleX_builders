@@ -1,7 +1,7 @@
 from Jumpscale import j
 
 
-class BuildEnv(j.builders.system.BaseFactoryClass):
+class BuildEnv(j.baseclasses.builder):
 
     __jslocation__ = "j.builders.buildenv"
 

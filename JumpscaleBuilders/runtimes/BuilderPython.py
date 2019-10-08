@@ -6,7 +6,7 @@ builder_method = j.baseclasses.builder_method
 class BuilderPython(j.baseclasses.builder):
     """
     : Determine version using
-    : > j.builders.runtimes.python.TAG = "vX.Y.Z"
+    : > j.builders.runtimes.python3.TAG = "vX.Y.Z"
     """
 
     __jslocation__ = "j.builders.runtimes.python3"
@@ -20,8 +20,8 @@ class BuilderPython(j.baseclasses.builder):
     @builder_method()
     def build(self):
         """
-        kosmos 'j.builders.runtimes.python.build()'
-            kosmos 'j.builders.runtimes.python.build(reset=True)'
+        kosmos 'j.builders.runtimes.python3.build()'
+            kosmos 'j.builders.runtimes.python3.build(reset=True)'
         will build python
         :param reset: choose to reset the build process even if it was done before
         :type reset: bool
@@ -50,7 +50,7 @@ class BuilderPython(j.baseclasses.builder):
         self._execute(
             """
         export DEBIAN_FRONTEND=noninteractive
-        apt install tk tk-dev linux-headers-generic tcl-dev libgdbm-dev -yq
+        apt-get install tk tk-dev linux-headers-generic tcl-dev libgdbm-dev -yq
         """
         )
         python_url = "https://github.com/python/cpython.git"
@@ -70,7 +70,7 @@ class BuilderPython(j.baseclasses.builder):
     @builder_method()
     def install(self):
         """
-        kosmos 'j.builders.runtimes.python.install()'
+        kosmos 'j.builders.runtimes.python3.install()'
         """
         install_cmd = """
         cd {DIR_CODE_L}/cpython
@@ -84,7 +84,7 @@ class BuilderPython(j.baseclasses.builder):
     @builder_method()
     def build_pip(self):
         """
-        kosmos 'j.builders.runtimes.python.build_pip()'
+        kosmos 'j.builders.runtimes.python3.build_pip()'
         :return:
         """
         # test openssl is working
@@ -98,11 +98,11 @@ class BuilderPython(j.baseclasses.builder):
     @builder_method()
     def _pip_install(self):
         """
-        kosmos 'j.builders.runtimes.python._pip_install()'
+        kosmos 'j.builders.runtimes.python3._pip_install()'
         will make sure we add env scripts to it as well as add all the required pip modules
         """
         script = """
-        apt -f install
+        apt-get -f install
         rm -rf get-pip.py
         curl https://bootstrap.pypa.io/get-pip.py > get-pip.py
         python3 get-pip.py
@@ -113,11 +113,15 @@ class BuilderPython(j.baseclasses.builder):
     @builder_method()
     def _pip_packages_all(self):
         """
-        kosmos 'j.builders.runtimes.python._pip_packages_all()'
+        kosmos 'j.builders.runtimes.python3._pip_packages_all()'
         """
         j.builders.libs.capnp.install(reset=True)
         # list comes from /sandbox/code/github/threefoldtech/jumpscale_core/install/InstallTools.py
         self.pip_package_install(j.core.installer_base.pips_list(0))
+
+        # get the zerohub client
+        self._execute("pip3 install -e 'git+https://github.com/threefoldtech/0-hub#egg=zerohub&subdirectory=client'")
+
         self._log_info("PIP DONE")
 
     @builder_method()
@@ -152,7 +156,10 @@ class BuilderPython(j.baseclasses.builder):
         flist_create=False,
         merge_base_flist="tf-autobuilder/threefoldtech-jumpscaleX-development.flist",
     ):
-        """Copy built bins to dest_path and create flist if create_flist = True
+        """
+        kosmos 'j.builders.runtimes.python3.sandbox()'
+
+        Copy built bins to dest_path and create flist if create_flist = True
         :param dest_path: destination path to copy files into
         :type dest_path: str
         :param sandbox_dir: path to sandbox
@@ -188,7 +195,7 @@ class BuilderPython(j.baseclasses.builder):
     @builder_method()
     def test(self):
         """
-        js_shell 'j.builders.runtimes.python.test(build=True)'
+        js_shell 'j.builders.runtimes.python3.test(build=True)'
         """
         self.profile_builder_select()
         assert self._execute("python3 -c \"print('python')\"")[1] == "python\n"

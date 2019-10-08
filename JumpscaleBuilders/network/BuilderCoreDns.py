@@ -44,7 +44,8 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
         cd {}
         git clone https://github.com/coredns/coredns.git
         cd coredns
-        echo 'redis:github.com/andrewayoub/redis' >> plugin.cfg
+        echo 'redis:github.com/threefoldtech/coredns-redis' >> plugin.cfg
+        export GO111MODULE=on
         make
         """.format(
             self.package_path

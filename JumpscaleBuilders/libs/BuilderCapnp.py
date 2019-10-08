@@ -47,7 +47,7 @@ class BuilderCapnp(JSBASE):
         """
         if self.tools.platform_is_ubuntu:
             j.builders.system.package.ensure("g++")
-        # j.builders.runtimes.python.pip_package_install(['cython', 'setuptools', 'pycapnp'])
+        # j.builders.runtimes.python3.pip_package_install(['cython', 'setuptools', 'pycapnp'])
         bins = ["capnp", "capnp-afl-testcase", "capnpc-c++", "capnp-test", "capnpc-capnp", "capnp-evolution-test"]
 
         libs = [

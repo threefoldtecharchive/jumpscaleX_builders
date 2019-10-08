@@ -18,14 +18,14 @@ class BuilderSonic(j.baseclasses.builder):
         :param reset:
         :return:
         """
-
         j.builders.runtimes.rust.install()
 
         if not j.core.platformtype.myplatform.platform_is_osx:
             self.system.package.install("clang")
         self.profile.env_set_part("PATH", j.builders.runtimes.rust.DIR_CARGOBIN)
         self._execute("rustup update")
-        self._execute("cargo install sonic-server --force", timeout=60 * 60)
+        self._remove("/sandbox/bin/sonic")
+        self._execute("cargo install sonic-server --force", timeout=3600 * 2, retry=2)
 
     @builder_method()
     def install(self, reset=False):
@@ -38,7 +38,9 @@ class BuilderSonic(j.baseclasses.builder):
 
     @builder_method()
     def sandbox(self, zhub_client=None):
-        """Copy built bins to dest_path and reate flist if create_flist = True
+        """
+        kosmos  'j.builders.apps.sonic.sandbox()'
+        Copy built bins to dest_path and reate flist if create_flist = True
 
         :param dest_path: destination path to copy files into
         :type dest_path: str
