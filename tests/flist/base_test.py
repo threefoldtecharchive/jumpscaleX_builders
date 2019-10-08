@@ -17,7 +17,6 @@ class BaseTest(TestCase):
         self.client_secret = config["itsyou"]["client_secret"]
         self.username = config["itsyou"]["username"]
         self.node_ip = config["zos_node"]["node_ip"]
-        self.node_jwt = config["zos_node"]["node_jwt"]
 
     def setUp(self):
         self.iyo_instance = "iyo_instance_{}".format(randint(1, 1000))
@@ -31,7 +30,7 @@ class BaseTest(TestCase):
         self.zhub.save()
 
         self.node_instance = "node_instance_{}".format(randint(1, 1000))
-        self.node = j.clients.zos.get(name=self.node_instance, password=self.node_jwt, host=self.node_ip)
+        self.node = j.clients.zos.get(name=self.node_instance, password=self.jwt, host=self.node_ip)
         self.sandbox_args = dict(
             zhub_client=self.zhub,
             reset=True,
@@ -51,7 +50,7 @@ class BaseTest(TestCase):
         )
         self.container_id = self.cont.get()
         self.container_name = "{}_container".format(builder)
-        self.cont_client = self.node.client.container.client(self.cont.get())
+        self.cont_client = self.node.client.container.client(self.container_id)
 
     def tearDown(self):
         self.info(" * Tear_down!")
