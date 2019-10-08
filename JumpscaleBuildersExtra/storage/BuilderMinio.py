@@ -51,7 +51,7 @@ class BuilderMinio(BuilderGolangTools):
         cmd = "MINIO_ACCESS_KEY={} MINIO_SECRET_KEY={} minio server --address {}:{} {}".format(
             access_key, secret_key, address, port, self.datadir
         )
-        cmds = [j.servers.startupcmd.get(name=self.NAME, cmd_start=cmd)]
+        cmds = [j.servers.startupcmd.get(name=self._name, cmd_start=cmd)]
         return cmds
 
     @builder_method()
@@ -96,7 +96,7 @@ class BuilderMinio(BuilderGolangTools):
             self.stop()
 
         self.start()
-        pid = j.sal.process.getProcessPid(self.NAME)
+        pid = j.sal.process.getProcessPid(self._name)
         assert pid is not []
         self.stop()
 
@@ -104,6 +104,6 @@ class BuilderMinio(BuilderGolangTools):
 
     @builder_method()
     def uninstall(self):
-        bin_path = self.tools.joinpaths("{DIR_BIN}", self.NAME)
+        bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
         self._remove(bin_path)
         self.clean()

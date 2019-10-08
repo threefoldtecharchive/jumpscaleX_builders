@@ -9,20 +9,20 @@ class BuilderS3Scality(j.baseclasses.builder):
 
     @property
     def path(self):
-        return self._replace("{DIR_BASE}/apps/%s" % self.NAME)
+        return self._replace("{DIR_BASE}/apps/%s" % self._name)
 
     @builder_method()
     def build(self, reset=False):
-        j.builders.runtimes.python.build(reset=reset)
+        j.builders.runtimes.python3.build(reset=reset)
         j.builders.runtimes.nodejs.build(reset=reset)
 
-        path = "%s/%s" % (self.DIR_BUILD, self.NAME)
+        path = "%s/%s" % (self.DIR_BUILD, self._name)
         j.builders.tools.dir_remove(path, recursive=True)
         j.clients.git.pullGitRepo("https://github.com/scality/S3.git", ssh=False, dest=path)
 
     @builder_method()
     def install(self, reset=False, storage="{DIR_VAR}/scality/data/", meta="{DIR_VAR}/scality/meta/"):
-        j.builders.runtimes.python.install(reset=reset)
+        j.builders.runtimes.python3.install(reset=reset)
         j.builders.runtimes.nodejs.install(reset=reset)
         j.builders.runtimes.nodejs.npm_install("npm-run-all")
         j.builders.system.package.mdupdate()
@@ -33,7 +33,7 @@ class BuilderS3Scality(j.baseclasses.builder):
 
         j.builders.tools.dir_remove(self.path, recursive=True)
         j.core.tools.dir_ensure("{DIR_BASE}/apps/")
-        self._execute("mv %s/%s %s" % (self.DIR_BUILD, self.NAME, self.path))
+        self._execute("mv %s/%s %s" % (self.DIR_BUILD, self._name, self.path))
         self._execute("cd %s && npm install" % self.path)
 
         cmd = "S3DATAPATH={data} S3METADATAPATH={meta} npm start".format(
@@ -54,7 +54,7 @@ class BuilderS3Scality(j.baseclasses.builder):
             self.tools.profile.env_set("NODE_PATH", node_path)
 
         cmd = j.servers.startupcmd.get(
-            self.NAME,
+            self._name,
             cmd_start=self._replace("cd %s && npm run start_location" % self.path),
             env={"NODE_PATH": node_path},
         )
@@ -62,7 +62,7 @@ class BuilderS3Scality(j.baseclasses.builder):
 
     def stop(self):
         # killing the daemon
-        pane = j.servers.tmux.pane_get(self.NAME)
+        pane = j.servers.tmux.pane_get(self._name)
         processes = pane.process_obj.children(True)
         for process in processes:
             process.kill()

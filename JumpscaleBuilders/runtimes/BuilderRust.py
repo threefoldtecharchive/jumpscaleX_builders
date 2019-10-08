@@ -14,7 +14,7 @@ class BuilderRust(j.baseclasses.builder):
     def install(self):
         """
 
-        kosmos 'j.builders.runtimes.rust.install()'
+        kosmos 'j.builders.runtimes.rust.install(reset=True)'
         :return:
         """
         self._execute("curl https://sh.rustup.rs -sSf | sh -s -- -y")

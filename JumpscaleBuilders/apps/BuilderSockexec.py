@@ -13,6 +13,7 @@ class BuilderSockexec(j.baseclasses.builder):
         build sockexec
         :return:
         """
+        # build skalibs from tag v2.8.1.0, because sockexec is depends on stuff removed in newer versions
 
         self.tools.dir_ensure(self.DIR_BUILD)
         C = """
@@ -20,6 +21,7 @@ class BuilderSockexec(j.baseclasses.builder):
         rm -rf skalibs/
         git clone https://github.com/skarnet/skalibs
         cd {DIR_BUILD}/skalibs
+        git checkout v2.8.1.0 # 
         ./configure
         make
         make install
@@ -64,16 +66,16 @@ class BuilderSockexec(j.baseclasses.builder):
 
     # def start(self, port=7681):
     #     cmd = "/sandbox/bin/sockexec --port {}".format(port)
-    #     j.servers.startupcmd.get(name=self.NAME, cmd_start=cmd).start()
+    #     j.servers.startupcmd.get(name=self._name, cmd_start=cmd).start()
     #
     # def running(self):
-    #     if len(j.sal.process.getProcessPid(self.NAME)) > 0:
+    #     if len(j.sal.process.getProcessPid(self._name)) > 0:
     #         return True
     #     return False
     #
     # def stop(self):
     #     # killing the daemon
-    #     pane = j.servers.tmux.pane_get(self.NAME)
+    #     pane = j.servers.tmux.pane_get(self._name)
     #     pane.kill()
     #
     # @builder_method()

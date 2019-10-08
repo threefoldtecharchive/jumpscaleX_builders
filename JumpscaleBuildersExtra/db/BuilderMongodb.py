@@ -108,12 +108,12 @@ class BuilderMongodb(j.baseclasses.builder):
         """
         )
 
-        cmd = j.servers.startupcmd.get(self.NAME, cmd_start=cmd_start)
+        cmd = j.servers.startupcmd.get(self._name, cmd_start=cmd_start)
         return [cmd]
 
     @builder_method()
     def stop(self):
-        j.sal.process.killProcessByName(self.NAME)
+        j.sal.process.killProcessByName(self._name)
 
     @builder_method()
     def test(self):

@@ -19,13 +19,16 @@ class BuilderCmake(j.baseclasses.builder):
         """.format(
             self.package_path
         )
-        self._execute(cmd)
+        self._execute(cmd, timeout=15 * 60)
+
+    @property
+    def share_src(self):
+        dir_list = j.sal.fs.listDirsInDir("/sandbox/share")
+        return [i for i in dir_list if i.startswith("/sandbox/share/cmake")][0]
 
     @builder_method()
     def install(self):
         self._execute("cd {} && make install".format(self.package_path))
-        self.dir_list = j.sal.fs.listDirsInDir("/sandbox/share")
-        self.share_src = [i for i in self.dir_list if i.startswith("/sandbox/share/cmake")][0]
         self.profile.env_set_part("LD_LIBRARY_PATH", "/sandbox/lib/")
 
     @builder_method()

@@ -10,6 +10,7 @@ class BuilderPostgresql(j.baseclasses.builder):
     def _init(self, **kwargs):
         self.DOWNLOAD_DIR = self.tools.joinpaths(self.DIR_BUILD, "build")
         self.DATA_DIR = self._replace("{DIR_VAR}/psql/data")
+        self.SOCKET_DIR = "/var/run/postgresql"
 
     @builder_method()
     def build(self):
@@ -29,8 +30,8 @@ class BuilderPostgresql(j.baseclasses.builder):
     @builder_method()
     def install(self, port=5432):
         """
-        kosmos 'j.builders.db.postgres.install()'
-        kosmos 'j.builders.db.postgres.stop()'
+        kosmos 'j.builders.db.psql.install()'
+        kosmos 'j.builders.db.psql.stop()'
 
         :param port:
         :return:
@@ -63,8 +64,8 @@ class BuilderPostgresql(j.baseclasses.builder):
             """
             cd {DIR_BASE}
             mkdir -p log
-            mkdir -p {DATA_DIR}
-            chown -R postgres {DATA_DIR}
+            mkdir -p {DATA_DIR} {SOCKET_DIR}
+            chown -R postgres {DATA_DIR} {SOCKET_DIR}
             sudo -u postgres {DIR_BIN}/initdb -D {DATA_DIR} -E utf8 --locale=en_US.UTF-8
         """
         )
@@ -78,23 +79,15 @@ class BuilderPostgresql(j.baseclasses.builder):
 
         # run the db with the same user when running odoo server
         cmd = j.servers.startupcmd.get("postgres")
-        cmd.cmd_start = self._replace("sudo -u postgres  {DIR_BIN}/postgres -D {DATA_DIR}")
-        cmd.cmd_stop = "sudo -u postgres {DIR_BIN}/pg_ctl stop -D {DATA_DIR}"
+        cmd.cmd_start = self._replace("sudo -u postgres  {DIR_BIN}/postgres -k {SOCKET_DIR} -D {DATA_DIR}")
+        cmd.cmd_stop = self._replace("sudo -u postgres {DIR_BIN}/pg_ctl stop -D {DATA_DIR}")
         cmd.ports = [5432]
         cmd.path = "/sandbox/bin"
-        return cmd
-
-    def start(self):
-        """
-        kosmos 'j.builders.db.postgres.start()'
-        :return:
-        """
-        self.startup_cmds.start()
-        time.sleep(1)
+        return [cmd]
 
     def test(self):
         """
-        kosmos 'j.builders.db.postgres.test()'
+        kosmos 'j.builders.db.psql.test()'
         :return:
         """
         self.stop()

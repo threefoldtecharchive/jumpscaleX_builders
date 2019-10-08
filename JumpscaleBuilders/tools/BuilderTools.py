@@ -574,20 +574,15 @@ class BuilderTools(j.baseclasses.builder):
     # =============================================================================
 
     def getNetworkInfoGenerator(self):
-        from Jumpscale.sal.nettools.NetTools import parseBlock, IPBLOCKS, IPMAC, IPIP, IPNAME
-
         exitcode, output, err = self.execute("ip a", showout=False)
-        for m in IPBLOCKS.finditer(output):
-            block = m.group("block")
-            yield parseBlock(block)
+        for result in j.sal.nettools.networkinfo_parse_ip(output):
+            yield result
 
     @property
     def networking_info(self):
-        from Jumpscale.sal.nettools.NetTools import getNetworkInfo
-
         if not self._networking_info:
             all_info = list()
-            for device in getNetworkInfo():
+            for device in j.sal.nettools.networkinfo_get():
                 all_info.append(device)
         return all_info
 
