@@ -40,9 +40,6 @@ class BaseTest(TestCase):
         )
         self.info("* Test case : {}".format(self._testMethodName))
 
-    def tearDown(self):
-        self.info(" * Tear_down!")
-
     def info(self, message):
         self.LOGGER.info(message)
 
