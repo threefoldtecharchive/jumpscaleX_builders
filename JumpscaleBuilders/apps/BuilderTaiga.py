@@ -19,7 +19,7 @@ STATIC_URL = "http://localhost/static/"
 SITES["front"]["scheme"] = "http"
 SITES["front"]["domain"] = "localhost"
 
-SECRET_KEY = "theveryultratopsecretkey"
+SECRET_KEY = %(PASSWORD_FOR_EVENTS)s
 
 DEBUG = False
 PUBLIC_REGISTER_ENABLED = True
@@ -30,7 +30,7 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 #CELERY_ENABLED = True
 
 EVENTS_PUSH_BACKEND = "taiga.events.backends.rabbitmq.EventsPushBackend"
-EVENTS_PUSH_BACKEND_OPTIONS = {"url": "amqp://taiga:PASSWORD_FOR_EVENTS@localhost:5672/taiga"}
+EVENTS_PUSH_BACKEND_OPTIONS = {"url": "amqp://taiga:%(PASSWORD_FOR_EVENTS)s@localhost:5672/taiga"}
 
 # Uncomment and populate with proper connection parameters
 # for enable email sending. EMAIL_HOST_USER should end by @domain.tld
@@ -118,6 +118,7 @@ class BuilderTaiga(j.baseclasses.builder):
         self.DIR_CODE = self.tools.joinpaths(self.DIR_BUILD, "code")
         self.frontend_repo_dir = f"{self.DIR_CODE}/taiga-front-dist"
         self.backend_repo_dir = f"{self.DIR_CODE}/taiga-back"
+        self.events_repo_dir = f"{self.DIR_CODE}/taiga-event"
         self.TAIGA_USER = "taiga"
         self.port = 4321
         self.host = "localhost"  # TODO
@@ -128,6 +129,7 @@ class BuilderTaiga(j.baseclasses.builder):
         self.system.package.update()
         self.system.package.install(PACKAGES)
         j.builders.db.redis.install(reset=reset)
+        j.builders.runtimes.nodejs.install(reset=reset)
         j.builders.db.psql.install(reset=reset)
         j.builders.db.psql.start()
         create_user_cmd = f"""
@@ -145,8 +147,9 @@ class BuilderTaiga(j.baseclasses.builder):
             self._done_set("postgresuser")
 
     @builder_method()
-    def backend_install(self):
-        j.clients.git.pullGitRepo("https://github.com/taigaio/taiga-back.git", self.backend_repo_dir, branch="stable")
+    def _backend_install(self, backend_repo="https://github.com/taigaio/taiga-back.git", rabbitmq_secret=None):
+        rabbitmq_secret = rabbitmq_secret or "PASSWORD_FOR_EVENTS"
+        j.clients.git.pullGitRepo(backend_repo, self.backend_repo_dir, branch="stable")
         command = f"""
         chown -R {TAIGA_USER} {self.backend_repo_dir}
         su - {TAIGA_USER} -c '
@@ -162,23 +165,45 @@ class BuilderTaiga(j.baseclasses.builder):
         '
         """
         self._execute(command)
-        j.sal.fs.writeFile(f"{self.backend_repo_dir}/settings/local.py", MEDIA_CONF_FILE)
+        j.sal.fs.writeFile(
+            f"{self.backend_repo_dir}/settings/local.py", MEDIA_CONF_FILE % {"PASSWORD_FOR_EVENTS": rabbitmq_secret}
+        )
 
     @builder_method()
-    def frontend_install(self):
-        j.clients.git.pullGitRepo(
-            "https://github.com/taigaio/taiga-front-dist.git", self.frontend_repo_dir, branch="stable"
-        )
+    def _frontend_install(self, frontend_repo="https://github.com/taigaio/taiga-front-dist.git", host=None, port=None):
+        host = host or self.host
+        port = port or self.port
+        j.clients.git.pullGitRepo(frontend_repo, self.frontend_repo_dir, branch="stable")
         conf_dict = j.data.serializers.json.load(f"{self.frontend_repo_dir}/dist/conf.example.json")
-        conf_dict["api"] = f"{self.protocol}://{self.host}:{self.port}/api/v1/"
+        conf_dict["api"] = f"{self.protocol}://{host}:{port}/api/v1/"
         j.data.serializers.json.dump(f"{self.frontend_repo_dir}/dist/conf.json", conf_dict)
+
+    @builder_method()
+    def _events_install(self, events_repo="https://github.com/taigaio/taiga-events.git", rabbitmq_secret=None):
+        rabbitmq_secret = rabbitmq_secret or "PASSWORD_FOR_EVENTS"
+        j.clients.git.pullGitRepo(events_repo, self.events_repo_dir, branch="stable")
+
+        conf_dict = j.data.serializers.json.load(f"{self.events_repo_dir}/config.example.json")
+        conf_dict["url"] = f"amqp://taiga:{rabbitmq_secret}@localhost:5672/taiga"
+        conf_dict["secret"] = rabbitmq_secret
+        j.data.serializers.json.dump(f"{self.events_repo_dir}/conf.json", conf_dict)
+
+        command = f"""
+        chown -R {TAIGA_USER} {self.events_repo_dir}
+        su - {TAIGA_USER} -c '
+        cd {self.events_repo_dir}
+        npm install
+        '
+        """
+        self._execute(command)
 
     @builder_method()
     def install(self, reset=True):
         self.install_deps(reset=reset)
-        self.backend_install()
+        self._backend_install()
         j.sal.fs.createDir(NGINX_LOG_DIR)
-        self.frontend_install()
+        self._frontend_install()
+        self._events_install()
 
     # @builder_method()
     def start(self):
@@ -201,4 +226,11 @@ class BuilderTaiga(j.baseclasses.builder):
         taiga_server = j.servers.startupcmd.get("taiga")
         taiga_server.path = f"{self.backend_repo_dir}"
         taiga_server.cmd_start = f"su {TAIGA_USER} -c '/home/{TAIGA_USER}/.virtualenvs/{TAIGA_USER}/bin/gunicorn --workers 4 --timeout 60 -b 127.0.0.1:8001 taiga.wsgi'"
-        return [taiga_server]
+
+        taiga_events = j.servers.startupcmd.get("taiga_events")
+        taiga_events.path = f"{self.events_repo_dir}"
+        taiga_events.cmd_start = (
+            f"su {TAIGA_USER} -c '/bin/bash -c 'node_modules/coffeescript/bin/coffee index.coffee''"
+        )
+        return [taiga_events, taiga_server]
+
