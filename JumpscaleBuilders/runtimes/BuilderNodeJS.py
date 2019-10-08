@@ -54,7 +54,7 @@ class BuilderNodeJS(j.baseclasses.builder):
                 sudo = "sudo "
             else:
                 sudo = ""
-            cmd = "cd /tmp;%snpm install -g %s --unsafe-perm=true --allow-root" % (sudo, name)
+            cmd = "cd /tmp;%snpm install -g %s --unsafe-perm=true --force-yes-root" % (sudo, name)
         else:
             cmd = "cd %s;npm i %s" % (self.NODE_PATH, name)
 
