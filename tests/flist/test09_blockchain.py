@@ -5,7 +5,16 @@ from parameterized import parameterized
 
 
 class Blockchain_TestCases(BaseTest):
-    @parameterized.expand([("ripple", "ripple")])
+    @parameterized.expand(
+        [
+            ("bitcoind", "bitcoind"),
+            ("electrum", "electrum"),
+            ("rippled", "ripple"),
+            ("atomicswap", "atomicswap"),
+            ("geth", "geth"),
+            ("tfchain", "tfchaind"),
+        ]
+    )
     def test_blockchain_flists(self, flist, binary):
         """ SAN-009
         *Test blockchain builers sandbox*

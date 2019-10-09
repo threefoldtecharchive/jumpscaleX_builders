@@ -4,14 +4,30 @@ from parameterized import parameterized
 
 
 class AppsTestCases(BaseTest):
-    @parameterized.expand([("digitalme", "openresty"), ("freeflow", "apache2"), ("hub", "hub"), ("odoo", "odoo")])
+    @parameterized.expand(
+        [
+            ("bootstrapbot", "zdb"),
+            ("digitalme", "openresty"),
+            ("freeflowpages", "apache2"),
+            ("gitea", "gitea"),
+            ("graphql", "psql"),
+            ("micro", "micro"),
+            ("zerohub", "hub"),
+            ("odoo", "odoo"),
+            ("sockexec", "sockexec"),
+            ("userbot", "zdb"),
+            ("sonic", "sonic"),
+            ("threebot", "lua"),
+            ("wordpress", "caddy"),
+        ]
+    )
     def test_apps_builders(self, builder, process):
         """ BLD-001
-        *Test web builers sandbox*
+        *Test web builers *
         """
         skipped_builders = {
-            "digitalme": "https://github.com/threefoldtech/jumpscaleX/issues/675",
-            "hub": "https://github.com/threefoldtech/jumpscaleX/issues/676",
+            "wordpress": "https://github.com/threefoldtech/jumpscaleX_builders/issues/13",
+            "micro": "https://github.com/threefoldtech/jumpscaleX_builders/issues/24",
         }
         if builder in skipped_builders:
             self.skipTest(skipped_builders[builder])

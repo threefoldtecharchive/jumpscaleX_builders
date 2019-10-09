@@ -13,7 +13,7 @@ class VirtualizationTestCases(BaseTest):
         if builder in skipped_builders:
             self.skipTest(skipped_builders[builder])
         self.info(" * {} builder: run build method.".format(builder))
-        getattr(j.builders.virtualization, builder).build()
+        getattr(j.builders.virtualization, builder).build(reset=True)
         self.info(" * {} builder: run install  method.".format(builder))
         getattr(j.builders.virtualization, builder).install()
         self.info(" * {} builder: run start method.".format(builder))

@@ -5,7 +5,15 @@ from parameterized import parameterized
 
 
 class Network_TestCases(BaseTest):
-    @parameterized.expand([("coredns", "coredns"), ("zerotier", "zerotier-one")])
+    @parameterized.expand(
+        [
+            ("coredns", "coredns"),
+            ("zerotier", "zerotier-one"),
+            ("gateone", "gateone"),
+            ("geodns", "geodns"),
+            ("tcprouter", "tcprouter"),
+        ]
+    )
     def test_network_flists(self, flist, binary):
         """ SAN-004
         *Test network builers sandbox*
