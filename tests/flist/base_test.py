@@ -30,7 +30,8 @@ class BaseTest(TestCase):
         self.zhub.save()
 
         self.node_instance = "node_instance_{}".format(randint(1, 1000))
-        self.node = j.clients.zos.get(name=self.node_instance, password=self.jwt, host=self.node_ip)
+        self.admin_jwt = self.iyo_client.jwt_get(name="admin", scope="user:memberof:threefold.sysadmin").jwt
+        self.node = j.clients.zos.get(name=self.node_instance, password=self.admin_jwt, host=self.node_ip)
         self.sandbox_args = dict(
             zhub_client=self.zhub,
             reset=True,

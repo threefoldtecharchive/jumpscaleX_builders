@@ -7,8 +7,8 @@ from parameterized import parameterized
 class Db_TestCases(BaseTest):
     @parameterized.expand(
         [
-            ("zdb", "zdb"),
-            ("etcd", "etcd"),
+            ("zdb", "zdb", "commit"),
+            ("etcd", "etcd", "usage: "),
             ("redis", "redis-server"),
             ("ardb", "ardb"),
             ("influxdb", "influx"),
@@ -20,7 +20,7 @@ class Db_TestCases(BaseTest):
             ("rocksdb", "rocksdb"),
         ]
     )
-    def test_db_flists(self, flist, binary):
+    def test_db_flists(self, flist, binary, check="Usage: "):
         """ SAN-003
         *Test DB builers sandbox*
         """
@@ -32,4 +32,4 @@ class Db_TestCases(BaseTest):
         self.info("Deploy container with uploaded {} flist.".format(flist))
         self.deploy_flist_container("{}".format(flist))
         self.info("Check that {} flist works.".format(flist))
-        self.assertIn("Usage: ", self.check_container_flist("/sandbox/bin/{} -h".format(binary)))
+        self.assertIn(check, self.check_container_flist("/sandbox/bin/{} --help".format(binary)))
