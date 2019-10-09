@@ -233,4 +233,3 @@ class BuilderTaiga(j.baseclasses.builder):
             f"su {TAIGA_USER} -c '/bin/bash -c 'node_modules/coffeescript/bin/coffee index.coffee''"
         )
         return [taiga_events, taiga_server]
-
