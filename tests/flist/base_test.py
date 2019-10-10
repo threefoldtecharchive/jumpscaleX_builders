@@ -11,34 +11,29 @@ class BaseTest(TestCase):
     LOGGER = logger
     LOGGER.add("flist_{time}.log")
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.client_id = config["itsyou"]["client_id"]
-        self.client_secret = config["itsyou"]["client_secret"]
-        self.username = config["itsyou"]["username"]
-        self.node_ip = config["zos_node"]["node_ip"]
+    @classmethod
+    def setUpClass(cls):
+        cls.client_id = config["itsyou"]["client_id"]
+        cls.client_secret = config["itsyou"]["client_secret"]
+        cls.username = config["itsyou"]["username"]
+        cls.node_ip = config["zos_node"]["node_ip"]
+        iyo_instance = "iyo_instance_{}".format(randint(1, 1000))
+        iyo_client = j.clients.itsyouonline.get(iyo_instance, application_id=cls.client_id, secret=cls.client_secret)
+        jwt = iyo_client.jwt_get().jwt
+        hub_instance = "hub_instance_{}".format(randint(1, 1000))
+        zhub = j.clients.zhub.get(name=hub_instance, token_=jwt, username=cls.username)
+        zhub.authenticate()
+        zhub.save()
 
-    def setUp(self):
-        self.iyo_instance = "iyo_instance_{}".format(randint(1, 1000))
-        self.iyo_client = j.clients.itsyouonline.get(
-            self.iyo_instance, application_id=self.client_id, secret=self.client_secret
-        )
-        self.jwt = self.iyo_client.jwt_get().jwt
-        self.hub_instance = "hub_instance_{}".format(randint(1, 1000))
-        self.zhub = j.clients.zhub.get(name=self.hub_instance, token_=self.jwt, username=self.username)
-        self.zhub.authenticate()
-        self.zhub.save()
-
-        self.node_instance = "node_instance_{}".format(randint(1, 1000))
-        self.admin_jwt = self.iyo_client.jwt_get(name="admin", scope="user:memberof:threefold.sysadmin").jwt
-        self.node = j.clients.zos.get(name=self.node_instance, password=self.admin_jwt, host=self.node_ip)
-        self.sandbox_args = dict(
-            zhub_client=self.zhub,
+        node_instance = "node_instance_{}".format(randint(1, 1000))
+        admin_jwt = iyo_client.jwt_get(name="admin", scope="user:memberof:threefold.sysadmin").jwt
+        cls.node = j.clients.zos.get(name=node_instance, password=admin_jwt, host=cls.node_ip)
+        cls.sandbox_args = dict(
+            zhub_client=zhub,
             reset=True,
             flist_create=True,
             merge_base_flist="tf-autobuilder/threefoldtech-jumpscaleX_core-development.flist",
         )
-        self.info("* Test case : {}".format(self._testMethodName))
 
     def info(self, message):
         self.LOGGER.info(message)
@@ -53,10 +48,14 @@ class BaseTest(TestCase):
         self.container_name = "{}_container".format(builder)
         self.cont_client = self.node.client.container.client(self.container_id)
 
+    def setUp(self):
+        self.container_id = None
+
     def tearDown(self):
-        self.info(" * Tear_down!")
-        self.info("deleting container {}".format(self.container_name))
-        self.node.client.container.terminate(self.container_id)
+        if self.container_id:
+            self.info(" * Tear_down!")
+            self.info("deleting container {}".format(self.container_name))
+            self.node.client.container.terminate(self.container_id)
 
     def check_container_flist(self, command):
         data = self.cont_client.system(command).get()
