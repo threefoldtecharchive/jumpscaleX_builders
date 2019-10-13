@@ -147,9 +147,11 @@ class BuilderTaiga(j.baseclasses.builder):
             self._done_set("postgresuser")
 
     @builder_method()
-    def _backend_install(self, backend_repo="https://github.com/taigaio/taiga-back.git", rabbitmq_secret=None):
+    def _backend_install(
+        self, backend_repo="https://github.com/taigaio/taiga-back.git", rabbitmq_secret=None, branch="stable"
+    ):
         rabbitmq_secret = rabbitmq_secret or "PASSWORD_FOR_EVENTS"
-        j.clients.git.pullGitRepo(backend_repo, self.backend_repo_dir, branch="stable")
+        j.clients.git.pullGitRepo(backend_repo, self.backend_repo_dir, branch=branch)
         command = f"""
         chown -R {TAIGA_USER} {self.backend_repo_dir}
         su - {TAIGA_USER} -c '
@@ -170,18 +172,22 @@ class BuilderTaiga(j.baseclasses.builder):
         )
 
     @builder_method()
-    def _frontend_install(self, frontend_repo="https://github.com/taigaio/taiga-front-dist.git", host=None, port=None):
+    def _frontend_install(
+        self, frontend_repo="https://github.com/taigaio/taiga-front-dist.git", host=None, port=None, branch="stable"
+    ):
         host = host or self.host
         port = port or self.port
-        j.clients.git.pullGitRepo(frontend_repo, self.frontend_repo_dir, branch="stable")
+        j.clients.git.pullGitRepo(frontend_repo, self.frontend_repo_dir, branch=branch)
         conf_dict = j.data.serializers.json.load(f"{self.frontend_repo_dir}/dist/conf.example.json")
         conf_dict["api"] = f"{self.protocol}://{host}:{port}/api/v1/"
         j.data.serializers.json.dump(f"{self.frontend_repo_dir}/dist/conf.json", conf_dict)
 
     @builder_method()
-    def _events_install(self, events_repo="https://github.com/taigaio/taiga-events.git", rabbitmq_secret=None):
+    def _events_install(
+        self, events_repo="https://github.com/taigaio/taiga-events.git", rabbitmq_secret=None, branch="master"
+    ):
         rabbitmq_secret = rabbitmq_secret or "PASSWORD_FOR_EVENTS"
-        j.clients.git.pullGitRepo(events_repo, self.events_repo_dir, branch="master")
+        j.clients.git.pullGitRepo(events_repo, self.events_repo_dir, branch=branch)
 
         conf_dict = j.data.serializers.json.load(f"{self.events_repo_dir}/config.example.json")
         conf_dict["url"] = f"amqp://taiga:{rabbitmq_secret}@localhost:5672/taiga"
