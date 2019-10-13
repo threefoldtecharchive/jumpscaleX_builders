@@ -181,7 +181,7 @@ class BuilderTaiga(j.baseclasses.builder):
     @builder_method()
     def _events_install(self, events_repo="https://github.com/taigaio/taiga-events.git", rabbitmq_secret=None):
         rabbitmq_secret = rabbitmq_secret or "PASSWORD_FOR_EVENTS"
-        j.clients.git.pullGitRepo(events_repo, self.events_repo_dir, branch="stable")
+        j.clients.git.pullGitRepo(events_repo, self.events_repo_dir, branch="master")
 
         conf_dict = j.data.serializers.json.load(f"{self.events_repo_dir}/config.example.json")
         conf_dict["url"] = f"amqp://taiga:{rabbitmq_secret}@localhost:5672/taiga"
