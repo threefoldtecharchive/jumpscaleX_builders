@@ -18,7 +18,7 @@ class BuilderSonic(j.baseclasses.builder):
         :param reset:
         :return:
         """
-        j.builders.runtimes.rust.install()
+        j.builders.runtimes.rust.install(reset=reset)
 
         if not j.core.platformtype.myplatform.platform_is_osx:
             self.system.package.install("clang")

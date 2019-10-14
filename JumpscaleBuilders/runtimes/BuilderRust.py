@@ -11,7 +11,7 @@ class BuilderRust(j.baseclasses.builder):
         self.DIR_CARGOBIN = self._replace("{DIR_HOME}/.cargo/bin")
 
     @builder_method()
-    def install(self):
+    def install(self, reset=False):
         """
 
         kosmos 'j.builders.runtimes.rust.install(reset=True)'
