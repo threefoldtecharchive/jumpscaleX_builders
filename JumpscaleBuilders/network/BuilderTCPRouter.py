@@ -7,6 +7,7 @@ CFG = """
 [server]
 addr = "0.0.0.0"
 port = 443
+httpport = 80 
 
 [server.dbbackend]
 type 	 = "redis"
