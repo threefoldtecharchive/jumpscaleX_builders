@@ -200,7 +200,7 @@ class BuilderTaiga(j.baseclasses.builder):
         su - {TAIGA_USER} -c '
         export PATH=$PATH:{self.DIR_BIN}
         cd {self.events_repo_dir}
-        npm install --save-dev gulp@4.0.2 --force'
+        npm install'
         """
         try:
             self._execute(command)
