@@ -116,6 +116,7 @@ class BuilderTaiga(j.baseclasses.builder):
 
     def _init(self, **kwargs):
         self.DIR_CODE = self.tools.joinpaths(self.DIR_BUILD, "code")
+        self.DIR_BIN = "/sandbox/bin"
         self.frontend_repo_dir = f"{self.DIR_CODE}/taiga-front-dist"
         self.backend_repo_dir = f"{self.DIR_CODE}/taiga-back"
         self.events_repo_dir = f"{self.DIR_CODE}/taiga-event"
@@ -192,16 +193,25 @@ class BuilderTaiga(j.baseclasses.builder):
         conf_dict = j.data.serializers.json.load(f"{self.events_repo_dir}/config.example.json")
         conf_dict["url"] = f"amqp://taiga:{rabbitmq_secret}@localhost:5672/taiga"
         conf_dict["secret"] = rabbitmq_secret
-        j.data.serializers.json.dump(f"{self.events_repo_dir}/conf.json", conf_dict)
+        j.data.serializers.json.dump(f"{self.events_repo_dir}/config.json", conf_dict)
 
         command = f"""
         chown -R {TAIGA_USER} {self.events_repo_dir}
         su - {TAIGA_USER} -c '
+        export PATH=$PATH:{self.DIR_BIN}
         cd {self.events_repo_dir}
-        npm install
-        '
+        npm install --save-dev gulp@4.0.2 --force'
         """
-        self._execute(command)
+        try:
+            self._execute(command)
+        except Exception:
+            c = f"""
+            su - {TAIGA_USER} -c '
+            cd {self.events_repo_dir}
+            npm audit fix --force
+            npm install'
+            """
+            self._execute(c)
 
     @builder_method()
     def install(self, reset=True):
@@ -235,7 +245,7 @@ class BuilderTaiga(j.baseclasses.builder):
 
         taiga_events = j.servers.startupcmd.get("taiga_events")
         taiga_events.path = f"{self.events_repo_dir}"
-        taiga_events.cmd_start = (
-            f"su {TAIGA_USER} -c '/bin/bash -c 'node_modules/coffeescript/bin/coffee index.coffee''"
-        )
+        taiga_events.cmd_start = f"""
+            su {self.taiga_user} -c 'export PATH=$PATH:{self.DIR_BIN};cd {self.events_repo_dir}; /bin/bash -c \\"node_modules/coffeescript/bin/coffee index.coffee\\"'
+            """
         return [taiga_events, taiga_server]
