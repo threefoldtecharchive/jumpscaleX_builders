@@ -30,7 +30,7 @@ class BuilderPython(j.baseclasses.builder):
         # install dependancies and build tools
         j.builders.libs.cmake.install()
         self.system.package.mdupdate()
-
+        self._execute("apt-get update")
         self.system.package.install(
             [
                 "build-essential",

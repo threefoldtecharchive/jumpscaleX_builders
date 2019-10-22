@@ -12,6 +12,8 @@ class BuilderThreebot(j.baseclasses.builder):
         url = "https://github.com/threefoldtech/jumpscaleX_core/tree/%s/sandbox" % j.core.myenv.DEFAULT_BRANCH
         self._sandbox_source = j.clients.git.getContentPathFromURLorPath(url)
         self.prebuilt_url = "https://github.com/threefoldtech/sandbox_threebot_linux64"
+        self.path_cfg_dir = "/sandbox/cfg/nginx/default"
+        self._web_path = "/sandbox/var/web/default"
 
     @builder_method()
     def install(self, reset=False):
@@ -43,10 +45,20 @@ class BuilderThreebot(j.baseclasses.builder):
         :param push_to_repo:
         :return:
         """
-        j.builders.runtimes.lua.sandbox(reset=reset_deps)
         j.builders.db.zdb.sandbox(reset=reset_deps)
+
         j.builders.apps.sonic.sandbox(reset=reset_deps)
         j.builders.runtimes.python3.sandbox(reset=reset_deps)
+        url = "https://github.com/threefoldtech/jumpscale_weblibs"
+        weblibs_path = j.clients.git.getContentPathFromURLorPath(url, pull=False)
+
+        # copy the templates to the right location
+        j.sal.fs.copyDirTree(
+            "/sandbox/code/github/threefoldtech/jumpscaleX_core/JumpscaleCore/servers/openresty/web_resources",
+            self.path_cfg_dir,
+        )
+
+        j.sal.fs.symlink("%s/static" % weblibs_path, "{}/static/weblibs".format(self._web_path), overwriteTarget=True)
 
         self.tools.copyTree(j.builders.web.openresty.DIR_SANDBOX, self.DIR_SANDBOX)
         self.tools.copyTree(j.builders.runtimes.lua.DIR_SANDBOX, self.DIR_SANDBOX)
@@ -112,7 +124,6 @@ class BuilderThreebot(j.baseclasses.builder):
         self.tools.dir_ensure(self.DIR_SANDBOX + "/bin")
         self.tools.copyTree("/sandbox/cfg/ssl/", self.DIR_SANDBOX + "/etc/ssl/")
         self.tools.copyTree("/etc/resty-auto-ssl", self.DIR_SANDBOX + "/etc/resty-auto-ssl")
-        self.tools.copyTree("/bin/resty-auto-ssl", self.DIR_SANDBOX + "/bin/")
 
         file = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates", "threebot_startup.toml")
         file_dest = self.tools.joinpaths(self.DIR_SANDBOX, ".startup.toml")
