@@ -61,7 +61,6 @@ class BuilderThreebot(j.baseclasses.builder):
         j.sal.fs.symlink("%s/static" % weblibs_path, "{}/static/weblibs".format(self._web_path), overwriteTarget=True)
 
         self.tools.copyTree(j.builders.web.openresty.DIR_SANDBOX, self.DIR_SANDBOX)
-        self.tools.copyTree(j.builders.runtimes.lua.DIR_SANDBOX, self.DIR_SANDBOX)
         self.tools.copyTree(j.builders.db.zdb.DIR_SANDBOX, self.DIR_SANDBOX)
         self.tools.copyTree(j.builders.apps.sonic.DIR_SANDBOX, self.DIR_SANDBOX)
         self.tools.copyTree(j.builders.runtimes.python3.DIR_SANDBOX, self.DIR_SANDBOX)
@@ -124,9 +123,9 @@ class BuilderThreebot(j.baseclasses.builder):
         self.tools.dir_ensure(self.DIR_SANDBOX + "/bin")
         self.tools.copyTree("/sandbox/cfg/ssl/", self.DIR_SANDBOX + "/etc/ssl/")
         self.tools.copyTree("/etc/resty-auto-ssl", self.DIR_SANDBOX + "/etc/resty-auto-ssl")
-        self.tools.copyTree("/sandbox/bin", self.DIR_SANDBOX + "/sandbox/bin")
+        self.tools.copyTree("/sandbox/bin", self.DIR_SANDBOX + "/sandbox/bin",ignoredir=[".git"])
+        self.tools.copyTree("/sandbox/lib", self.DIR_SANDBOX + "/sandbox/lib",ignoredir=[".git"])
         
-
         file = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates", "threebot_startup.toml")
         file_dest = self.tools.joinpaths(self.DIR_SANDBOX, ".startup.toml")
         self._copy(file, file_dest)
