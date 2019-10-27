@@ -5,7 +5,7 @@ builder_method = j.baseclasses.builder_method
 
 PACKAGES = """build-essential,binutils-doc,autoconf,flex,bison,libjpeg-dev,
 libfreetype6-dev,zlib1g-dev,libzmq3-dev,libgdbm-dev,libncurses5-dev,
-automake,libtool,gettext,nginx,virtualenvwrapper"""
+automake,libtool,gettext,nginx,virtualenvwrapper,rabbitmq-server"""
 
 TAIGA_USER = "taiga"
 
@@ -126,7 +126,19 @@ class BuilderTaiga(j.baseclasses.builder):
         self.protocol = "http"
 
     @builder_method()
-    def install_deps(self, reset=False):
+    def clean(self):
+        j.builders.db.psql.clean()
+        self._remove(self.DIR_BUILD)
+        cmd = """
+        deluser taiga
+        rabbitmqctl delete_user taiga
+        rabbitmqctl delete_vhost taiga
+        service rabbitmq-server stop
+        """
+        self._execute(cmd)
+
+    @builder_method()
+    def install_deps(self, reset=False, rabbitmq_secret=None):
         self.system.package.update()
         self.system.package.install(PACKAGES)
         j.builders.db.redis.install(reset=reset)
@@ -146,6 +158,20 @@ class BuilderTaiga(j.baseclasses.builder):
             """
             self._execute(create_psql_user_cmd)
             self._done_set("postgresuser")
+
+        if not self._done_check("rabbitmq_server"):
+            cmd = "service rabbitmq-server start"
+            self._execute(cmd)
+            self._done_set("rabbitmq_server")
+        if not self._done_check("rabbitmq_user"):
+            rabbitmq_secret = rabbitmq_secret or "PASSWORD_FOR_EVENTS"
+            cmd_rabbitmq = f"""
+            sudo rabbitmqctl add_user {TAIGA_USER} {rabbitmq_secret}
+            sudo rabbitmqctl add_vhost {TAIGA_USER}
+            sudo rabbitmqctl set_permissions -p {TAIGA_USER} {TAIGA_USER} ".*" ".*" ".*"
+            """
+            self._execute(cmd_rabbitmq)
+            self._done_set("rabbitmq_user")
 
     @builder_method()
     def _backend_install(
@@ -246,6 +272,6 @@ class BuilderTaiga(j.baseclasses.builder):
         taiga_events = j.servers.startupcmd.get("taiga_events")
         taiga_events.path = f"{self.events_repo_dir}"
         taiga_events.cmd_start = f"""
-            su {self.taiga_user} -c 'export PATH=$PATH:{self.DIR_BIN};cd {self.events_repo_dir}; /bin/bash -c \\"node_modules/coffeescript/bin/coffee index.coffee\\"'
+            su {self.TAIGA_USER} -c 'export PATH=$PATH:{self.DIR_BIN};cd {self.events_repo_dir}; /bin/bash -c \\"node_modules/coffeescript/bin/coffee index.coffee\\"'
             """
         return [taiga_events, taiga_server]
