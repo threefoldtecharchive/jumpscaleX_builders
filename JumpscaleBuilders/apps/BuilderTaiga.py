@@ -135,7 +135,10 @@ class BuilderTaiga(j.baseclasses.builder):
         rabbitmqctl delete_vhost taiga
         service rabbitmq-server stop
         """
-        self._execute(cmd)
+        try:
+            self._execute(cmd)
+        except:
+            pass
 
     @builder_method()
     def install_deps(self, reset=False, rabbitmq_secret=None):
