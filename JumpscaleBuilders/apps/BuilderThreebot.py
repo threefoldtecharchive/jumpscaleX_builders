@@ -49,7 +49,7 @@ class BuilderThreebot(j.baseclasses.builder):
 
         j.builders.apps.sonic.sandbox(reset=reset_deps)
         j.builders.runtimes.python3.sandbox(reset=reset_deps)
-        url = "https://github.com/threefoldtech/jumpscale_weblibs"
+        url = "https://github.com/threefoldtech/jumpscaleX_weblibs"
         weblibs_path = j.clients.git.getContentPathFromURLorPath(url, pull=False)
 
         # copy the templates to the right location
