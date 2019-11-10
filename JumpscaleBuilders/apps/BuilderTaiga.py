@@ -223,24 +223,16 @@ class BuilderTaiga(j.baseclasses.builder):
         conf_dict["url"] = f"amqp://taiga:{rabbitmq_secret}@localhost:5672/taiga"
         conf_dict["secret"] = rabbitmq_secret
         j.data.serializers.json.dump(f"{self.events_repo_dir}/config.json", conf_dict)
-
         command = f"""
         chown -R {TAIGA_USER} {self.events_repo_dir}
         su - {TAIGA_USER} -c '
         export PATH=$PATH:{self.DIR_BIN}
         cd {self.events_repo_dir}
-        npm install'
+        npm install
+        npm audit fix --force'
+        npm install
         """
-        try:
-            self._execute(command)
-        except Exception:
-            c = f"""
-            su - {TAIGA_USER} -c '
-            cd {self.events_repo_dir}
-            npm audit fix --force
-            npm install'
-            """
-            self._execute(c)
+        self._execute(command)
 
     @builder_method()
     def install(self, reset=True):
