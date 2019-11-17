@@ -36,11 +36,11 @@ class BuilderOpenSSL(j.baseclasses.builder):
         C = """
         cd {DIR_BUILD}/openssl
         ./config -Wl,--enable-new-dtags,-rpath,'$(LIBRPATH)'
-        ./Configure {TARGET} shared enable-ec_nistp_64_gcc_128 no-ssl2 no-ssl3 no-comp --openssldir=/sandbox/var/openssl --prefix=/sandbox/ zlib
+        ./Configure {TARGET} shared enable-ec_nistp_64_gcc_128 no-ssl2 no-ssl3 no-comp --openssldir={DIR_BASE}/var/openssl --prefix={DIR_BASE}/ zlib
         make depend
         make install
-        rm -rf /sandbox/share
-        rm -rf /sandbox/build/private
+        rm -rf {DIR_BASE}/share
+        rm -rf {DIR_BASE}/build/private
         echo "**BUILD DONE**"
         """
 

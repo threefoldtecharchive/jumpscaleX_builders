@@ -68,9 +68,9 @@ class BuilderThreebot(j.baseclasses.builder):
         self.tools.copyTree(j.builders.runtimes.python3.DIR_SANDBOX, self.DIR_SANDBOX)
 
         script = """
-        rsync -rav /sandbox/code/github/threefoldtech/jumpscaleX_core/sandbox/cfg/ {DIR_SANDBOX}/sandbox/cfg/
-        rsync -rav /sandbox/code/github/threefoldtech/jumpscaleX_core/sandbox/bin/ {DIR_SANDBOX}/sandbox/bin/
-        rsync -rav /sandbox/code/github/threefoldtech/jumpscaleX_core/sandbox/env.sh {DIR_SANDBOX}/sandbox/env.sh
+        rsync -rav {DIR_CODE}/github/threefoldtech/jumpscaleX_core/sandbox/cfg/ {DIR_SANDBOX}/sandbox/cfg/
+        rsync -rav {DIR_CODE}/github/threefoldtech/jumpscaleX_core/sandbox/bin/ {DIR_SANDBOX}/sandbox/bin/
+        rsync -rav {DIR_CODE}/github/threefoldtech/jumpscaleX_core/sandbox/env.sh {DIR_SANDBOX}/sandbox/env.sh
         """
         self._execute(script)
 

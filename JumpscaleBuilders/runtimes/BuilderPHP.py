@@ -44,7 +44,7 @@ class BuilderPHP(j.baseclasses.builder):
         git clone https://github.com/kkos/oniguruma.git --depth 1
         cd oniguruma
         autoreconf -vfi
-        ./configure --prefix=/sandbox
+        ./configure --prefix={DIR_BASE}
         make
         make install
         """
@@ -82,7 +82,7 @@ class BuilderPHP(j.baseclasses.builder):
             """
         cd {DIR_BUILD}/php-src
         ./buildconf
-        export PKG_CONFIG_PATH=/sandbox/lib/pkgconfig/
+        export PKG_CONFIG_PATH={DIR_BASE}/lib/pkgconfig/
         ./configure %s
         make
         """
@@ -95,7 +95,7 @@ class BuilderPHP(j.baseclasses.builder):
     @builder_method()
     def install(self):
         fpm_default_conf = """\
-        include=/sandbox/etc/php-fpm.d/*.conf
+        include={DIR_BASE}/etc/php-fpm.d/*.conf
         """
         fpm_www_conf = """\
         ;nobody Start a new pool named 'www'.
@@ -122,7 +122,7 @@ class BuilderPHP(j.baseclasses.builder):
         # make sure to save that configuration file ending with .conf under php/etc/php-fpm.d/www.conf
         self._execute("cd {DIR_BUILD}/php-src && make install")
 
-        self.tools.dir_ensure(self._replace("{/sandbox/etc/php-fpm.d"))
+        self.tools.dir_ensure(self._replace("{{DIR_BASE}/etc/php-fpm.d"))
         fpm_default_conf = self._replace(fpm_default_conf)
         fpm_www_conf = self._replace(fpm_www_conf)
         self._write(path=j.core.tools.text_replace("{DIR_BASE}/etc/php-fpm.conf"), txt=fpm_default_conf)
@@ -146,7 +146,7 @@ class BuilderPHP(j.baseclasses.builder):
 
     @property
     def startup_cmds(self):
-        cmd = j.core.tools.text_replace("{DIR_BASE}/sbin/php-fpm -F -y /sandbox/etc/php-fpm.conf")  # foreground
+        cmd = j.core.tools.text_replace("{DIR_BASE}/sbin/php-fpm -F -y {DIR_BASE}/etc/php-fpm.conf")  # foreground
         cmds = [j.servers.startupcmd.get(name=self._name, cmd_start=cmd)]
         return cmds
 
@@ -224,4 +224,3 @@ class BuilderPHP(j.baseclasses.builder):
     def clean(self):
         self._remove("{DIR_BUILD}/php-src")
         self._remove("{DIR_BUILD}/oniguruma")
-

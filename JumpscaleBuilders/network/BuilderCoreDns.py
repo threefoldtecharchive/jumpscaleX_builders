@@ -71,7 +71,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
 
     @property
     def startup_cmds(self):
-        cmd = j.core.tools.text_replace("{DIR_BASE}/bin/coredns -conf /sandbox/cfg/coredns.conf")
+        cmd = j.core.tools.text_replace("{DIR_BASE}/bin/coredns -conf {DIR_BASE}/cfg/coredns.conf")
         cmds = [j.servers.startupcmd.get(name="coredns", cmd_start=cmd)]
         return cmds
 
@@ -135,4 +135,3 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
         for job in client.job.list():
             client.job.kill(job["cmd"]["id"])
         print("TEST OK")
-
