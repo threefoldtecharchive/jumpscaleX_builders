@@ -79,7 +79,7 @@ class BuilderCaddy(BuilderGolangTools):
         self._init()
         j.builders.tools.dir_remove("{DIR_BIN}/caddy")
         C = """
-        cd /sandbox
+        cd {DIR_BASE}
         rm -rf {DIR_BUILD}
         """
         self._execute(C)
@@ -165,4 +165,5 @@ class BuilderCaddy(BuilderGolangTools):
         :type name: str, optional
         """
         self._test_run(name=name, obj_key="test_main")
+
 

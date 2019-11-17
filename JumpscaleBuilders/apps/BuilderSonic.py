@@ -34,7 +34,7 @@ class BuilderSonic(j.baseclasses.builder):
         :param reset:
         :return:
         """
-        self._execute("cp %s/sonic /sandbox/bin/" % j.builders.runtimes.rust.DIR_CARGOBIN)
+        self._execute("cp %s/sonic {DIR_BASE}/bin/" % j.builders.runtimes.rust.DIR_CARGOBIN)
 
     @builder_method()
     def sandbox(self, zhub_client=None):
@@ -67,4 +67,5 @@ class BuilderSonic(j.baseclasses.builder):
         for bin in bins:
             dir_src = self.tools.joinpaths(bin_dest, bin)
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest)
+
 

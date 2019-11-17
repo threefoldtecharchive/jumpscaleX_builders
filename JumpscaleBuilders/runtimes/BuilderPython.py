@@ -74,7 +74,7 @@ class BuilderPython(j.baseclasses.builder):
         """
         install_cmd = """
         cd {DIR_CODE_L}/cpython
-        make install DESTDIR=/sandbox
+        make install DESTDIR={DIR_BASE}
         """.format(
             DIR_CODE_L=self.DIR_CODE_L
         )
@@ -203,3 +203,4 @@ class BuilderPython(j.baseclasses.builder):
         assert self._execute('python3 -c "import ssl"')[0] == 0
 
         print("TEST OK")
+

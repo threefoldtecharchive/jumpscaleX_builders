@@ -292,7 +292,7 @@ class BuilderVRouter(j.baseclasses.builder):
     #     j.builders.pullGitRepo(url=giturl, dest=None, login=None, passwd=None, depth=1,
     #                               ignorelocalchanges=True, reset=True, branch=None, revision=None, ssh=False)
     #
-    #     j.sal.process.execute("cp /sandbox/code/create_ap/create_ap /usr/local/bin/")
+    #     j.sal.process.execute("cp {DIR_BASE}/code/create_ap/create_ap /usr/local/bin/")
     #
     #     START1 = """
     #     [Unit]
@@ -317,3 +317,4 @@ class BuilderVRouter(j.baseclasses.builder):
         return "prefab.vrouter:%s:%s" % (getattr(self.executor, "addr", "local"), getattr(self.executor, "port", ""))
 
     __repr__ = __str__
+

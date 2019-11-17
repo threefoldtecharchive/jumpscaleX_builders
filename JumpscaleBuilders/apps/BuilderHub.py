@@ -184,7 +184,7 @@ class BuilderHub(j.baseclasses.builder):
         self._execute(
             """
             sed -i "s/\\"zflist-bin\\": \\"\/opt\/0-flist\/zflist\/zflist\\"/\\"zflist-bin\\":\
-            \\"\/sandbox\/zeroflist\/zflist\/zflist\\"/" {DEST_SANDBOX_HUB}/python/config.py
+            \\"\{DIR_BASE}\/zeroflist\/zflist\/zflist\\"/" {DEST_SANDBOX_HUB}/python/config.py
         """
         )
 
@@ -218,3 +218,4 @@ class BuilderHub(j.baseclasses.builder):
         assert self.running()
         self.stop()
         print("TEST OK")
+

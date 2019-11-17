@@ -79,7 +79,7 @@ class BuilderMariadb(j.baseclasses.builder):
 
         install_cmd = """
         cd {}/server
-        make install DESTDIR=/sandbox
+        make install DESTDIR={DIR_BASE}
         """.format(
             self.code_dir
         )
@@ -87,12 +87,12 @@ class BuilderMariadb(j.baseclasses.builder):
 
         script = """
         useradd -r mysql || true
-        chmod 777 /sandbox/usr/local/mysql/
-        chown -R mysql:mysql /sandbox/usr/local/mysql/
-        cd /sandbox/usr/local/mysql/
-        scripts/mysql_install_db --basedir=/sandbox/usr/local/mysql \
-            --datadir=/sandbox/usr/local/mysql/data
-        chown -R mysql:mysql /sandbox/usr/local/mysql/
+        chmod 777 {DIR_BASE}/usr/local/mysql/
+        chown -R mysql:mysql {DIR_BASE}/usr/local/mysql/
+        cd {DIR_BASE}/usr/local/mysql/
+        scripts/mysql_install_db --basedir={DIR_BASE}/usr/local/mysql \
+            --datadir={DIR_BASE}/usr/local/mysql/data
+        chown -R mysql:mysql {DIR_BASE}/usr/local/mysql/
         """
         self._execute(script)
 
@@ -100,8 +100,8 @@ class BuilderMariadb(j.baseclasses.builder):
     def startup_cmds(self):
 
         cmd = """
-        /sandbox/usr/local/mysql/bin/mysqld --datadir=/sandbox/usr/local/mysql/data\
-            --basedir=/sandbox/usr/local/mysql --user=mysql
+        {DIR_BASE}/usr/local/mysql/bin/mysqld --datadir={DIR_BASE}/usr/local/mysql/data\
+            --basedir={DIR_BASE}/usr/local/mysql --user=mysql
         """
         cmd_start = cmd
 
@@ -243,3 +243,4 @@ class MariaClient:
     def _create_db(self, dbname):
         cmd = 'echo "CREATE DATABASE {dbname}" | mysql'.format(dbname=dbname)
         j.sal.process.execute(cmd, die=False)
+

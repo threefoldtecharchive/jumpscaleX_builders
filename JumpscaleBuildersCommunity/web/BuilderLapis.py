@@ -42,7 +42,7 @@ class BuilderLapis(j.baseclasses.builder):
         startup_file = j.sal.fs.joinPaths(j.sal.fs.getDirName(__file__), "templates", "lapis_startup.toml")
         self.startup = j.sal.fs.readFile(startup_file)
         self.root_files = {
-            "etc/passwd": "nobody:x:65534:65534:nobody:/:/sandbox/bin/openresty",
+            "etc/passwd": "nobody:x:65534:65534:nobody:/:{DIR_BASE}/bin/openresty",
             "etc/group": "nogroup:x:65534:",
         }
 
@@ -51,3 +51,4 @@ class BuilderLapis(j.baseclasses.builder):
 
     def install(self, reset=False):
         j.builders.runtimes.lua.install(reset)
+

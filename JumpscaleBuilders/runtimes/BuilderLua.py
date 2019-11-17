@@ -37,11 +37,11 @@ class BuilderLua(j.baseclasses.builder):
         )
         C = """
         cd {DIR_BUILD}/luarocks
-        ./configure --prefix=/sandbox/openresty/luarocks --with-lua=/sandbox/openresty/luajit
+        ./configure --prefix={DIR_BASE}/openresty/luarocks --with-lua={DIR_BASE}/openresty/luajit
         make build
         make install
 
-        cp {DIR_BUILD}/luarocks/luarocks /sandbox/bin/luarocks
+        cp {DIR_BUILD}/luarocks/luarocks {DIR_BASE}/bin/luarocks
         luarocks path > {ROCKS_PATHS_PROFILE}
         """
 
@@ -85,7 +85,7 @@ class BuilderLua(j.baseclasses.builder):
         self.profile.env_set("LUALIB", LUALIB)
 
         lua_path = (
-            "?.lua;$LUALIB/?/init.lua;$LUALIB/?.lua;$LUALIB/?/?.lua;$LUALIB/?/core.lua;/sandbox/openresty/lapis/?.lua;"
+            "?.lua;$LUALIB/?/init.lua;$LUALIB/?.lua;$LUALIB/?/?.lua;$LUALIB/?/core.lua;{DIR_BASE}/openresty/lapis/?.lua;"
             + lua_path.strip('"')
         )
         lua_path = lua_path.replace("$LUALIB", LUALIB)
@@ -126,7 +126,7 @@ class BuilderLua(j.baseclasses.builder):
             C = C.replace("$CRYPTODIR", CRYPTODIR)
         else:
             # C = "luarocks install $NAME CRYPTO_DIR=$CRYPTODIR OPENSSL_DIR=$CRYPTODIR"
-            # C = "luarocks install lapis CRYPTO_DIR=/sandbox OPENSSL_DIR=/sandbox"
+            # C = "luarocks install lapis CRYPTO_DIR={DIR_BASE} OPENSSL_DIR={DIR_BASE}"
             C = "luarocks install $NAME "
             C = C.replace("$CRYPTODIR", j.core.tools.text_replace("{DIR_BASE}"))
         C = C.replace("$NAME", name)
@@ -213,11 +213,11 @@ class BuilderLua(j.baseclasses.builder):
             self.lua_rock_install("lua-resty-jwt", reset=reset)
             self.lua_rock_install("lua-resty-iyo-auth", reset=reset)  # need to check how to get this to work on OSX
 
-        cmd = "rsync -rav  /sandbox/openresty/luarocks/lua_modules/lib/lua/5.1/ /sandbox/openresty/lualib"
+        cmd = "rsync -rav  {DIR_BASE}/openresty/luarocks/lua_modules/lib/lua/5.1/ {DIR_BASE}/openresty/lualib"
         self.tools.execute(cmd, die=False)
-        cmd = "rsync -rav /sandbox/openresty/luarocks/share/lua/5.1/  /sandbox/openresty/lualib/"
+        cmd = "rsync -rav {DIR_BASE}/openresty/luarocks/share/lua/5.1/  {DIR_BASE}/openresty/lualib/"
         self.tools.execute(cmd, die=False)
-        cmd = "rsync -rav /sandbox/openresty/luarocks/lib/lua/5.1/  /sandbox/openresty/lualib/"
+        cmd = "rsync -rav {DIR_BASE}/openresty/luarocks/lib/lua/5.1/  {DIR_BASE}/openresty/lualib/"
         self.tools.execute(cmd, die=False)
 
     # def build_crypto(self):
@@ -229,7 +229,7 @@ class BuilderLua(j.baseclasses.builder):
     #     export OPENSSL_LIBS="-L/usr/local/opt/openssl/lib -lssl -lcrypto"
     #     export LUAJIT_LIB=j.core.tools.text_replace("{DIR_BASE}/openresty/luajit/lib")
     #     export LUAJIT_INC=j.core.tools.text_replace("{DIR_BASE}/openresty/luajit/include/luajit-2.1")
-    #     export LUA_CFLAGS="-I/sandbox/openresty/luajit/include/luajit-2.1/"
+    #     export LUA_CFLAGS="-I{DIR_BASE}/openresty/luajit/include/luajit-2.1/"
     #     export LUA_LIB=j.core.tools.text_replace("{DIR_BASE}/openresty/luajit/lib")
     #     export LUA_INC=j.core.tools.text_replace("{DIR_BASE}/openresty/luajit/include/luajit-2.1")
     #
@@ -248,7 +248,7 @@ class BuilderLua(j.baseclasses.builder):
 
         set -ex
 
-        rm -rf /sandbox/openresty/luarocks
+        rm -rf {DIR_BASE}/openresty/luarocks
         rm -rf /bin/resty-auto-ssl
         rm -rf {DIR_BUILD}
         rm -rf /tmp/luarocks*
@@ -277,13 +277,13 @@ class BuilderLua(j.baseclasses.builder):
         C = """
 
         set -e
-        pushd /sandbox/openresty/luarocks/lib/luarocks/rocks-5.1/lapis/1.7.0-1/bin/
-        cp lapis /sandbox/bin/_lapis.lua
-        cp lapis /sandbox/bin/lapis
+        pushd {DIR_BASE}/openresty/luarocks/lib/luarocks/rocks-5.1/lapis/1.7.0-1/bin/
+        cp lapis {DIR_BASE}/bin/_lapis.lua
+        cp lapis {DIR_BASE}/bin/lapis
         popd
         pushd j.core.tools.text_replace("{DIR_BASE}/openresty/luarocks/lib/luarocks/rocks-5.1/moonscript/0.5.0-1/bin")
-        cp moon /sandbox/bin/_moon.lua
-        cp moonc /sandbox/bin/_moonc.lua
+        cp moon {DIR_BASE}/bin/_moon.lua
+        cp moonc {DIR_BASE}/bin/_moonc.lua
         popd
 
 
@@ -301,14 +301,14 @@ class BuilderLua(j.baseclasses.builder):
         """
         if self.tools.platform_is_ubuntu:
             C = """
-            ln -sf /sandbox/openresty/luarocks/bin/resty-auto-ssl/ /sandbox/openresty/resty-auto-ssl
-            ln -sf /sandbox/openresty/luarocks/bin/resty-auto-ssl/ /bin/resty-auto-ssl
+            ln -sf {DIR_BASE}/openresty/luarocks/bin/resty-auto-ssl/ {DIR_BASE}/openresty/resty-auto-ssl
+            ln -sf {DIR_BASE}/openresty/luarocks/bin/resty-auto-ssl/ /bin/resty-auto-ssl
             mkdir -p /etc/resty-auto-ssl/storage/file
             """
             self._execute(C)
         else:
             C = """
-            ln -sf /sandbox/openresty/luarocks/bin/resty-auto-ssl /sandbox/openresty/resty-auto-ssl
+            ln -sf {DIR_BASE}/openresty/luarocks/bin/resty-auto-ssl {DIR_BASE}/openresty/resty-auto-ssl
             """
 
             self._execute(C)
@@ -449,4 +449,5 @@ class BuilderLua(j.baseclasses.builder):
         self.stop()
 
         self._log_info("openresty test was ok,no longer running")
+
 

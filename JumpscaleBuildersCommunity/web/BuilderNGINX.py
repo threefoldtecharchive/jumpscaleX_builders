@@ -238,7 +238,7 @@ class BuilderNGINX(j.baseclasses.builder):
             :param flist_create: create flist after copying files
             :type flist_create:bool
         """
-        dir_dest = j.sal.fs.joinPaths(j.core.tools.text_replace("{DIR_BASE}/var/build", "{}/sandbox").format(self.DIR_SANDBOX))
+        dir_dest = j.sal.fs.joinPaths(j.core.tools.text_replace("{DIR_BASE}/var/build", "{}{DIR_BASE}").format(self.DIR_SANDBOX))
         self.tools.dir_ensure(dir_dest)
         bin_path = self.tools.joinpaths(self._replace("{DIR_BIN}"), self._name)
         bin_dest = self.tools.joinpaths(dir_dest, "bin", self._name)
@@ -253,4 +253,5 @@ class BuilderNGINX(j.baseclasses.builder):
         for bin in bins:
             dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, bin)
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest, exclude_sys_libs=False)
+
 

@@ -67,7 +67,7 @@ class BuilderZeroStor(BuilderGolangTools):
         self.datadir = self.DIR_BUILD
         self.tools.dir_ensure(self.datadir)
 
-        cmd = "zstor --config /sandbox/cfg/zstor.yaml daemon --listen 127.0.0.1:8000"
+        cmd = "zstor --config {DIR_BASE}/cfg/zstor.yaml daemon --listen 127.0.0.1:8000"
         cmd_zdb = j.builders.db.zdb.startup_cmds
         cmd_etcd = j.builders.db.etcd.startup_cmds
         cmds = [j.servers.startupcmd.get(name=self._classname, cmd_start=cmd)]
@@ -136,4 +136,5 @@ class BuilderZeroStor(BuilderGolangTools):
         self._remove(bin_path)
         self._remove(bin_bench_path)
         self.clean()
+
 

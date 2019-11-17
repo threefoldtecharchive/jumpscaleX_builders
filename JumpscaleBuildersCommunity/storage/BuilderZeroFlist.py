@@ -19,7 +19,7 @@ class BuilderZeroFlist(j.baseclasses.builder):
         Builds zflist
         """
         cmd = """
-        cd /sandbox/code/github/threefoldtech
+        cd {DIR_BASE}/code/github/threefoldtech
         git clone -b development-v2 https://github.com/threefoldtech/0-flist.git
 
         cd 0-flist/autobuild/
@@ -66,4 +66,5 @@ class BuilderZeroFlist(j.baseclasses.builder):
         bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
         self._remove(bin_path)
         self.clean()
+
 

@@ -101,7 +101,7 @@ class BuilderPostgresql(j.baseclasses.builder):
 
     @builder_method()
     def sandbox(self):
-        self.PACKAGE_DIR = self._replace("{DIR_SANDBOX}/sandbox")
+        self.PACKAGE_DIR = self._replace("{DIR_SANDBOX}{DIR_BASE}")
         self.tools.dir_ensure(self.PACKAGE_DIR)
         # data dir
         self.tools.dir_ensure("%s/apps/psql/data" % self.PACKAGE_DIR)
@@ -119,4 +119,5 @@ class BuilderPostgresql(j.baseclasses.builder):
         templates_dir = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates")
         startup_path = self._replace("{DIR_SANDBOX}/.startup.toml")
         self._copy(self.tools.joinpaths(templates_dir, "postgres_startup.toml"), startup_path)
+
 

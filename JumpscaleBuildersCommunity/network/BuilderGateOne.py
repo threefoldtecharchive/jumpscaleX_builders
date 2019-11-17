@@ -28,7 +28,7 @@ class BuilderGateOne(j.baseclasses.builder):
             return
 
         cmd = """
-cd /sandbox/code/github/liftoff/GateOne
+cd {DIR_BASE}/code/github/liftoff/GateOne
 apt-get install build-essential python3-dev python3-setuptools python3-pip -y
 pip3 install tornado==4.5.3
 python3 setup.py install
@@ -74,3 +74,4 @@ ln -sf /usr/bin/python3 /usr/bin/python
         helper method to clean what this module generates.
         """
         pass
+
