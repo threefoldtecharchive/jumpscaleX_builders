@@ -62,7 +62,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
         name = "coredns"
         src = self.tools.joinpaths(self.package_path, name, name)
         self._copy(src, "{DIR_BIN}/coredns")
-        j.sal.fs.writeFile(filename="/sandbox/cfg/coredns.conf", contents=CONFIGTEMPLATE)
+        j.sal.fs.writeFile(filename=j.core.tools.text_replace("{DIR_BASE}/cfg/coredns.conf"), contents=CONFIGTEMPLATE)
         self._execute("service systemd-resolved stop", die=False)
 
     def clean(self):
@@ -71,7 +71,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
 
     @property
     def startup_cmds(self):
-        cmd = "/sandbox/bin/coredns -conf /sandbox/cfg/coredns.conf"
+        cmd = j.core.tools.text_replace("{DIR_BASE}/bin/coredns -conf /sandbox/cfg/coredns.conf")
         cmds = [j.servers.startupcmd.get(name="coredns", cmd_start=cmd)]
         return cmds
 
@@ -89,7 +89,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
 
         # config
         config_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "cfg")
-        self._copy("/sandbox/cfg/coredns.conf", config_dest)
+        self._copy(j.core.tools.text_replace("{DIR_BASE}/cfg/coredns.conf"), config_dest)
 
         # startup toml
         startup_file = self.tools.joinpaths(self.templates_dir, "coredns_startup.toml")
@@ -98,7 +98,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
         # add certs
         dir_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "etc/ssl/certs/")
         self.tools.dir_ensure(dir_dest)
-        self._copy("/sandbox/cfg/ssl/certs", dir_dest)
+        self._copy(j.core.tools.text_replace("{DIR_BASE}/cfg/ssl/certs"), dir_dest)
 
     @builder_method()
     def test(self):
@@ -129,9 +129,10 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
         )
         client = test_container.client
         assert client.ping()
-        assert client.filesystem.list("/sandbox/bin")[0]["name"] == "coredns"
-        client.system("/sandbox/bin/coredns -dns.port 1053")
+        assert client.filesystem.list(j.core.tools.text_replace("{DIR_BASE}/bin")[0]["name"] == "coredns")
+        client.system(j.core.tools.text_replace("{DIR_BASE}/bin/coredns -dns.port 1053"))
         assert test_container.is_port_listening(1053)
         for job in client.job.list():
             client.job.kill(job["cmd"]["id"])
         print("TEST OK")
+

@@ -36,7 +36,7 @@ class BuilderBrotli(j.baseclasses.builder):
         lib_src = j.sal.fs.joinPaths(build_src, "lib")
         include_src = j.sal.fs.joinPaths(build_src, "include")
 
-        self._copy(bin_src + "/brotli", "/sandbox/bin/")
+        self._copy(bin_src + "/brotli", j.core.tools.text_replace("{DIR_BASE}/bin/"))
 
         # install libs
         libs = [
@@ -51,16 +51,16 @@ class BuilderBrotli(j.baseclasses.builder):
             "libbrotlidec.so.1.0.7",
         ]
         for lib in libs:
-            self._copy(lib_src + "/" + lib, "/sandbox/lib/")
+            self._copy(lib_src + "/" + lib, j.core.tools.text_replace("{DIR_BASE}/lib/"))
 
         # copy includes
-        self._copy(include_src, "/sandbox/include/")
+        self._copy(include_src, j.core.tools.text_replace("{DIR_BASE}/include/"))
 
     @builder_method()
     def sandbox(self, zhub_client=None, flist_create=True, merge_base_flist=""):
-        bin_src = "/sandbox/bin/brotli"
-        lib_src = "/sandbox/lib/"
-        include_src = "/sandbox/include/brotli"
+        bin_src = j.core.tools.text_replace("{DIR_BASE}/bin/brotli")
+        lib_src = j.core.tools.text_replace("{DIR_BASE}/lib/")
+        include_src = j.core.tools.text_replace("{DIR_BASE}/include/brotli")
 
         bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
         lib_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "lib")
@@ -130,3 +130,4 @@ class BuilderBrotli(j.baseclasses.builder):
         assert md5_src.split()[0] == md5_out.split()[0]
 
         print("TEST OK")
+

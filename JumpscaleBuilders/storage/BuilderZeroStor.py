@@ -57,7 +57,7 @@ class BuilderZeroStor(BuilderGolangTools):
         j.builders.db.zdb.install()
 
         self._copy("{}/src/github.com/threefoldtech/0-stor/bin".format(self.DIR_GO_PATH), "{DIR_BIN}")
-        j.sal.fs.writeFile(filename="/sandbox/cfg/zstor.yaml", contents=CONFIG_TEMPLATE)
+        j.sal.fs.writeFile(filename=j.core.tools.text_replace("{DIR_BASE}/cfg/zstor.yaml"), contents=CONFIG_TEMPLATE)
 
     @property
     def startup_cmds(self):
@@ -136,3 +136,4 @@ class BuilderZeroStor(BuilderGolangTools):
         self._remove(bin_path)
         self._remove(bin_bench_path)
         self.clean()
+

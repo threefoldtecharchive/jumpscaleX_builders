@@ -40,7 +40,7 @@ class BuilderCockroachDB(j.baseclasses.builder):
         port = 26257
         http_port = 8581
 
-        cmd = "/sandbox/bin/cockroach start --host={} --insecure --port={} --http-port={}".format(host, port, http_port)
+        cmd = j.core.tools.text_replace("{DIR_BASE}/bin/cockroach start --host={} --insecure --port={} --http-port={}").format(host, port, http_port)
         cmds = [j.servers.startupcmd.get(name=self._name, cmd_start=cmd)]
         return cmds
 
@@ -73,3 +73,4 @@ class BuilderCockroachDB(j.baseclasses.builder):
         bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
         self._remove(bin_path)
         self.clean()
+

@@ -10,7 +10,7 @@ class BuilderZerotier(j.baseclasses.builder):
 
     def _init(self, **kwargs):
         self.DIR_BUILD = j.core.tools.text_replace("{DIR_VAR}/build/zerotier/")
-        self.CLI = "/sandbox/bin/zerotier-cli"
+        self.CLI = j.core.tools.text_replace("{DIR_BASE}/bin/zerotier-cli")
 
     @builder_method()
     def reset(self):
@@ -70,7 +70,7 @@ class BuilderZerotier(j.baseclasses.builder):
         kosmos 'j.builders.network.zerotier.install()'
         :return:
         """
-        self._copy("{DIR_BUILD}/usr/sbin/", "/sandbox/bin/")
+        self._copy("{DIR_BUILD}/usr/sbin/", j.core.tools.text_replace("{DIR_BASE}/bin/"))
 
     @property
     def startup_cmds(self):
@@ -96,3 +96,4 @@ class BuilderZerotier(j.baseclasses.builder):
         self.start()
         self.stop()
         print("TEST OK")
+

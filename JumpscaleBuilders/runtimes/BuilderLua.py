@@ -66,7 +66,7 @@ class BuilderLua(j.baseclasses.builder):
             self.build(reset=True)
             assert j.sal.fs.exists(self.ROCKS_PATHS_PROFILE)
 
-        if not j.sal.fs.exists("/sandbox/openresty/luajit/include"):
+        if not j.sal.fs.exists(j.core.tools.text_replace("{DIR_BASE}/openresty/luajit/include")):
             # we need the include headers so if not there need to build openresty
             j.builders.web.openresty.build(reset=True)
 
@@ -80,7 +80,7 @@ class BuilderLua(j.baseclasses.builder):
         lua_cpath = _clean_env(lua_cpath)
 
         # ADD items from sandbox
-        LUALIB = "/sandbox/openresty/lualib"
+        LUALIB = j.core.tools.text_replace("{DIR_BASE}/openresty/lualib")
         assert j.sal.fs.exists(LUALIB)
         self.profile.env_set("LUALIB", LUALIB)
 
@@ -97,10 +97,10 @@ class BuilderLua(j.baseclasses.builder):
 
         self.profile.env_set("LUA_CPATH", lua_cpath, quote=True)
 
-        LUAINCDIR = "/sandbox/openresty/luajit/include/luajit-2.1"
+        LUAINCDIR = j.core.tools.text_replace("{DIR_BASE}/openresty/luajit/include/luajit-2.1")
         assert j.sal.fs.exists(LUAINCDIR)
         self.profile.env_set("LUA_INCDIR", LUAINCDIR)
-        self.profile.path_add("/sandbox/bin")
+        self.profile.path_add(j.core.tools.text_replace("{DIR_BASE}/bin"))
 
         path = luarocks_profile.env_get("PATH")  # .replace(";", ":")
         self.profile.path_add(path, check_exists=False)
@@ -128,7 +128,7 @@ class BuilderLua(j.baseclasses.builder):
             # C = "luarocks install $NAME CRYPTO_DIR=$CRYPTODIR OPENSSL_DIR=$CRYPTODIR"
             # C = "luarocks install lapis CRYPTO_DIR=/sandbox OPENSSL_DIR=/sandbox"
             C = "luarocks install $NAME "
-            C = C.replace("$CRYPTODIR", "/sandbox")
+            C = C.replace("$CRYPTODIR", j.core.tools.text_replace("{DIR_BASE}"))
         C = C.replace("$NAME", name)
         # example crypto dir: /usr/local/openresty/openssl/
 
@@ -227,11 +227,11 @@ class BuilderLua(j.baseclasses.builder):
     #
     #     export OPENSSL_CFLAGS=-I/usr/local/opt/openssl/include/
     #     export OPENSSL_LIBS="-L/usr/local/opt/openssl/lib -lssl -lcrypto"
-    #     export LUAJIT_LIB="/sandbox/openresty/luajit/lib"
-    #     export LUAJIT_INC="/sandbox/openresty/luajit/include/luajit-2.1"
+    #     export LUAJIT_LIB=j.core.tools.text_replace("{DIR_BASE}/openresty/luajit/lib")
+    #     export LUAJIT_INC=j.core.tools.text_replace("{DIR_BASE}/openresty/luajit/include/luajit-2.1")
     #     export LUA_CFLAGS="-I/sandbox/openresty/luajit/include/luajit-2.1/"
-    #     export LUA_LIB="/sandbox/openresty/luajit/lib"
-    #     export LUA_INC="/sandbox/openresty/luajit/include/luajit-2.1"
+    #     export LUA_LIB=j.core.tools.text_replace("{DIR_BASE}/openresty/luajit/lib")
+    #     export LUA_INC=j.core.tools.text_replace("{DIR_BASE}/openresty/luajit/include/luajit-2.1")
     #
     #     :return:
     #     """
@@ -281,7 +281,7 @@ class BuilderLua(j.baseclasses.builder):
         cp lapis /sandbox/bin/_lapis.lua
         cp lapis /sandbox/bin/lapis
         popd
-        pushd '/sandbox/openresty/luarocks/lib/luarocks/rocks-5.1/moonscript/0.5.0-1/bin'
+        pushd j.core.tools.text_replace("{DIR_BASE}/openresty/luarocks/lib/luarocks/rocks-5.1/moonscript/0.5.0-1/bin")
         cp moon /sandbox/bin/_moon.lua
         cp moonc /sandbox/bin/_moonc.lua
         popd
@@ -313,7 +313,7 @@ class BuilderLua(j.baseclasses.builder):
 
             self._execute(C)
 
-        ssl_path = "/sandbox/cfg/ssl"
+        ssl_path = j.core.tools.text_replace("{DIR_BASE}/cfg/ssl")
         j.sal.fs.createDir(ssl_path)
         if self.tools.platform_is_ubuntu:
             j.sal.unix.addSystemGroup("www")
@@ -333,8 +333,8 @@ class BuilderLua(j.baseclasses.builder):
         kosmos 'j.builders.runtimes.lua.install_certificates()'
         :return:
         """
-        assert self._exists("/sandbox/openresty/resty-auto-ssl")
-        ssl_path = "/sandbox/cfg/ssl"
+        assert self._exists(j.core.tools.text_replace("{DIR_BASE}/openresty/resty-auto-ssl"))
+        ssl_path = j.core.tools.text_replace("{DIR_BASE}/cfg/ssl")
         j.sal.fs.createDir(ssl_path)
         # Generate a self signed fallback certificate
         cmd = """
@@ -385,7 +385,7 @@ class BuilderLua(j.baseclasses.builder):
         :return:
         """
         # assert self.executor.type=="local"
-        path = "/sandbox/openresty/lualib"
+        path = j.core.tools.text_replace("{DIR_BASE}/openresty/lualib")
 
         if j.core.platformtype.myplatform.platform_is_ubuntu:
             destbin = "%s/base/openresty/lualib" % j.clients.git.getContentPathFromURLorPath(
@@ -449,3 +449,4 @@ class BuilderLua(j.baseclasses.builder):
         self.stop()
 
         self._log_info("openresty test was ok,no longer running")
+

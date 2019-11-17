@@ -105,7 +105,7 @@ class BuilderCoreX(j.baseclasses.builder):
         self._remove(self.DIR_SANDBOX)
 
     def start(self, port=7681):
-        cmd = "/sandbox/bin/corex --port {}".format(port)
+        cmd = j.core.tools.text_replace("{DIR_BASE}/bin/corex --port {}").format(port)
         j.servers.startupcmd.get(name=self._classname, cmd_start=cmd).start()
 
     def running(self):
@@ -141,3 +141,4 @@ class BuilderCoreX(j.baseclasses.builder):
         bin_path = self.tools.joinpaths("{DIR_BIN}", "corex")
         self._remove(bin_path)
         self.clean()
+

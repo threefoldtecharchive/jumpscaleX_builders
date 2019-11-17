@@ -41,7 +41,7 @@ class BuilderZeroFlist(j.baseclasses.builder):
         Remove built files
         """
         self._remove(self.DIR_SANDBOX)
-        self._remove("/sandbox/code/github/threefoldtech/0-flist")
+        self._remove(j.core.tools.text_replace("{DIR_BASE}/code/github/threefoldtech/0-flist"))
         cmd = """
          rm -rf /opt/*
          """
@@ -66,3 +66,4 @@ class BuilderZeroFlist(j.baseclasses.builder):
         bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
         self._remove(bin_path)
         self.clean()
+

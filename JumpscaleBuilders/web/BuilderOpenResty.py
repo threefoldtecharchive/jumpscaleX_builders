@@ -28,18 +28,18 @@ class BuilderOpenResty(j.baseclasses.builder):
         )
         C = """
         cd {DIR_BUILD}/openresty
-        mkdir -p /sandbox/var/pid
-        mkdir -p /sandbox/var/log
+        mkdir -p {DIR_BASE}/var/pid
+        mkdir -p {DIR_BASE}/var/log
         ./configure \
             --with-cc-opt="-I/usr/local/opt/openssl/include/ -I/usr/local/opt/pcre/include/" \
             --with-ld-opt="-L/usr/local/opt/openssl/lib/ -L/usr/local/opt/pcre/lib/" \
-            --prefix="/sandbox/openresty" \
-            --sbin-path="/sandbox/bin/openresty" \
-            --modules-path="/sandbox/lib" \
-            --pid-path="/sandbox/var/pid/openresty.pid" \
-            --error-log-path="/sandbox/var/log/openresty.log" \
-            --lock-path="/sandbox/var/nginx.lock" \
-            --conf-path="/sandbox/cfg/nginx/openresty.cfg" \
+            --prefix="{DIR_BASE}/openresty" \
+            --sbin-path="{DIR_BASE}/bin/openresty" \
+            --modules-path="{DIR_BASE}/lib" \
+            --pid-path="{DIR_BASE}/var/pid/openresty.pid" \
+            --error-log-path="{DIR_BASE}/var/log/openresty.log" \
+            --lock-path="{DIR_BASE}/var/nginx.lock" \
+            --conf-path="{DIR_BASE}/cfg/nginx/openresty.cfg" \
             -j8
         make -j8
         make install
@@ -57,12 +57,12 @@ class BuilderOpenResty(j.baseclasses.builder):
         # copy the files from the sandbox !!! IMPORTANT
 
         C = """
-        ln -sf /sandbox/openresty/bin/resty /sandbox/bin/resty
-        ln -sf /sandbox/openresty/bin/restydoc /sandbox/bin/restydoc
-        ln -sf /sandbox/openresty/bin/restydoc-index /sandbox/bin/restydoc-index
-        ln -f -s /sandbox/openresty/luajit/bin/luajit /sandbox/bin/lua
-        rm  -rf /sandbox/openresty/pod
-        rm  -rf /sandbox/openresty/site
+        ln -sf {DIR_BASE}/openresty/bin/resty {DIR_BASE}/bin/resty
+        ln -sf {DIR_BASE}/openresty/bin/restydoc {DIR_BASE}/bin/restydoc
+        ln -sf {DIR_BASE}/openresty/bin/restydoc-index {DIR_BASE}/bin/restydoc-index
+        ln -f -s {DIR_BASE}/openresty/luajit/bin/luajit {DIR_BASE}/bin/lua
+        rm  -rf {DIR_BASE}/openresty/pod
+        rm  -rf {DIR_BASE}/openresty/site
         """
         self._execute(C)
 
@@ -137,16 +137,16 @@ class BuilderOpenResty(j.baseclasses.builder):
         :return:
         """
         C = """
-        cd /sandbox
+        cd {DIR_BASE}
         rm -rf {DIR_BUILD}
-        rm -f /sandbox/bin/lua*
-        rm -f /sandbox/bin/moon*
-        rm -f /sandbox/bin/openresty*
-        rm -f /sandbox/bin/resty*
-        rm -f /sandbox/bin/_moon*
-        rm -f /sandbox/bin/_lapis*
-        rm -f /sandbox/bin/lapis*
-        rm -rf /sandbox/openresty/
+        rm -f {DIR_BASE}/bin/lua*
+        rm -f {DIR_BASE}/bin/moon*
+        rm -f {DIR_BASE}/bin/openresty*
+        rm -f {DIR_BASE}/bin/resty*
+        rm -f {DIR_BASE}/bin/_moon*
+        rm -f {DIR_BASE}/bin/_lapis*
+        rm -f {DIR_BASE}/bin/lapis*
+        rm -rf {DIR_BASE}/openresty/
 
         """
         self._execute(C)

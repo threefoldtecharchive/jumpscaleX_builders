@@ -84,7 +84,7 @@ class BuilderHub(j.baseclasses.builder):
         --with-openssl
         make {MAKEOPTS}
         make install
-        make install DESTDIR="/sandbox/"
+        make install DESTDIR="{DIR_BASE}/"
         ldconfig
         """
         self._execute(curl_cmd)
@@ -100,7 +100,7 @@ class BuilderHub(j.baseclasses.builder):
         ./configure
         make {MAKEOPTS}
         make install
-        make install DESTDIR="/sandbox/"
+        make install DESTDIR="{DIR_BASE}/"
         ldconfig
         """
         self._execute(capnp_cmd)
@@ -115,7 +115,7 @@ class BuilderHub(j.baseclasses.builder):
         make
         popd
         pushd zflist
-        make production DESTDIR="/sandbox/"
+        make production DESTDIR="{DIR_BASE}/"
         popd
         cp zflist/zflist /tmp/zflist
         strip -s /tmp/zflist

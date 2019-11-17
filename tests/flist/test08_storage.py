@@ -37,6 +37,7 @@ class Storage_TestCases(BaseTest):
         self.deploy_flist_container("{}".format(flist))
         self.info("Check that {} flist works.".format(flist))
         if flist == "minio":
-            self.assertIn("USAGE:", self.check_container_flist("/sandbox/bin/minio --help"))
+            self.assertIn("USAGE:", self.check_container_flist(j.core.tools.text_replace("{DIR_BASE}/bin/minio --help")))
         else:
-            self.assertIn("Usage", self.check_container_flist("/sandbox/bin/{} help".format(binary)))
+            self.assertIn("Usage", self.check_container_flist(j.core.tools.text_replace("{DIR_BASE}/bin/{} help").format(binary)))
+

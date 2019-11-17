@@ -23,13 +23,13 @@ class BuilderCmake(j.baseclasses.builder):
 
     @property
     def share_src(self):
-        dir_list = j.sal.fs.listDirsInDir("/sandbox/share")
-        return [i for i in dir_list if i.startswith("/sandbox/share/cmake")][0]
+        dir_list = j.sal.fs.listDirsInDir(j.core.tools.text_replace("{DIR_BASE}/share"))
+        return [i for i in dir_list if i.startswith(j.core.tools.text_replace("{DIR_BASE}/share/cmake"))][0]
 
     @builder_method()
     def install(self):
         self._execute("cd {} && make install".format(self.package_path))
-        self.profile.env_set_part("LD_LIBRARY_PATH", "/sandbox/lib/")
+        self.profile.env_set_part("LD_LIBRARY_PATH", j.core.tools.text_replace("{DIR_BASE}/lib/"))
 
     @builder_method()
     def sandbox(
@@ -64,5 +64,6 @@ class BuilderCmake(j.baseclasses.builder):
 
     def test(self):
         path = self._execute("which cmake", showout=False)
-        assert path[1].strip() == "/sandbox/bin/cmake"
+        assert path[1].strip() == j.core.tools.text_replace("{DIR_BASE}/bin/cmake")
         print("TEST OK")
+

@@ -47,7 +47,7 @@ class BuilderZdb(j.baseclasses.builder):
         ddir = "{}/data/".format(datadir)
         self.tools.dir_ensure(idir)
         self.tools.dir_ensure(ddir)
-        cmd = "/sandbox/bin/zdb --listen {} --port {} --index {} --data {} --mode {} --admin {} --protect".format(
+        cmd = j.core.tools.text_replace("{DIR_BASE}/bin/zdb --listen {} --port {} --index {} --data {} --mode {} --admin {} --protect").format(
             addr, port, idir, ddir, mode, adminsecret
         )
         cmds = [j.servers.startupcmd.get(name=self._name, cmd_start=cmd)]
@@ -125,3 +125,4 @@ class BuilderZdb(j.baseclasses.builder):
     def reset(self):
         super().reset()
         self.clean()
+

@@ -80,8 +80,8 @@ def test_main(self=None):
     j.builders.tools.dir_ensure(j.builders.tools.joinpaths(www_path, "test"))
     j.sal.fs.writeFile(j.builders.tools.joinpaths(www_path, "test", "index.php"), contents="<?php phpinfo(); ?>")
 
-    cmd = "/sandbox/sbin/php-fpm -F -y /sandbox/etc/php-fpm.d/www.conf"
-    php_cmd = j.servers.startupcmd.get(name="test_php", cmd_start=cmd, process_strings=["/sandbox/sbin/php-fpm"])
+    cmd = j.core.tools.text_replace("{DIR_BASE}/sbin/php-fpm -F -y /sandbox/etc/php-fpm.d/www.conf")
+    php_cmd = j.servers.startupcmd.get(name="test_php", cmd_start=cmd, process_strings=[j.core.tools.text_replace("{DIR_BASE}/sbin/php-fpm")])
     cmd = "nginx -c /tmp/builders/nginx/conf/nginx-php.conf -g 'daemon off;'"
     nginx_cmd = j.servers.startupcmd.get(name="test_nginx-php", cmd_start=cmd, cmd_stop="nginx -s stop")
 
@@ -97,3 +97,4 @@ def test_main(self=None):
 
     j.builders.runtimes.php.stop()
     j.sal.process.killProcessByName("nginx")
+

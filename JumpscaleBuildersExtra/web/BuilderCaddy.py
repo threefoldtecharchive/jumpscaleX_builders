@@ -148,12 +148,12 @@ class BuilderCaddy(BuilderGolangTools):
 
     @property
     def startup_cmds(self):
-        cmd = j.servers.startupcmd.get("caddy", cmd_start="caddy", path="/sandbox/bin")
+        cmd = j.servers.startupcmd.get("caddy", cmd_start="caddy", path=j.core.tools.text_replace("{DIR_BASE}/bin"))
         return [cmd]
 
     @builder_method()
     def sandbox(self, reset=False, zhub_client=None, flist_create=False):
-        bin_dest = j.sal.fs.joinPaths("/sandbox/var/build", "{}/sandbox".format(self.DIR_SANDBOX))
+        bin_dest = j.sal.fs.joinPaths(j.core.tools.text_replace("{DIR_BASE}/var/build", "{}/sandbox").format(self.DIR_SANDBOX))
         self.tools.dir_ensure(bin_dest)
         caddy_bin_path = self.tools.joinpaths(self.package_path, "/caddy", self._name)
         self.tools.file_copy(caddy_bin_path, bin_dest)
@@ -165,3 +165,4 @@ class BuilderCaddy(BuilderGolangTools):
         :type name: str, optional
         """
         self._test_run(name=name, obj_key="test_main")
+

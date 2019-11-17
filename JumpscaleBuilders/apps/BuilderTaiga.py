@@ -116,7 +116,7 @@ class BuilderTaiga(j.baseclasses.builder):
 
     def _init(self, **kwargs):
         self.DIR_CODE = self.tools.joinpaths(self.DIR_BUILD, "code")
-        self.DIR_BIN = "/sandbox/bin"
+        self.DIR_BIN = j.core.tools.text_replace("{DIR_BASE}/bin")
         self.frontend_repo_dir = f"{self.DIR_CODE}/taiga-front-dist"
         self.backend_repo_dir = f"{self.DIR_CODE}/taiga-back"
         self.events_repo_dir = f"{self.DIR_CODE}/taiga-event"
@@ -270,3 +270,4 @@ class BuilderTaiga(j.baseclasses.builder):
             su {self.TAIGA_USER} -c 'export PATH=$PATH:{self.DIR_BIN};cd {self.events_repo_dir}; /bin/bash -c \\"node_modules/coffeescript/bin/coffee index.coffee\\"'
             """
         return [taiga_events, taiga_server]
+

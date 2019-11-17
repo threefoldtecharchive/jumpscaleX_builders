@@ -34,8 +34,8 @@ class BuilderInfluxdb(BuilderGolangTools):
     @builder_method()
     def install(self):
         self.tools.dir_ensure("{DIR_BIN}")
-        self._copy("/sandbox/go_proj/bin/influx", "{DIR_BIN}")
-        self._copy("/sandbox/go_proj/bin/influxd", "{DIR_BIN}")
+        self._copy(j.core.tools.text_replace("{DIR_BASE}/go_proj/bin/influx", "{DIR_BIN}"))
+        self._copy(j.core.tools.text_replace("{DIR_BASE}/go_proj/bin/influxd", "{DIR_BIN}"))
 
     @builder_method()
     def sandbox(
@@ -89,3 +89,4 @@ class BuilderInfluxdb(BuilderGolangTools):
         self.start()
         assert self.running()
         print("TEST OK")
+

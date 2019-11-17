@@ -48,7 +48,7 @@ class BuilderTCPRouter(BuilderGolangTools):
         """
         j.builders.db.redis.install()
         self.tools.file_copy(self._replace("{DIR_BUILD}/bin/tcprouter"), "{DIR_BIN}")
-        j.sal.fs.writeFile(filename="/sandbox/cfg/router.toml", contents=CFG)
+        j.sal.fs.writeFile(filename=j.core.tools.text_replace("{DIR_BASE}/cfg/router.toml"), contents=CFG)
 
     @builder_method()
     def sandbox(self):
@@ -59,11 +59,12 @@ class BuilderTCPRouter(BuilderGolangTools):
         )
 
         self.tools.file_copy(
-            self._replace("/sandbox/cfg/router.toml"), self._replace("{DIR_SANDBOX}/sandbox/cfg/router.toml")
+            self._replace(j.core.tools.text_replace("{DIR_BASE}/cfg/router.toml"), self._replace("{DIR_SANDBOX}/sandbox/cfg/router.toml"))
         )
 
     @property
     def startup_cmds(self):
         tcprouter_cmd = "tcprouter /sandbox/cfg/router.toml"
-        tcprouter = j.servers.startupcmd.get("tcprouter", cmd_start=tcprouter_cmd, path="/sandbox/bin")
+        tcprouter = j.servers.startupcmd.get("tcprouter", cmd_start=tcprouter_cmd, path=j.core.tools.text_replace("{DIR_BASE}/bin"))
         return [tcprouter]
+

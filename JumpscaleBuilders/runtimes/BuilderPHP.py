@@ -13,8 +13,8 @@ compileconfig["with_libzip"] = False
 compileconfig["with_zlib"] = True
 compileconfig["with_openssl"] = True
 compileconfig["enable_fpm"] = True
-compileconfig["prefix"] = "/sandbox"
-compileconfig["exec_prefix"] = "/sandbox"
+compileconfig["prefix"] = j.core.tools.text_replace("{DIR_BASE}")
+compileconfig["exec_prefix"] = j.core.tools.text_replace("{DIR_BASE}")
 compileconfig["with_mysqli"] = True
 compileconfig["with_pdo_mysql"] = True
 compileconfig["with_mysql_sock"] = "/var/run/mysqld/mysqld.sock"
@@ -125,11 +125,11 @@ class BuilderPHP(j.baseclasses.builder):
         self.tools.dir_ensure(self._replace("{/sandbox/etc/php-fpm.d"))
         fpm_default_conf = self._replace(fpm_default_conf)
         fpm_www_conf = self._replace(fpm_www_conf)
-        self._write(path="/sandbox/etc/php-fpm.conf", txt=fpm_default_conf)
-        self._write(path="/sandbox/etc/php-fpm.d/www.conf", txt=fpm_www_conf)
+        self._write(path=j.core.tools.text_replace("{DIR_BASE}/etc/php-fpm.conf"), txt=fpm_default_conf)
+        self._write(path=j.core.tools.text_replace("{DIR_BASE}/etc/php-fpm.d/www.conf"), txt=fpm_www_conf)
 
         php_tmp_path = self._replace("{DIR_BUILD}/php-src")
-        php_app_path = self._replace("/sandbox")
+        php_app_path = self._replace(j.core.tools.text_replace("{DIR_BASE}"))
         self._copy(
             self.tools.joinpaths(php_tmp_path, "php.ini-development"), self.tools.joinpaths(php_app_path, "php.ini")
         )
@@ -146,7 +146,7 @@ class BuilderPHP(j.baseclasses.builder):
 
     @property
     def startup_cmds(self):
-        cmd = "/sandbox/sbin/php-fpm -F -y /sandbox/etc/php-fpm.conf"  # foreground
+        cmd = j.core.tools.text_replace("{DIR_BASE}/sbin/php-fpm -F -y /sandbox/etc/php-fpm.conf")  # foreground
         cmds = [j.servers.startupcmd.get(name=self._name, cmd_start=cmd)]
         return cmds
 
@@ -170,7 +170,7 @@ class BuilderPHP(j.baseclasses.builder):
             self._copy(dir_src, dir_dest)
 
         # sbin
-        sbin_src = "/sandbox/sbin/php-fpm"
+        sbin_src = j.core.tools.text_replace("{DIR_BASE}/sbin/php-fpm")
         sbin_dest = self.tools.joinpaths(self.DIR_SANDBOX, sbin_src[1:])
         self._copy(sbin_src, sbin_dest)
 
@@ -182,26 +182,26 @@ class BuilderPHP(j.baseclasses.builder):
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest, exclude_sys_libs=False)
 
         # libs
-        libs_src = "/sandbox/lib/php"
+        libs_src = j.core.tools.text_replace("{DIR_BASE}/lib/php")
         libs_dest = self.tools.joinpaths(self.DIR_SANDBOX, libs_src[1:])
         self.tools.dir_ensure(libs_dest)
         self._copy(libs_src, libs_dest)
 
         # include
-        include_src = "/sandbox/include/php"
+        include_src = j.core.tools.text_replace("{DIR_BASE}/include/php")
         include_dest = self.tools.joinpaths(self.DIR_SANDBOX, include_src[1:])
         self.tools.dir_ensure(include_dest)
         self._copy(include_src, include_dest)
 
         # php
-        php_src = "/sandbox/php"
+        php_src = j.core.tools.text_replace("{DIR_BASE}/php")
         php_dest = self.tools.joinpaths(self.DIR_SANDBOX, php_src[1:])
         self.tools.dir_ensure(php_dest)
         self._copy(php_src, php_dest)
 
         # configs
-        default_conf = "/sandbox/etc/php-fpm.conf"
-        fpm_www_conf = "/sandbox/etc/php-fpm.d/www.conf"
+        default_conf = j.core.tools.text_replace("{DIR_BASE}/etc/php-fpm.conf")
+        fpm_www_conf = j.core.tools.text_replace("{DIR_BASE}/etc/php-fpm.d/www.conf")
         default_conf_dest = self.tools.joinpaths(self.DIR_SANDBOX, "sandbox/etc/")
         www_conf_dest = self.tools.joinpaths(self.DIR_SANDBOX, "sandbox/etc/php-fpm.d")
         self.tools.dir_ensure(www_conf_dest)
@@ -209,7 +209,7 @@ class BuilderPHP(j.baseclasses.builder):
         self._copy(fpm_www_conf, www_conf_dest)
 
         # php.ini
-        phpini_src = "/sandbox/php.ini"
+        phpini_src = j.core.tools.text_replace("{DIR_BASE}/php.ini")
         phpini_dest = self.tools.joinpaths(self.DIR_SANDBOX, phpini_src[1:])
         self._copy(phpini_src, phpini_dest)
 
@@ -224,3 +224,4 @@ class BuilderPHP(j.baseclasses.builder):
     def clean(self):
         self._remove("{DIR_BUILD}/php-src")
         self._remove("{DIR_BUILD}/oniguruma")
+

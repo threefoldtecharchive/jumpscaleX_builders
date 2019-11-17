@@ -39,7 +39,7 @@ class BuilderGitea(BuilderGolangTools):
         if self.tools.exists(self.CUSTOM_PATH) and not self.tools.file_is_link(self.CUSTOM_PATH):
             self.tools.dir_remove(self.CUSTOM_PATH)
 
-        self.tools.file_link(source="/sandbox/code/github/incubaid/gitea-custom", destination=self.CUSTOM_PATH)
+        self.tools.file_link(source=j.core.tools.text_replace("{DIR_BASE}/code/github/incubaid/gitea-custom"), destination=self.CUSTOM_PATH)
 
         # build gitea (will be stored in self.GITEAPATH/gitea)
         self._execute('cd {GITEAPATH} && TAGS="bindata" make generate build')
@@ -124,7 +124,7 @@ class BuilderGitea(BuilderGolangTools):
 
     @property
     def startup_cmds(self):
-        cmd = j.servers.startupcmd.get("gitea", "gitea web", path="/sandbox/bin")
+        cmd = j.servers.startupcmd.get("gitea", "gitea web", path=j.core.tools.text_replace("{DIR_BASE}/bin"))
         return j.builders.db.psql.startup_cmds + [cmd]
 
     @builder_method()
@@ -134,7 +134,7 @@ class BuilderGitea(BuilderGolangTools):
         # add certs
         dir_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "etc/ssl/certs/")
         self.tools.dir_ensure(dir_dest)
-        self._copy("/sandbox/cfg/ssl/certs", dir_dest)
+        self._copy(j.core.tools.text_replace("{DIR_BASE}/cfg/ssl/certs"), dir_dest)
 
         # gitea bin
         self.tools.dir_ensure("{DIR_SANDBOX}/sandbox/bin")
@@ -152,3 +152,4 @@ class BuilderGitea(BuilderGolangTools):
         # init config
         custom_dir = self._replace("{DIR_SANDBOX}/sandbox/bin/custom/conf")
         self.write_ini_config("%s/app.ini" % custom_dir)
+

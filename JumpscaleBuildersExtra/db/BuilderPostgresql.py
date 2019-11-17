@@ -82,7 +82,7 @@ class BuilderPostgresql(j.baseclasses.builder):
         cmd.cmd_start = self._replace("sudo -u postgres  {DIR_BIN}/postgres -k {SOCKET_DIR} -D {DATA_DIR}")
         cmd.cmd_stop = self._replace("sudo -u postgres {DIR_BIN}/pg_ctl stop -D {DATA_DIR}")
         cmd.ports = [5432]
-        cmd.path = "/sandbox/bin"
+        cmd.path = j.core.tools.text_replace("{DIR_BASE}/bin")
         return [cmd]
 
     def test(self):
@@ -119,3 +119,4 @@ class BuilderPostgresql(j.baseclasses.builder):
         templates_dir = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates")
         startup_path = self._replace("{DIR_SANDBOX}/.startup.toml")
         self._copy(self.tools.joinpaths(templates_dir, "postgres_startup.toml"), startup_path)
+
