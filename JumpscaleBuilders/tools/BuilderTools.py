@@ -594,7 +594,7 @@ class BuilderTools(j.baseclasses.builder):
 
     def joinpaths(self, *args):
         args = [self._replace(arg) for arg in args]
-        return self._joinpaths(*args)
+        return j.sal.fs.joinPaths(*args)
 
     def path_relative(self, path):
         """Makes the path relative by removing the slash at the beginning if it exists
