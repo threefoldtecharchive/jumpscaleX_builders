@@ -41,21 +41,21 @@ class BuilderCmake(j.baseclasses.builder):
         # bins
         bins = ["cmake", "cpack", "ctest"]
         for bin_name in bins:
-            dir_src = self.tools.joinpaths(j.dirs.BINDIR, bin_name)
-            dir_dest = self.tools.joinpaths(self.DIR_SANDBOX, j.dirs.BINDIR[1:])
-            self.tools.dir_ensure(dir_dest)
+            dir_src = self._joinpaths(j.dirs.BINDIR, bin_name)
+            dir_dest = self._joinpaths(self.DIR_SANDBOX, j.dirs.BINDIR[1:])
+            self._dir_ensure(dir_dest)
             self._copy(dir_src, dir_dest)
 
         # libs
-        lib_dest = self.tools.joinpaths(self.DIR_SANDBOX, "sandbox/lib")
-        self.tools.dir_ensure(lib_dest)
+        lib_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox/lib")
+        self._dir_ensure(lib_dest)
         for bin in bins:
-            dir_src = self.tools.joinpaths(j.dirs.BINDIR, bin)
+            dir_src = self._joinpaths(j.dirs.BINDIR, bin)
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest, exclude_sys_libs=False)
 
         # share
-        share_dest = self.tools.joinpaths(self.DIR_SANDBOX, self.share_src[1:])
-        self.tools.dir_ensure(share_dest)
+        share_dest = self._joinpaths(self.DIR_SANDBOX, self.share_src[1:])
+        self._dir_ensure(share_dest)
         self._copy(self.share_src, share_dest)
 
     def clean(self):
@@ -66,4 +66,3 @@ class BuilderCmake(j.baseclasses.builder):
         path = self._execute("which cmake", showout=False)
         assert path[1].strip() == j.core.tools.text_replace("{DIR_BASE}/bin/cmake")
         print("TEST OK")
-

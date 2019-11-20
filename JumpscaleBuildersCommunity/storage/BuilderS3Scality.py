@@ -17,7 +17,7 @@ class BuilderS3Scality(j.baseclasses.builder):
         j.builders.runtimes.nodejs.build(reset=reset)
 
         path = "%s/%s" % (self.DIR_BUILD, self._name)
-        j.builders.tools.dir_remove(path, recursive=True)
+        self._remove(path, recursive=True)
         j.clients.git.pullGitRepo("https://github.com/scality/S3.git", ssh=False, dest=path)
 
     @builder_method()
@@ -31,7 +31,7 @@ class BuilderS3Scality(j.baseclasses.builder):
         j.core.tools.dir_ensure(storage)
         j.core.tools.dir_ensure(meta)
 
-        j.builders.tools.dir_remove(self.path, recursive=True)
+        self._remove(self.path, recursive=True)
         j.core.tools.dir_ensure("{DIR_BASE}/apps/")
         self._execute("mv %s/%s %s" % (self.DIR_BUILD, self._name, self.path))
         self._execute("cd %s && npm install" % self.path)
@@ -44,7 +44,7 @@ class BuilderS3Scality(j.baseclasses.builder):
         pkg["scripts"]["start_location"] = cmd
 
         content = j.data.serializers.json.dumps(pkg, indent=True)
-        j.sal.fs.writeFile("%s/package.json" % self.path, content)
+        self._write("%s/package.json" % self.path, content)
 
     @property
     def startup_cmds(self):

@@ -47,24 +47,21 @@ class BuilderTCPRouter(BuilderGolangTools):
         install tcprouter
         """
         j.builders.db.redis.install()
-        self.tools.file_copy(self._replace("{DIR_BUILD}/bin/tcprouter"), "{DIR_BIN}")
-        j.sal.fs.writeFile(filename=j.core.tools.text_replace("{DIR_BASE}/cfg/router.toml"), contents=CFG)
+        self._copy("{DIR_BUILD}/bin/tcprouter", "{DIR_BIN}")
+        self._write("{DIR_BASE}/cfg/router.toml", contents=CFG)
 
     @builder_method()
     def sandbox(self):
         j.builders.db.redis.sandbox()
-        self.tools.copyTree(j.builders.db.redis.DIR_SANDBOX, self.DIR_SANDBOX)
-        self.tools.file_copy(
-            self._replace("{DIR_BUILD}/bin/tcprouter"), self._replace("{DIR_SANDBOX}/sandbox/bin/tcprouter")
-        )
+        self._copy(j.builders.db.redis.DIR_SANDBOX, self.DIR_SANDBOX)
+        self._copy("{DIR_BUILD}/bin/tcprouter", "{DIR_SANDBOX}/sandbox/bin/tcprouter")
 
-        self.tools.file_copy(
-            self._replace(j.core.tools.text_replace("{DIR_BASE}/cfg/router.toml"), self._replace("{DIR_SANDBOX}/sandbox/cfg/router.toml"))
-        )
+        self._copy("{DIR_BASE}/cfg/router.toml", "{DIR_SANDBOX}/sandbox/cfg/router.toml")
 
     @property
     def startup_cmds(self):
         tcprouter_cmd = "tcprouter /sandbox/cfg/router.toml"
-        tcprouter = j.servers.startupcmd.get("tcprouter", cmd_start=tcprouter_cmd, path=j.core.tools.text_replace("{DIR_BASE}/bin"))
+        tcprouter = j.servers.startupcmd.get(
+            "tcprouter", cmd_start=tcprouter_cmd, path=j.core.tools.text_replace("{DIR_BASE}/bin")
+        )
         return [tcprouter]
-

@@ -22,7 +22,7 @@ class BuilderAydoStor(BuilderGolangTools):
         j.builders.system.package.mdupdate()
         j.builders.system.package.ensure("build-essential")
 
-        j.builders.tools.dir_remove("%s/src" % j.builders.sandbox.env_get("GOPATH"))
+        self._remove("%s/src" % j.builders.sandbox.env_get("GOPATH"))
         self.get("github.com/g8os/stor")
 
         if install:
@@ -47,7 +47,7 @@ class BuilderAydoStor(BuilderGolangTools):
         config = {"listen_addr": addr, "store_root": backend}
         content = j.data.serializers.toml.dumps(config)
         j.core.tools.dir_ensure("{DIR_VAR}/templates/cfg/stor", recursive=True)
-        j.sal.fs.writeFile("{DIR_VAR}/templates/cfg/stor/config.toml", content)
+        self._write("{DIR_VAR}/templates/cfg/stor/config.toml", content)
 
         if start:
             self.start(addr)

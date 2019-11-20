@@ -13,7 +13,7 @@ class BuilderRedis(j.baseclasses.builder):
             j.builders.system.package.mdupdate()
             j.builders.system.package.ensure("build-essential")
 
-            j.builders.tools.dir_remove("{DIR_TEMP}/build/redis")
+            self._remove("{DIR_TEMP}/build/redis")
 
             C = """
             #!/bin/bash
@@ -40,7 +40,7 @@ class BuilderRedis(j.baseclasses.builder):
         self.build()
         self._copy("{DIR_TEMP}/build/redis/redis-stable/src/redis-server", "{DIR_BIN}", overwrite=False)
         self._copy("{DIR_TEMP}/build/redis/redis-stable/src/redis-cli", "{DIR_BIN}", overwrite=False)
-        j.builders.tools.dir_remove("{DIR_BASE}/apps/redis")
+        self._remove("{DIR_BASE}/apps/redis")
 
     @property
     def startup_cmds(self):
@@ -74,13 +74,13 @@ class BuilderRedis(j.baseclasses.builder):
 
         bins = ["redis-server", "redis-cli"]
         for bin_name in bins:
-            dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, bin_name)
-            dir_dest = self.tools.joinpaths(dest_path, j.core.dirs.BINDIR[1:])
-            self.tools.dir_ensure(dir_dest)
+            dir_src = self._joinpaths(j.core.dirs.BINDIR, bin_name)
+            dir_dest = self._joinpaths(dest_path, j.core.dirs.BINDIR[1:])
+            self._dir_ensure(dir_dest)
             self._copy(dir_src, dir_dest)
 
-        lib_dest = self.tools.joinpaths(dest_path, "sandbox/lib")
-        self.tools.dir_ensure(lib_dest)
+        lib_dest = self._joinpaths(dest_path, "sandbox/lib")
+        self._dir_ensure(lib_dest)
         for bin in bins:
-            dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, bin)
+            dir_src = self._joinpaths(j.core.dirs.BINDIR, bin)
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest, exclude_sys_libs=False)

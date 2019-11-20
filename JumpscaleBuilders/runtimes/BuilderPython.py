@@ -14,8 +14,8 @@ class BuilderPython(j.baseclasses.builder):
 
     def _init(self, **kwargs):
 
-        self.DIR_CODE_L = self.tools.joinpaths(self.DIR_BUILD, "code/")
-        self.tools.dir_ensure(self.DIR_CODE_L)
+        self.DIR_CODE_L = self._joinpaths(self.DIR_BUILD, "code/")
+        self._dir_ensure(self.DIR_CODE_L)
 
     @builder_method()
     def build(self):
@@ -169,8 +169,8 @@ class BuilderPython(j.baseclasses.builder):
         :param zhub_client: hub instance to upload flist tos
         :type zhub_client:str
         """
-        sandbox_dir = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox")
-        self.tools.dir_ensure(sandbox_dir)
+        sandbox_dir = self._joinpaths(self.DIR_SANDBOX, "sandbox")
+        self._dir_ensure(sandbox_dir)
         sandbox_cmd = """
         cd {DIR_CODE_L}/cpython
         make install DESTDIR={DIR_SANDBOX}
@@ -203,4 +203,3 @@ class BuilderPython(j.baseclasses.builder):
         assert self._execute('python3 -c "import ssl"')[0] == 0
 
         print("TEST OK")
-

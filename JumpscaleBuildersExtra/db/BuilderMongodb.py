@@ -10,7 +10,7 @@ class BuilderMongodb(j.baseclasses.builder):
     def _init(self, **kwargs):
         self.DIR_DATA = self._replace("{DIR_VAR}/mongodb/data")
         self.DIR_HOME = self._replace("{DIR_VAR}/mongodb")
-        self.BIN_PATH = self.tools.joinpaths(self.DIR_BUILD, "mongod")
+        self.BIN_PATH = self._joinpaths(self.DIR_BUILD, "mongod")
 
     @builder_method()
     def clean(self):
@@ -24,7 +24,7 @@ class BuilderMongodb(j.baseclasses.builder):
         install, move files to appropriate places, and create relavent configs
         """
         # install: python3 buildscripts/scons.py --prefix=/opt/mongo install
-        bin_path = self.tools.joinpaths(self.DIR_BUILD, "mongod")
+        bin_path = self._joinpaths(self.DIR_BUILD, "mongod")
         install_cmd = self._replace(
             """
             cp {BIN_PATH} {DIR_BIN}
@@ -65,7 +65,7 @@ class BuilderMongodb(j.baseclasses.builder):
 
         # create user
 
-        self.tools.dir_ensure(self.DIR_HOME)
+        self._dir_ensure(self.DIR_HOME)
         cmd = self._replace(
             """
             id -u mongouser &>/dev/null || useradd mongouser --home {DIR_HOME} --no-create-home --shell /bin/bash
@@ -144,22 +144,22 @@ class BuilderMongodb(j.baseclasses.builder):
         :type zhub_client:str
         """
 
-        sandbox_dir = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox")
-        self.tools.dir_ensure(sandbox_dir)
+        sandbox_dir = self._joinpaths(self.DIR_SANDBOX, "sandbox")
+        self._dir_ensure(sandbox_dir)
 
-        bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
-        self.tools.dir_ensure(bin_dest)
+        bin_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "bin")
+        self._dir_ensure(bin_dest)
         bins = ["mongod"]
         for bin in bins:
             self._copy("{DIR_BIN}/" + bin, bin_dest)
 
-        lib_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox")
-        self.tools.dir_ensure(lib_dest)
+        lib_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox")
+        self._dir_ensure(lib_dest)
         for bin in bins:
-            dir_src = self.tools.joinpaths(bin_dest, bin)
+            dir_src = self._joinpaths(bin_dest, bin)
             j.tools.sandboxer.libs_clone_under(dir_src, lib_dest)
 
         # startup.toml
-        templates_dir = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates")
+        templates_dir = self._joinpaths(j.sal.fs.getDirName(__file__), "templates")
         startup_path = self._replace("{DIR_SANDBOX}/.startup.toml")
-        self._copy(self.tools.joinpaths(templates_dir, "mongodb_startup.toml"), startup_path)
+        self._copy(self._joinpaths(templates_dir, "mongodb_startup.toml"), startup_path)

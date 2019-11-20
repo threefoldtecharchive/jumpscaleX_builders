@@ -9,7 +9,7 @@ class BuilderZerotier(j.baseclasses.builder):
     __jslocation__ = "j.builders.network.zerotier"
 
     def _init(self, **kwargs):
-        self.DIR_BUILD = j.core.tools.text_replace("{DIR_VAR}/build/zerotier/")
+        self.DIR_BUILD = "{DIR_VAR}/build/zerotier/"
         self.CLI = j.core.tools.text_replace("{DIR_BASE}/bin/zerotier-cli")
 
     @builder_method()
@@ -70,7 +70,7 @@ class BuilderZerotier(j.baseclasses.builder):
         kosmos 'j.builders.network.zerotier.install()'
         :return:
         """
-        self._copy("{DIR_BUILD}/usr/sbin/", j.core.tools.text_replace("{DIR_BASE}/bin/"))
+        self._copy("{DIR_BUILD}/usr/sbin/", "{DIR_BASE}/bin/")
 
     @property
     def startup_cmds(self):
@@ -82,9 +82,9 @@ class BuilderZerotier(j.baseclasses.builder):
 
         """Copy built bins to dest_path and create flist
         """
-        zt_bin_path = self.tools.joinpaths("{DIR_BIN}", "zerotier-one")
-        bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
-        self.tools.dir_ensure(bin_dest)
+        zt_bin_path = self._joinpaths("{DIR_BIN}", "zerotier-one")
+        bin_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "bin")
+        self._dir_ensure(bin_dest)
         self._copy(zt_bin_path, bin_dest)
 
     def test(self):
@@ -96,4 +96,3 @@ class BuilderZerotier(j.baseclasses.builder):
         self.start()
         self.stop()
         print("TEST OK")
-

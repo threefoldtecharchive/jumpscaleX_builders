@@ -26,7 +26,7 @@ class BuilderIPFS(j.baseclasses.builder):
 
         uncompress_path = self._replace("{DIR_TEMP}/go-ipfs")
         if j.builders.tools.file_exists(uncompress_path):
-            j.builders.tools.dir_remove(uncompress_path)
+            self._remove(uncompress_path)
 
         j.sal.process.execute("cd {DIR_TEMP}; tar xvf {}".format(name))
         j.builders.tools.file_copy("{}/ipfs".format(uncompress_path), "{DIR_BIN}/ipfs")

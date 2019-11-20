@@ -76,13 +76,13 @@ class BuilderRipple(JSBASE):
     @builder_method()
     def sandbox(self, zhub_client=None, flist_create=True, merge_base_flist=""):
         # copy bins to DIR_BIN
-        bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
-        self.tools.dir_ensure(bin_dest)
+        bin_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "bin")
+        self._dir_ensure(bin_dest)
         self._copy("{DIR_BIN}/rippled", bin_dest)
 
     @builder_method()
     def clean(self):
-        code_dir = j.sal.fs.joinPaths(self.DIR_BUILD, "rippled")
+        code_dir = self._joinpaths(self.DIR_BUILD, "rippled")
         self._remove(code_dir)
 
     @property
@@ -108,4 +108,3 @@ class BuilderRipple(JSBASE):
         self.start()
         assert self.running()
         print("TEST OK")
-

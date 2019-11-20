@@ -139,7 +139,7 @@ class BuilderCgit(j.baseclasses.builder):
     __jslocation__ = "j.builders.apps.cgit"
 
     def _init(self, **kwargs):
-        self.DIR_CODE = self.tools.joinpaths(self.DIR_BUILD, "code")
+        self.DIR_CODE = self._joinpaths(self.DIR_BUILD, "code")
         self.DIR_BIN = "/sandbox/bin"
         self.port = 8008
         self.host = "localhost"  # TODO
@@ -147,10 +147,12 @@ class BuilderCgit(j.baseclasses.builder):
     @property
     def startup_cmds(self):
         cgit_server = j.servers.startupcmd.get("cgit")
-        cgit_server.cmd_start = f"/usr/bin/spawn-fcgi  -F $(nproc) -M 666 -s /var/run/fcgiwrap.socket /usr/sbin/fcgiwrap"
+        cgit_server.cmd_start = (
+            f"/usr/bin/spawn-fcgi  -F $(nproc) -M 666 -s /var/run/fcgiwrap.socket /usr/sbin/fcgiwrap"
+        )
         nginx_server = j.servers.startupcmd.get("nginx")
         nginx_server.cmd_start = f"/usr/sbin/nginx -g 'daemon off;'"
-        return [cgit_server,nginx_server]
+        return [cgit_server, nginx_server]
 
     @builder_method()
     def install(self, reset=True):
@@ -161,26 +163,14 @@ class BuilderCgit(j.baseclasses.builder):
 
     # @builder_method()
     def start(self):
-        j.sal.fs.writeFile(
-            "/etc/nginx/sites-available/default",
-            NGINX_CONF
-            % {
-                "port": self.port
-            },
-        )
-        j.sal.fs.writeFile(
-            "/etc/cgitrc",
-            CGITRC_CONFIG
-        )
-        j.sal.fs.writeFile(
-            "/usr/lib/cgit/filters/syntax-highlighting.sh",
-            SYNTAX_HIGHLIGHT
-        )
-        #TODO disable service when systemd exist for nginx and fcgiwrap services
+        self._write("/etc/nginx/sites-available/default", NGINX_CONF % {"port": self.port})
+        self._write("/etc/cgitrc", CGITRC_CONFIG)
+        self._write("/usr/lib/cgit/filters/syntax-highlighting.sh", SYNTAX_HIGHLIGHT)
+        # TODO disable service when systemd exist for nginx and fcgiwrap services
         # Two steps below added incase systemd is exist
         self._execute("nginx -t;service nginx stop ")
         self._execute("service fcgiwrap  stop ")
         for startupcmd in self.startup_cmds:
             startupcmd.start()
-        print ('your cgit started successfully on port 8008, connect http://localhost:8008')
-        print ('you need to clone your repo under /srv/git/ and wait a time to appear in cgit UI')
+        print("your cgit started successfully on port 8008, connect http://localhost:8008")
+        print("you need to clone your repo under /srv/git/ and wait a time to appear in cgit UI")

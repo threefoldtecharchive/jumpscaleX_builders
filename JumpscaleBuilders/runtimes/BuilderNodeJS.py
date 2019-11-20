@@ -62,7 +62,7 @@ class BuilderNodeJS(j.baseclasses.builder):
 
     @builder_method()
     def build(self):
-        j.builders.tools.dir_remove(self.DIR_BUILD)
+        self._remove(self.DIR_BUILD)
         if j.core.platformtype.myplatform.platform_is_osx:
             url = "https://nodejs.org/dist/v%s/node-v%s-darwin-x64.tar.gz" % (self._version, self._version)
         elif j.core.platformtype.myplatform.platform_is_ubuntu:
@@ -97,14 +97,14 @@ class BuilderNodeJS(j.baseclasses.builder):
         flist_create=False,
         merge_base_flist="tf-autobuilder/threefoldtech-jumpscaleX-development.flist",
     ):
-        self.tools.dir_ensure(self.DIR_SANDBOX)
+        self._dir_ensure(self.DIR_SANDBOX)
         self._copy(self.path, "%s/%s/%s" % (self.DIR_SANDBOX, j.core.dirs.BASEDIR[1:], self._name))
 
-        bin_dest = self.tools.joinpaths(self.DIR_SANDBOX, j.core.dirs.BINDIR[1:])
-        self.tools.dir_ensure(bin_dest)
+        bin_dest = self._joinpaths(self.DIR_SANDBOX, j.core.dirs.BINDIR[1:])
+        self._dir_ensure(bin_dest)
 
-        self._copy(self.tools.joinpaths(j.core.dirs.BINDIR, "node"), bin_dest)
-        self._copy(self.tools.joinpaths(j.core.dirs.BINDIR, "npm"), bin_dest)
+        self._copy(self._joinpaths(j.core.dirs.BINDIR, "node"), bin_dest)
+        self._copy(self._joinpaths(j.core.dirs.BINDIR, "npm"), bin_dest)
 
     @builder_method()
     def test(self):

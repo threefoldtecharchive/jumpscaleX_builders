@@ -10,10 +10,10 @@ class BuilderGolangTools(j.baseclasses.builder):
         self.base_dir = self._replace("{DIR_BASE}")
 
         self.env = self.bash.profile
-        self.DIR_GO_ROOT = self.tools.joinpaths(self.base_dir, "go")
-        self.DIR_GO_PATH = self.tools.joinpaths(self.base_dir, "go_proj")
-        self.DIR_GO_ROOT_BIN = self.tools.joinpaths(self.DIR_GO_ROOT, "bin")
-        self.DIR_GO_PATH_BIN = self.tools.joinpaths(self.DIR_GO_PATH, "bin")
+        self.DIR_GO_ROOT = self._joinpaths(self.base_dir, "go")
+        self.DIR_GO_PATH = self._joinpaths(self.base_dir, "go_proj")
+        self.DIR_GO_ROOT_BIN = self._joinpaths(self.DIR_GO_ROOT, "bin")
+        self.DIR_GO_PATH_BIN = self._joinpaths(self.DIR_GO_PATH, "bin")
 
     def update_profile_paths(self, profile=None):
         if not profile:
@@ -114,7 +114,7 @@ class BuilderGolangTools(j.baseclasses.builder):
         """
         if not go_path:
             go_path = self.DIR_GO_PATH
-        return self.tools.joinpaths(go_path, "src", host, name)
+        return self._joinpaths(go_path, "src", host, name)
 
     def godep(self, url, branch=None, depth=1):
         """install a package using godep

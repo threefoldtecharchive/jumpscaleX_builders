@@ -8,7 +8,7 @@ class BuilderPostgresql(j.baseclasses.builder):
     __jslocation__ = "j.builders.db.psql"
 
     def _init(self, **kwargs):
-        self.DOWNLOAD_DIR = self.tools.joinpaths(self.DIR_BUILD, "build")
+        self.DOWNLOAD_DIR = self._joinpaths(self.DIR_BUILD, "build")
         self.DATA_DIR = self._replace("{DIR_VAR}/psql/data")
         self.SOCKET_DIR = "/var/run/postgresql"
 
@@ -102,9 +102,9 @@ class BuilderPostgresql(j.baseclasses.builder):
     @builder_method()
     def sandbox(self):
         self.PACKAGE_DIR = self._replace("{DIR_SANDBOX}{DIR_BASE}")
-        self.tools.dir_ensure(self.PACKAGE_DIR)
+        self._dir_ensure(self.PACKAGE_DIR)
         # data dir
-        self.tools.dir_ensure("%s/apps/psql/data" % self.PACKAGE_DIR)
+        self._dir_ensure("%s/apps/psql/data" % self.PACKAGE_DIR)
         self._execute(
             """
             cd {DOWNLOAD_DIR}/postgresql-9.6.13
@@ -116,8 +116,6 @@ class BuilderPostgresql(j.baseclasses.builder):
         j.tools.sandboxer.libs_clone_under(bins_dir, self.DIR_SANDBOX)
 
         # startup.toml
-        templates_dir = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates")
+        templates_dir = self._joinpaths(j.sal.fs.getDirName(__file__), "templates")
         startup_path = self._replace("{DIR_SANDBOX}/.startup.toml")
-        self._copy(self.tools.joinpaths(templates_dir, "postgres_startup.toml"), startup_path)
-
-
+        self._copy(self._joinpaths(templates_dir, "postgres_startup.toml"), startup_path)

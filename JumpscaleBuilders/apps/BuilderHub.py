@@ -9,16 +9,16 @@ class BuilderHub(j.baseclasses.builder):
     __jslocation__ = "j.builders.apps.zerohub"
 
     def _init(self, **kwargs):
-        self.DIR_CODE = self.tools.joinpaths(self.DIR_BUILD, "code")
+        self.DIR_CODE = self._joinpaths(self.DIR_BUILD, "code")
         self.MAKEOPTS = "-j 5"
-        self.DEST_CURL = self.tools.joinpaths(self.DIR_CODE, "curl")
-        self.DEST_CAPNP = self.tools.joinpaths(self.DIR_CODE, "capnp")
-        self.DEST_HUB = self.tools.joinpaths(self.DIR_CODE, "hub")
-        self.DEST_ZEROFLIST = self.tools.joinpaths(self.DIR_CODE, "zeroflist")
-        self.HUB_SANDBOX = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox")
-        self.tools.dir_ensure(self.HUB_SANDBOX)
-        self.DEST_SANDBOX_HUB = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "hub")
-        self.DEST_SANDBOX_ZEROFLIST = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "zeroflist")
+        self.DEST_CURL = self._joinpaths(self.DIR_CODE, "curl")
+        self.DEST_CAPNP = self._joinpaths(self.DIR_CODE, "capnp")
+        self.DEST_HUB = self._joinpaths(self.DIR_CODE, "hub")
+        self.DEST_ZEROFLIST = self._joinpaths(self.DIR_CODE, "zeroflist")
+        self.HUB_SANDBOX = self._joinpaths(self.DIR_SANDBOX, "sandbox")
+        self._dir_ensure(self.HUB_SANDBOX)
+        self.DEST_SANDBOX_HUB = self._joinpaths(self.DIR_SANDBOX, "sandbox", "hub")
+        self.DEST_SANDBOX_ZEROFLIST = self._joinpaths(self.DIR_SANDBOX, "sandbox", "zeroflist")
 
     @builder_method()
     def clean(self):
@@ -129,8 +129,8 @@ class BuilderHub(j.baseclasses.builder):
     @builder_method()
     def install(self):
         # install hub
-        file_src = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates", "zerohub_config.py")
-        file_dest = self.tools.joinpaths(self.DEST_HUB, "python", "config.py")
+        file_src = self._joinpaths(j.sal.fs.getDirName(__file__), "templates", "zerohub_config.py")
+        file_dest = self._joinpaths(self.DEST_HUB, "python", "config.py")
         self._copy(file_src, file_dest)
         self._execute(
             """
@@ -142,18 +142,18 @@ class BuilderHub(j.baseclasses.builder):
     @builder_method()
     def sandbox(self, reset=False, zhub_client=None, flist_create=False):
         # ensure dirs
-        bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
-        self.tools.dir_ensure(bin_dest)
+        bin_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "bin")
+        self._dir_ensure(bin_dest)
 
         # sandbox zdb
         bins = ["zdb"]
         for bin in bins:
             self._copy("{DIR_BIN}/" + bin, bin_dest)
 
-        lib_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "lib")
-        self.tools.dir_ensure(lib_dest)
+        lib_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "lib")
+        self._dir_ensure(lib_dest)
         for bin in bins:
-            dir_src = self.tools.joinpaths(bin_dest, bin)
+            dir_src = self._joinpaths(bin_dest, bin)
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest)
 
         # sandbox curl
@@ -178,8 +178,8 @@ class BuilderHub(j.baseclasses.builder):
         self._copy(self.DEST_HUB, self.DEST_SANDBOX_HUB)
 
         # install hub
-        file_src = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates", "zerohub_config.py")
-        file_dest = self.tools.joinpaths(self.DEST_SANDBOX_HUB, "python", "config.py")
+        file_src = self._joinpaths(j.sal.fs.getDirName(__file__), "templates", "zerohub_config.py")
+        file_dest = self._joinpaths(self.DEST_SANDBOX_HUB, "python", "config.py")
         self._copy(file_src, file_dest)
         self._execute(
             """
@@ -188,8 +188,8 @@ class BuilderHub(j.baseclasses.builder):
         """
         )
 
-        file = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates", "zerohub_startup.toml")
-        file_dest = self.tools.joinpaths(self.DIR_SANDBOX, ".startup.toml")
+        file = self._joinpaths(j.sal.fs.getDirName(__file__), "templates", "zerohub_startup.toml")
+        file_dest = self._joinpaths(self.DIR_SANDBOX, ".startup.toml")
         self._copy(file, file_dest)
 
     @property
@@ -218,4 +218,3 @@ class BuilderHub(j.baseclasses.builder):
         assert self.running()
         self.stop()
         print("TEST OK")
-

@@ -86,7 +86,7 @@ class BuilderDocker(j.baseclasses.builder):
         dest_path = self.DIR_SANDBOX
         bins = ["docker", "dockerd", "dockerd-ce", "docker-init", "docker-proxy"]
         for bin_name in bins:
-            dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, bin_name)
-            dir_dest = self.tools.joinpaths(dest_path, j.core.dirs.BINDIR[1:])
-            self.tools.dir_ensure(dir_dest)
+            dir_src = self._joinpaths(j.core.dirs.BINDIR, bin_name)
+            dir_dest = self._joinpaths(dest_path, j.core.dirs.BINDIR[1:])
+            self._dir_ensure(dir_dest)
             self._copy(dir_src, dir_dest)

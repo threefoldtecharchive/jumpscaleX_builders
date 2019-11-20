@@ -9,7 +9,7 @@ class BuilderLibffi(j.baseclasses.builder):
     def _init(self, **kwargs):
         self.LIBFFI_URL = "https://github.com/libffi/libffi"
         self.INSTALL_DIR = self.DIR_SANDBOX + "/sandbox"
-        self.tools.dir_ensure(self.INSTALL_DIR)
+        self._dir_ensure(self.INSTALL_DIR)
         self.CODEDIR = self._replace("{DIR_TEMP}/libffi")
 
     @builder_method()

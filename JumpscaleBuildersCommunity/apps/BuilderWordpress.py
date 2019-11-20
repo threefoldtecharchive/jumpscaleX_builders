@@ -215,4 +215,4 @@ class BuilderWordpress(j.baseclasses.builder):
             self._log_info("an error happened while compressing your backup")
 
         # clean up
-        j.builders.tools.dir_remove(backup_path)
+        self._remove(backup_path)

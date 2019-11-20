@@ -12,22 +12,22 @@ class BuilderLapis(j.baseclasses.builder):
         self.bins = [
             "/bin/mkdir",
             "/bin/touch",
-            self.tools.joinpaths(j.core.dirs.BINDIR, "openresty"),
-            self.tools.joinpaths(j.core.dirs.BINDIR, "lua"),
-            self.tools.joinpaths(j.core.dirs.BINDIR, "resty"),
-            self.tools.joinpaths(j.core.dirs.BINDIR, "restydoc"),
-            self.tools.joinpaths(j.core.dirs.BINDIR, "restydoc-index"),
-            self.tools.joinpaths(j.core.dirs.BINDIR, "lapis"),
-            self.tools.joinpaths(j.core.dirs.BINDIR, "moon"),
-            self.tools.joinpaths(j.core.dirs.BINDIR, "moonc"),
+            self._joinpaths(j.core.dirs.BINDIR, "openresty"),
+            self._joinpaths(j.core.dirs.BINDIR, "lua"),
+            self._joinpaths(j.core.dirs.BINDIR, "resty"),
+            self._joinpaths(j.core.dirs.BINDIR, "restydoc"),
+            self._joinpaths(j.core.dirs.BINDIR, "restydoc-index"),
+            self._joinpaths(j.core.dirs.BINDIR, "lapis"),
+            self._joinpaths(j.core.dirs.BINDIR, "moon"),
+            self._joinpaths(j.core.dirs.BINDIR, "moonc"),
         ]
         self.dirs = {
-            self.tools.joinpaths(j.core.dirs.BASEDIR, "cfg/openresty.cfg"): "cfg/",
-            self.tools.joinpaths(j.core.dirs.BASEDIR, "cfg/mime.types"): "cfg/",
-            self.tools.joinpaths(j.core.dirs.BASEDIR, "openresty/"): "openresty/",
+            self._joinpaths(j.core.dirs.BASEDIR, "cfg/openresty.cfg"): "cfg/",
+            self._joinpaths(j.core.dirs.BASEDIR, "cfg/mime.types"): "cfg/",
+            self._joinpaths(j.core.dirs.BASEDIR, "openresty/"): "openresty/",
             "/lib/x86_64-linux-gnu/libnss_files.so.2": "lib",
         }
-        lua_files = j.sal.fs.listFilesInDir(self.tools.joinpaths(j.core.dirs.BASEDIR, "bin/"), filter="*.lua")
+        lua_files = j.sal.fs.listFilesInDir(self._joinpaths(j.core.dirs.BASEDIR, "bin/"), filter="*.lua")
         for file in lua_files:
             self.dirs[file] = "bin/"
 
@@ -39,7 +39,7 @@ class BuilderLapis(j.baseclasses.builder):
         }
 
         self.new_dirs = ["var/pid/", "var/log/"]
-        startup_file = j.sal.fs.joinPaths(j.sal.fs.getDirName(__file__), "templates", "lapis_startup.toml")
+        startup_file = self._joinpaths(j.sal.fs.getDirName(__file__), "templates", "lapis_startup.toml")
         self.startup = j.sal.fs.readFile(startup_file)
         self.root_files = {
             "etc/passwd": "nobody:x:65534:65534:nobody:/:{DIR_BASE}/bin/openresty",
@@ -51,4 +51,3 @@ class BuilderLapis(j.baseclasses.builder):
 
     def install(self, reset=False):
         j.builders.runtimes.lua.install(reset)
-

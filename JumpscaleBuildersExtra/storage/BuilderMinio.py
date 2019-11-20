@@ -44,7 +44,7 @@ class BuilderMinio(BuilderGolangTools):
         """
         self.datadir = self.DIR_BUILD
         address = "0.0.0.0"
-        self.tools.dir_ensure(self.datadir)
+        self._dir_ensure(self.datadir)
         port = 9000
         access_key = "admin"
         secret_key = "adminadmin"
@@ -80,14 +80,14 @@ class BuilderMinio(BuilderGolangTools):
         :type zhub_instance:str
         """
         dest_path = self.DIR_SANDBOX
-        dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, "minio")
-        bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox")
-        self.tools.dir_ensure(bin_dest)
-        dir_dest = self.tools.joinpaths(dest_path, j.core.dirs.BINDIR[1:])
-        self.tools.dir_ensure(dir_dest)
+        dir_src = self._joinpaths(j.core.dirs.BINDIR, "minio")
+        bin_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox")
+        self._dir_ensure(bin_dest)
+        dir_dest = self._joinpaths(dest_path, j.core.dirs.BINDIR[1:])
+        self._dir_ensure(dir_dest)
         self._copy(dir_src, dir_dest)
-        lib_dest = self.tools.joinpaths(dest_path, "sandbox/lib")
-        self.tools.dir_ensure(lib_dest)
+        lib_dest = self._joinpaths(dest_path, "sandbox/lib")
+        self._dir_ensure(lib_dest)
         j.tools.sandboxer.libs_sandbox(dir_src, lib_dest, exclude_sys_libs=False)
 
     @builder_method()
@@ -104,6 +104,6 @@ class BuilderMinio(BuilderGolangTools):
 
     @builder_method()
     def uninstall(self):
-        bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
+        bin_path = self._joinpaths("{DIR_BIN}", self._name)
         self._remove(bin_path)
         self.clean()

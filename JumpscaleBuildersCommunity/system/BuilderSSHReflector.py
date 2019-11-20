@@ -47,7 +47,7 @@ class BuilderSSHReflector(j.baseclasses.builder):
         lpath = os.environ["HOME"] + "/.ssh/reflector"
         path = "/home/sshreflector/.ssh/reflector"
         ftp = j.builders.tools.executor.sshclient.sftp
-        if j.sal.fs.exists(lpath) and j.sal.fs.exists(lpath + ".pub"):
+        if self._exists(lpath) and self._exists(lpath + ".pub"):
             self._log_info("UPLOAD EXISTING SSH KEYS")
             ftp.put(lpath, path)
             ftp.put(lpath + ".pub", path + ".pub")
@@ -115,7 +115,7 @@ class BuilderSSHReflector(j.baseclasses.builder):
 
             lpath = os.environ["HOME"] + "/.ssh/reflector"
 
-            if reset or not j.sal.fs.exists(lpath) or not j.sal.fs.exists(lpath_pub):
+            if reset or not self._exists(lpath) or not self._exists(lpath_pub):
                 self._log_info("DOWNLOAD SSH KEYS")
                 # get private key from reflector
                 ftp = remotetools.executor.sshclient.sftp
@@ -178,7 +178,7 @@ class BuilderSSHReflector(j.baseclasses.builder):
                 out2 += "%s:%s\n" % (j.builders.platformtype.hostname, newport)
                 remotetools.file_write("/home/sshreflector/reflectorclients", out2)
 
-            j.sal.fs.writeFile("/etc/reflectorclients", out2)
+            self._write("/etc/reflectorclients", out2)
 
             reflport = "9222"
 

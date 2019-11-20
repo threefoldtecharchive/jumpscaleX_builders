@@ -33,7 +33,7 @@ class BuilderGrafana(j.baseclasses.builder):
             cfg = j.core.tools.file_text_read("/usr/share/grafana/conf/defaults.ini")
         else:
             cfg = j.core.tools.file_text_read("{DIR_TEMP}/cfg/grafana/conf/defaults.ini")
-        j.sal.fs.writeFile("{DIR_BASE}/cfg/grafana/grafana.ini", cfg)
+        self._write("{DIR_BASE}/cfg/grafana/grafana.ini", cfg)
 
         if start:
             self.start(influx_addr, influx_port, port)
@@ -42,7 +42,7 @@ class BuilderGrafana(j.baseclasses.builder):
 
         cmd = "{DIR_BIN}/grafana-server --config={DIR_BASE}/cfg/grafana/grafana.ini\n"
         cmd = self._replace(cmd)
-        j.sal.fs.writeFile("/opt/jumpscale/bin/start_grafana.sh", cmd, 777, replaceArgs=True)
+        self._write("/opt/jumpscale/bin/start_grafana.sh", cmd, 777, replaceArgs=True)
         j.builders.system.process.kill("grafana-server")
         pm = j.builders.system.processmanager.get()
         pm.ensure("grafana-server", cmd=cmd, env={}, path="{DIR_BASE}/apps/grafana")

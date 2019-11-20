@@ -12,7 +12,7 @@ class BuilderVolumeDriver(j.baseclasses.builder):
         self._build()
 
     def _install_deps(self):
-        j.sal.fs.writeFile("/etc/apt/sources.list.d/ovsaptrepo.list", "deb http://apt.openvstorage.org unstable main")
+        self._write("/etc/apt/sources.list.d/ovsaptrepo.list", "deb http://apt.openvstorage.org unstable main")
         j.sal.process.execute(
             'echo "deb http://us.archive.ubuntu.com/ubuntu xenial main universe" >> /etc/apt/sources.list'
         )
@@ -54,8 +54,8 @@ class BuilderVolumeDriver(j.baseclasses.builder):
         )
         j.sal.process.execute("cd %(volumedriver)s;git checkout tags/%(version)s" % str_repl)
 
-        j.builders.tools.file_link(str_repl["buildtools"], j.sal.fs.joinPaths(workspace, "volumedriver-buildtools"))
-        j.builders.tools.file_link(str_repl["volumedriver"], j.sal.fs.joinPaths(workspace, "volumedriver"))
+        j.builders.tools.file_link(str_repl["buildtools"], self._joinpaths(workspace, "volumedriver-buildtools"))
+        j.builders.tools.file_link(str_repl["volumedriver"], self._joinpaths(workspace, "volumedriver"))
 
         build_script = (
             """

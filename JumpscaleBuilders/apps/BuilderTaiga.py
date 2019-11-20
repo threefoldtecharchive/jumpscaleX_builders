@@ -115,7 +115,7 @@ class BuilderTaiga(j.baseclasses.builder):
     __jslocation__ = "j.builders.apps.taiga"
 
     def _init(self, **kwargs):
-        self.DIR_CODE = self.tools.joinpaths(self.DIR_BUILD, "code")
+        self.DIR_CODE = self._joinpaths(self.DIR_BUILD, "code")
         self.DIR_BIN = j.core.tools.text_replace("{DIR_BASE}/bin")
         self.frontend_repo_dir = f"{self.DIR_CODE}/taiga-front-dist"
         self.backend_repo_dir = f"{self.DIR_CODE}/taiga-back"
@@ -197,7 +197,7 @@ class BuilderTaiga(j.baseclasses.builder):
         '
         """
         self._execute(command)
-        j.sal.fs.writeFile(
+        self._write(
             f"{self.backend_repo_dir}/settings/local.py", MEDIA_CONF_FILE % {"PASSWORD_FOR_EVENTS": rabbitmq_secret}
         )
 
@@ -244,7 +244,7 @@ class BuilderTaiga(j.baseclasses.builder):
 
     # @builder_method()
     def start(self):
-        j.sal.fs.writeFile(
+        self._write(
             "/etc/nginx/conf.d/taiga.conf",
             NGINX_CONF
             % {
@@ -270,4 +270,3 @@ class BuilderTaiga(j.baseclasses.builder):
             su {self.TAIGA_USER} -c 'export PATH=$PATH:{self.DIR_BIN};cd {self.events_repo_dir}; /bin/bash -c \\"node_modules/coffeescript/bin/coffee index.coffee\\"'
             """
         return [taiga_events, taiga_server]
-

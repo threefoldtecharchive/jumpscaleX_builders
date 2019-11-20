@@ -92,7 +92,7 @@ class BuilderProxyClassic(j.baseclasses.builder):
             self.installCacheProxy(force=False)
             CONFIG += "forward  / localhost:8123\n"
 
-        j.sal.fs.writeFile("/etc/privoxy/config", CONFIG)
+        self._write("/etc/privoxy/config", CONFIG)
 
         self.removeFromSystemD()
 
@@ -166,7 +166,7 @@ class BuilderProxyClassic(j.baseclasses.builder):
 
         USERACTION = j.core.text.strip(USERACTION)
 
-        j.sal.fs.writeFile("/etc/privoxy/user.action", USERACTION)
+        self._write("/etc/privoxy/user.action", USERACTION)
 
         self.start()
 
@@ -229,7 +229,7 @@ class BuilderProxyClassic(j.baseclasses.builder):
             \.xiti\.com
             webtrekk\..*
             """
-        j.sal.fs.writeFile("/etc/polipo/forbiddenTunnels", forbiddentunnels)
+        self._write("/etc/polipo/forbiddenTunnels", forbiddentunnels)
 
         # dnsNameServer
 
@@ -330,7 +330,7 @@ class BuilderProxyClassic(j.baseclasses.builder):
             """
 
         CONFIG = CONFIG.replace("$cachedir", cachedir)
-        j.sal.fs.writeFile("/etc/polipo/config", CONFIG)
+        self._write("/etc/polipo/config", CONFIG)
 
         j.sal.process.execute("killall polipo", die=False)
 
@@ -352,7 +352,7 @@ class BuilderProxyClassic(j.baseclasses.builder):
         if j.builders.prefab.platformtype.myplatform.startswith("ubuntu"):
             f = j.core.tools.file_text_read("/etc/apt/apt.conf", "")
             f += "\n%s\n" % config
-            j.sal.fs.writeFile("/etc/apt/apt.conf", f)
+            self._write("/etc/apt/apt.conf", f)
         else:
             raise j.exceptions.Base("not implemented yet")
 

@@ -36,15 +36,15 @@ class BuilderNIM(j.baseclasses.builder):
     def install(self):
 
         self.build()
-        nim_bin_path = self.tools.joinpaths(self.DIR_BUILD, "bin")
+        nim_bin_path = self._joinpaths(self.DIR_BUILD, "bin")
 
         j.builders.tools.dir_ensure(nim_bin_path)
         self._copy("%s/nim" % nim_bin_path, "{DIR_BIN}/nim")
 
     @builder_method()
     def sandbox(self):
-        bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox")
-        self.tools.dir_ensure(bin_dest)
+        bin_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox")
+        self._dir_ensure(bin_dest)
         self._copy("{DIR_BUILD}/bin/", bin_dest)
 
     @builder_method()

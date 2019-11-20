@@ -53,17 +53,17 @@ class BuilderEtcd(BuilderGolangTools):
         :param zhub_client: hub instance to upload flist tos
         :type zhub_client:str
         """
-        bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
-        self.tools.dir_ensure(bin_dest)
-        etcd_bin_path = self.tools.joinpaths(self._replace("{DIR_BIN}"), self._classname)
-        etcdctl_bin_path = self.tools.joinpaths(self._replace("{DIR_BIN}"), "etcdctl")
-        self.tools.file_copy(etcd_bin_path, bin_dest)
-        self.tools.file_copy(etcdctl_bin_path, bin_dest)
+        bin_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "bin")
+        self._dir_ensure(bin_dest)
+        etcd_bin_path = self._joinpaths(self._replace("{DIR_BIN}"), self._classname)
+        etcdctl_bin_path = self._joinpaths(self._replace("{DIR_BIN}"), "etcdctl")
+        self._copy(etcd_bin_path, bin_dest)
+        self._copy(etcdctl_bin_path, bin_dest)
 
-        lib_dest = self.tools.joinpaths(self.DIR_SANDBOX, "sandbox/lib")
-        self.tools.dir_ensure(lib_dest)
+        lib_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox/lib")
+        self._dir_ensure(lib_dest)
         for bin in [self._classname, "etcdctl"]:
-            dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, bin)
+            dir_src = self._joinpaths(j.core.dirs.BINDIR, bin)
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest, exclude_sys_libs=False)
 
     def client_get(self, name):

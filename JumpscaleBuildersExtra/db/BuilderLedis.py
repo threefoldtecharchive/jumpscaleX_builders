@@ -40,7 +40,7 @@ class BuilderLedis(j.baseclasses.builder):
                 raise j.exceptions.NotImplemented
             configcontent.replace('db_name = "leveldb"', 'db_name = "%s"' % backend)
 
-            j.sal.fs.writeFile("/tmp/ledisconfig.toml", configcontent)
+            self._write("/tmp/ledisconfig.toml", configcontent)
 
             script = C.format(ledisdir=ledisdir)
             out = j.sal.process.execute(script, profile=True)

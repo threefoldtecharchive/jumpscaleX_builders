@@ -21,7 +21,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
     def _init(self, **kwargs):
         super()._init()
         self.package_path = self.package_path_get(self._name)
-        self.templates_dir = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates")
+        self.templates_dir = self._joinpaths(j.sal.fs.getDirName(__file__), "templates")
 
     @builder_method()
     def build(self):
@@ -33,7 +33,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
 
         # install golang
         j.builders.runtimes.go.install()
-        self.tools.dir_ensure(self.package_path)
+        self._dir_ensure(self.package_path)
         # redis as backend
         j.builders.db.redis.install()
         # https://github.com/coredns/coredns#compilation-from-source
@@ -60,9 +60,9 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
         installs and runs coredns server with redis plugin
         """
         name = "coredns"
-        src = self.tools.joinpaths(self.package_path, name, name)
+        src = self._joinpaths(self.package_path, name, name)
         self._copy(src, "{DIR_BIN}/coredns")
-        j.sal.fs.writeFile(filename=j.core.tools.text_replace("{DIR_BASE}/cfg/coredns.conf"), contents=CONFIGTEMPLATE)
+        self._write("{DIR_BASE}/cfg/coredns.conf", CONFIGTEMPLATE)
         self._execute("service systemd-resolved stop", die=False)
 
     def clean(self):
@@ -80,26 +80,26 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
         j.builders.db.redis.sandbox()
 
         # add redis binaries
-        self.tools.copyTree(j.builders.db.redis.DIR_SANDBOX, self.DIR_SANDBOX)
+        self._copy(j.builders.db.redis.DIR_SANDBOX, self.DIR_SANDBOX)
 
         # copy bins
-        coredns_bin = j.sal.fs.joinPaths("{DIR_BIN}", self._name)
-        bin_dir_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
-        self.tools.dir_ensure(bin_dir_dest)
+        coredns_bin = self._joinpaths("{DIR_BIN}", self._name)
+        bin_dir_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "bin")
+        self._dir_ensure(bin_dir_dest)
         self._copy(coredns_bin, bin_dir_dest)
 
         # config
-        config_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "cfg")
-        self._copy(j.core.tools.text_replace("{DIR_BASE}/cfg/coredns.conf"), config_dest)
+        config_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "cfg")
+        self._copy("{DIR_BASE}/cfg/coredns.conf", config_dest)
 
         # startup toml
-        startup_file = self.tools.joinpaths(self.templates_dir, "coredns_startup.toml")
+        startup_file = self._joinpaths(self.templates_dir, "coredns_startup.toml")
         self._copy(startup_file, config_dest)
 
         # add certs
-        dir_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "etc/ssl/certs/")
-        self.tools.dir_ensure(dir_dest)
-        self._copy(j.core.tools.text_replace("{DIR_BASE}/cfg/ssl/certs"), dir_dest)
+        dir_dest = self._joinpaths(self.DIR_SANDBOX, "etc/ssl/certs/")
+        self._dir_ensure(dir_dest)
+        self._copy("{DIR_BASE}/cfg/ssl/certs", dir_dest)
 
     @builder_method()
     def test(self):
@@ -112,7 +112,7 @@ class BuilderCoreDns(BuilderGolangTools, j.baseclasses.builder):
 
     @builder_method()
     def uninstall(self):
-        bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
+        bin_path = self._joinpaths("{DIR_BIN}", self._name)
         self._remove(bin_path)
         self.clean()
 

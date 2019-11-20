@@ -15,7 +15,7 @@ class BuilderSockexec(j.baseclasses.builder):
         """
         # build skalibs from tag v2.8.1.0, because sockexec is depends on stuff removed in newer versions
 
-        self.tools.dir_ensure(self.DIR_BUILD)
+        self._dir_ensure(self.DIR_BUILD)
         C = """
         cd {DIR_BUILD}
         rm -rf skalibs/
@@ -36,7 +36,7 @@ class BuilderSockexec(j.baseclasses.builder):
         build sockexec
         :return:
         """
-        self.tools.dir_ensure(self.DIR_BUILD)
+        self._dir_ensure(self.DIR_BUILD)
         self.deps()
         C = """
         cd {DIR_BUILD}
@@ -101,4 +101,3 @@ class BuilderSockexec(j.baseclasses.builder):
     #     bin_path = self.tools.joinpaths("{DIR_BIN}", "sockexec")
     #     self._remove(bin_path)
     #     self.clean()
-

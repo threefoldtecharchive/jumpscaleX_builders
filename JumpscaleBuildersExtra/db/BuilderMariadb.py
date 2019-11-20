@@ -10,7 +10,7 @@ class BuilderMariadb(j.baseclasses.builder):
 
     def _init(self, **kwargs):
         # code dir
-        self.code_dir = j.sal.fs.joinPaths(self.DIR_BUILD, "code")
+        self.code_dir = self._joinpaths(self.DIR_BUILD, "code")
         # self.start_cmd = """
         # useradd -r mysql
         # chown -R mysql.mysql {DATA_DIR}
@@ -29,7 +29,7 @@ class BuilderMariadb(j.baseclasses.builder):
         """
         # install dependancies and clone repo
         url = "https://github.com/MariaDB/server"
-        self.tools.dir_ensure(self.code_dir)
+        self._dir_ensure(self.code_dir)
         self._execute("sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list")
         self.system.package.mdupdate()
         self._execute("apt-get build-dep mysql-server -y")
@@ -132,8 +132,8 @@ class BuilderMariadb(j.baseclasses.builder):
         :type zhub_client:str
         """
 
-        sandbox_dir = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox")
-        self.tools.dir_ensure(sandbox_dir)
+        sandbox_dir = self._joinpaths(self.DIR_SANDBOX, "sandbox")
+        self._dir_ensure(sandbox_dir)
         install_cmd = """
         cd {}/server
         make install DESTDIR={}
@@ -142,14 +142,14 @@ class BuilderMariadb(j.baseclasses.builder):
         )
         self._execute(install_cmd)
 
-        mysql_bin_content = j.sal.fs.listFilesAndDirsInDir(j.sal.fs.joinPaths(sandbox_dir, "usr/local/mysql/bin"))
+        mysql_bin_content = j.sal.fs.listFilesAndDirsInDir(self._joinpaths(sandbox_dir, "usr/local/mysql/bin"))
         for bin_src in mysql_bin_content:
             j.tools.sandboxer.libs_clone_under(bin_src, self.DIR_SANDBOX)
 
         # startup.toml
-        templates_dir = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates")
+        templates_dir = self._joinpaths(j.sal.fs.getDirName(__file__), "templates")
         startup_path = self._replace("{DIR_SANDBOX}/.startup.toml")
-        self._copy(self.tools.joinpaths(templates_dir, "mariadb_startup.toml"), startup_path)
+        self._copy(self._joinpaths(templates_dir, "mariadb_startup.toml"), startup_path)
 
     @builder_method()
     def test(self):
@@ -176,7 +176,7 @@ class MariaClient:
             target_dir    {string} -- dir to which db will be exported to
         """
 
-        target = j.sal.fs.joinPaths(targetdir, "datadump-" + str(int(time.time())) + ".sql")
+        target = self._joinpaths(targetdir, "datadump-" + str(int(time.time())) + ".sql")
         cmd = "mysqldump {} > {}".format(dbname, target)
         j.sal.process.execute(cmd)
 
@@ -243,4 +243,3 @@ class MariaClient:
     def _create_db(self, dbname):
         cmd = 'echo "CREATE DATABASE {dbname}" | mysql'.format(dbname=dbname)
         j.sal.process.execute(cmd, die=False)
-

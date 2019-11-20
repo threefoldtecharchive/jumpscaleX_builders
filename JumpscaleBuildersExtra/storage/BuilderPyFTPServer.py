@@ -67,10 +67,10 @@ class BuilderPyFTPServer(j.baseclasses.builder):
             authorizer = ""
             configmodel = j.data.serializers.yaml.loads(config)
             for key, obj in configmodel.items():
-                j.builders.storage.btrfs.subvolumeCreate(j.sal.fs.joinPaths(root, key))
+                j.builders.storage.btrfs.subvolumeCreate(self._joinpaths(root, key))
                 for user, obj2 in obj.items():
                     if user.lower() == "anonymous":
-                        authorizer += "    authorizer.add_anonymous('%s')\n" % j.sal.fs.joinPaths(root, key)
+                        authorizer += "    authorizer.add_anonymous('%s')\n" % self._joinpaths(root, key)
                     else:
                         if len(obj2) == 1:
                             # no rights
@@ -83,7 +83,7 @@ class BuilderPyFTPServer(j.baseclasses.builder):
                         authorizer += "    authorizer.add_user('%s', '%s', '%s', perm='%s')\n" % (
                             user,
                             secret,
-                            j.sal.fs.joinPaths(root, key),
+                            self._joinpaths(root, key),
                             rights,
                         )
 
@@ -132,7 +132,7 @@ class BuilderPyFTPServer(j.baseclasses.builder):
         C = C.replace("$authorizers", authorizer)
 
         j.core.tools.dir_ensure("$CFGDIR/ftpserver")
-        j.sal.fs.writeFile("$CFGDIR/ftpserver/start.py", C)
+        self._write("$CFGDIR/ftpserver/start.py", C)
 
     def start(self):
         pm = j.builders.system.processmanager.get()

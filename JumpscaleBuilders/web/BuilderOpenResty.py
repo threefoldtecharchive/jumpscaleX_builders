@@ -94,40 +94,40 @@ class BuilderOpenResty(j.baseclasses.builder):
 
         bins = ["openresty", "lua", "resty", "restydoc", "restydoc-index"]
         dirs = {
-            self.tools.joinpaths(j.core.dirs.BASEDIR, "cfg/nginx/openresty.cfg"): "sandbox/cfg/nginx",
-            self.tools.joinpaths(j.core.dirs.BASEDIR, "cfg/nginx/mime.types"): "sandbox/cfg/nginx",
-            self.tools.joinpaths(j.core.dirs.BASEDIR, "openresty/"): "sandbox/openresty/",
+            self._joinpaths(j.core.dirs.BASEDIR, "cfg/nginx/openresty.cfg"): "sandbox/cfg/nginx",
+            self._joinpaths(j.core.dirs.BASEDIR, "cfg/nginx/mime.types"): "sandbox/cfg/nginx",
+            self._joinpaths(j.core.dirs.BASEDIR, "openresty/"): "sandbox/openresty/",
             "/lib/x86_64-linux-gnu/libnss_files.so.2": "sandbox/lib/",
         }
         new_dirs = ["sandbox/var/pid/", "sandbox/var/log/"]
-        lua_files = j.sal.fs.listFilesInDir(self.tools.joinpaths(j.core.dirs.BASEDIR, "bin/"), filter="*.lua")
+        lua_files = j.sal.fs.listFilesInDir(self._joinpaths(j.core.dirs.BASEDIR, "bin/"), filter="*.lua")
         for file in lua_files:
             dirs[file] = "sandbox/bin/"
 
         for bin_name in bins:
-            dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, bin_name)
-            dir_dest = self.tools.joinpaths(self.DIR_SANDBOX, j.core.dirs.BINDIR[1:])
-            self.tools.dir_ensure(dir_dest)
+            dir_src = self._joinpaths(j.core.dirs.BINDIR, bin_name)
+            dir_dest = self._joinpaths(self.DIR_SANDBOX, j.core.dirs.BINDIR[1:])
+            self._dir_ensure(dir_dest)
             self._copy(dir_src, dir_dest)
 
-        lib_dest = self.tools.joinpaths(self.DIR_SANDBOX, "sandbox/lib")
-        self.tools.dir_ensure(lib_dest)
+        lib_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox/lib")
+        self._dir_ensure(lib_dest)
         for bin in bins:
-            dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, bin)
+            dir_src = self._joinpaths(j.core.dirs.BINDIR, bin)
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest, exclude_sys_libs=False)
 
         for dir_src, dir_dest in dirs.items():
-            dir_dest = self.tools.joinpaths(self.DIR_SANDBOX, dir_dest)
-            self.tools.dir_ensure(dir_dest)
-            self.tools.copyTree(dir_src, dir_dest)
+            dir_dest = self._joinpaths(self.DIR_SANDBOX, dir_dest)
+            self._dir_ensure(dir_dest)
+            self._copy(dir_src, dir_dest)
 
         for dir_dest in new_dirs:
-            dir_dest = self.tools.joinpaths(self.DIR_SANDBOX, self.tools.path_relative(dir_dest))
-            self.tools.dir_ensure(dir_dest)
+            dir_dest = self._joinpaths(self.DIR_SANDBOX, self.tools.path_relative(dir_dest))
+            self._dir_ensure(dir_dest)
 
         cur_dir = j.sal.fs.getDirName(__file__)
-        startup_file = self.tools.joinpaths(cur_dir, "templates", "openresty_startup.toml")
-        file_dest = self.tools.joinpaths(self.DIR_SANDBOX, ".startup.toml")
+        startup_file = self._joinpaths(cur_dir, "templates", "openresty_startup.toml")
+        file_dest = self._joinpaths(self.DIR_SANDBOX, ".startup.toml")
         self._copy(startup_file, file_dest)
 
     @builder_method()
@@ -205,7 +205,7 @@ class BuilderOpenResty(j.baseclasses.builder):
         args["SRCBINDIR"] = j.core.tools.text_replace("{DIR_BASE}/openresty/bin")
         args["BINDIR"] = j.core.tools.text_replace("{DIR_BASE}/bin")
 
-        self.tools.execute(C, args=args)
+        self._execute(C, args=args)
 
     @property
     def startup_cmds(self):

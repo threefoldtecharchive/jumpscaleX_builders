@@ -77,11 +77,11 @@ class BuilderCapnp(JSBASE):
 
         # copy libs
         for lib in libs:
-            self._copy(bins_src_path + lib, j.core.tools.text_replace("{DIR_BASE}/lib"))
+            self._copy(bins_src_path + lib, "{DIR_BASE}/lib")
 
     @builder_method()
     def clean(self):
-        code_dir = j.sal.fs.joinPaths(self.DIR_BUILD, "capnproto")
+        code_dir = self._joinpaths(self.DIR_BUILD, "capnproto")
         self._remove(code_dir)
 
     @builder_method()
@@ -91,8 +91,8 @@ class BuilderCapnp(JSBASE):
 
     @builder_method()
     def sandbox(self, zhub_client=None, flist_create=True, merge_base_flist=""):
-        bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
-        lib_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "lib")
+        bin_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "bin")
+        lib_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "lib")
 
         bins = ["capnp", "capnp-afl-testcase", "capnpc-c++", "capnp-test", "capnpc-capnp", "capnp-evolution-test"]
 
@@ -118,14 +118,14 @@ class BuilderCapnp(JSBASE):
         ]
         # copy bins
         for bin in bins:
-            self.tools.dir_ensure(bin_dest)
-            bin_src = j.sal.fs.joinPaths(j.core.tools.text_replace("{DIR_BASE}/bin/"), bin)
+            self._dir_ensure(bin_dest)
+            bin_src = self._joinpaths("{DIR_BASE}/bin/", bin)
             self._copy(bin_src, bin_dest)
 
         # copy libs
         for lib in libs:
-            self.tools.dir_ensure(lib_dest)
-            lib_src = j.sal.fs.joinPaths(j.core.tools.text_replace("{DIR_BASE}/lib/"), lib)
+            self._dir_ensure(lib_dest)
+            lib_src = self._joinpaths("{DIR_BASE}/lib/", lib)
             self._copy(lib_src, lib_dest)
 
     @builder_method()
@@ -136,4 +136,3 @@ class BuilderCapnp(JSBASE):
         return_code, _, _ = self._execute("capnp-test")
         assert return_code == 0
         print("TEST OK")
-

@@ -24,7 +24,7 @@ class BuilderOpenSSL(j.baseclasses.builder):
         """
         kosmos 'j.builders.libs.openssl.build(reset=True)'
         """
-        self.tools.dir_ensure(self._replace("{DIR_BUILD}"))
+        self._dir_ensure(self._replace("{DIR_BUILD}"))
         if not self.tools.exists(self.DIR_BUILD + "/openssl"):
             C = """
             set -ex

@@ -11,7 +11,7 @@ class BuilderSmartmontools(j.baseclasses.builder):
 
     _DOWNLOAD_URL = "http:/builds.smartmontools.org/r4592/smartmontools-6.6-0-20171104-r4592.linux-x86_64-static.tar.gz"
     _VERSION = "6.6"
-    _REL_INSTALL_LOCATION = j.sal.fs.joinPaths("usr", "local", "sbin")
+    _REL_INSTALL_LOCATION = self._joinpaths("usr", "local", "sbin")
 
     def install(self):
         """
@@ -32,13 +32,13 @@ class BuilderSmartmontools(j.baseclasses.builder):
         self._execute(
             "mv %s %s"
             % (
-                j.sal.fs.joinPaths(tmp_location, self._REL_INSTALL_LOCATION, "smartctl"),
-                j.sal.fs.joinPaths(os.sep, self._REL_INSTALL_LOCATION),
+                self._joinpaths(tmp_location, self._REL_INSTALL_LOCATION, "smartctl"),
+                self._joinpaths(os.sep, self._REL_INSTALL_LOCATION),
             )
         )
 
         # cleanup
-        j.builders.tools.dir_remove(tmp_location)
+        self._remove(tmp_location)
 
         if not self.isInstalled():
             raise j.exceptions.Base("Failed to install Smartmontools")

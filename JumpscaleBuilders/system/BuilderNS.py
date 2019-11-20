@@ -103,4 +103,4 @@ class BuilderNS(j.baseclasses.builder):
 
         for ns in nameservers:
             content += "nameserver %s\n" % ns
-        j.sal.fs.writeFile("/etc/resolv.conf", content)
+        self._write("/etc/resolv.conf", content)

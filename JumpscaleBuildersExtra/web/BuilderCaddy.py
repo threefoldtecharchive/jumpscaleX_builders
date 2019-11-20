@@ -77,7 +77,7 @@ class BuilderCaddy(BuilderGolangTools):
 
     def clean(self):
         self._init()
-        j.builders.tools.dir_remove("{DIR_BIN}/caddy")
+        self._remove("{DIR_BIN}/caddy")
         C = """
         cd {DIR_BASE}
         rm -rf {DIR_BUILD}
@@ -143,7 +143,7 @@ class BuilderCaddy(BuilderGolangTools):
 
         """
 
-        caddy_bin_path = self.tools.joinpaths(self.DIR_GO_PATH_BIN, self._name)
+        caddy_bin_path = self._joinpaths(self.DIR_GO_PATH_BIN, self._name)
         j.builders.tools.file_copy(caddy_bin_path, "{DIR_BIN}/caddy")
 
     @property
@@ -153,10 +153,10 @@ class BuilderCaddy(BuilderGolangTools):
 
     @builder_method()
     def sandbox(self, reset=False, zhub_client=None, flist_create=False):
-        bin_dest = j.sal.fs.joinPaths(j.core.tools.text_replace("{DIR_BASE}/var/build", "{}/sandbox").format(self.DIR_SANDBOX))
-        self.tools.dir_ensure(bin_dest)
-        caddy_bin_path = self.tools.joinpaths(self.package_path, "/caddy", self._name)
-        self.tools.file_copy(caddy_bin_path, bin_dest)
+        bin_dest = self._joinpaths("{DIR_BASE}/var/build", "{DIR_SANDBOX}/sandbox")
+        self._dir_ensure(bin_dest)
+        caddy_bin_path = self._joinpaths(self.package_path, "/caddy", self._name)
+        self._copy(caddy_bin_path, bin_dest)
 
     def _test(self, name=""):
         """Run tests under tests directory
@@ -165,5 +165,3 @@ class BuilderCaddy(BuilderGolangTools):
         :type name: str, optional
         """
         self._test_run(name=name, obj_key="test_main")
-
-

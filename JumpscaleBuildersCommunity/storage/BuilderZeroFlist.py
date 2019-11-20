@@ -41,7 +41,7 @@ class BuilderZeroFlist(j.baseclasses.builder):
         Remove built files
         """
         self._remove(self.DIR_SANDBOX)
-        self._remove(j.core.tools.text_replace("{DIR_BASE}/code/github/threefoldtech/0-flist"))
+        self._remove("{DIR_BASE}/code/github/threefoldtech/0-flist")
         cmd = """
          rm -rf /opt/*
          """
@@ -53,9 +53,9 @@ class BuilderZeroFlist(j.baseclasses.builder):
         Copy required bin files to be used to sandbox
         """
         # Copy zstor bins
-        bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
-        self.tools.dir_ensure(bin_dest)
-        bin_path = j.sal.fs.joinPaths(self._replace("{DIR_BIN}"), self._name)
+        bin_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "bin")
+        self._dir_ensure(bin_dest)
+        bin_path = self._joinpaths(self._replace("{DIR_BIN}"), self._name)
         self._copy(bin_path, bin_dest)
 
     @builder_method()
@@ -63,8 +63,6 @@ class BuilderZeroFlist(j.baseclasses.builder):
         """
         Uninstall zflist by removing all related files from bin directory and build destination
         """
-        bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
+        bin_path = self._joinpaths("{DIR_BIN}", self._name)
         self._remove(bin_path)
         self.clean()
-
-

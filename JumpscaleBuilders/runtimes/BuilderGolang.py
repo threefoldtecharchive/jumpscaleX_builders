@@ -14,10 +14,10 @@ class BuilderGolang(BuilderGolangTools):
         self.base_dir = self._replace("{DIR_BASE}")
 
         self.env = self.bash.profile
-        self.DIR_GO_ROOT = self.tools.joinpaths(self.base_dir, "go")
-        self.DIR_GO_PATH = self.tools.joinpaths(self.base_dir, "go_proj")
-        self.DIR_GO_ROOT_BIN = self.tools.joinpaths(self.DIR_GO_ROOT, "bin")
-        self.DIR_GO_PATH_BIN = self.tools.joinpaths(self.DIR_GO_PATH, "bin")
+        self.DIR_GO_ROOT = self._joinpaths(self.base_dir, "go")
+        self.DIR_GO_PATH = self._joinpaths(self.base_dir, "go_proj")
+        self.DIR_GO_ROOT_BIN = self._joinpaths(self.DIR_GO_ROOT, "bin")
+        self.DIR_GO_PATH_BIN = self._joinpaths(self.DIR_GO_PATH, "bin")
 
     @property
     def version(self):

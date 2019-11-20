@@ -31,7 +31,7 @@ class BuilderLua(j.baseclasses.builder):
 
         url = "https://luarocks.org/releases/luarocks-3.1.3.tar.gz"
         dest = self._replace("{DIR_BUILD}/luarocks")
-        self.tools.dir_ensure(dest)
+        self._dir_ensure(dest)
         self.tools.file_download(
             url, to=dest, overwrite=False, retry=3, expand=True, minsizekb=100, removeTopDir=True, deletedest=True
         )
@@ -62,11 +62,11 @@ class BuilderLua(j.baseclasses.builder):
             )
             return clean_path
 
-        if not j.sal.fs.exists(self.ROCKS_PATHS_PROFILE):
+        if not self._exists(self.ROCKS_PATHS_PROFILE):
             self.build(reset=True)
-            assert j.sal.fs.exists(self.ROCKS_PATHS_PROFILE)
+            assert self._exists(self.ROCKS_PATHS_PROFILE)
 
-        if not j.sal.fs.exists(j.core.tools.text_replace("{DIR_BASE}/openresty/luajit/include")):
+        if not self._exists("{DIR_BASE}/openresty/luajit/include"):
             # we need the include headers so if not there need to build openresty
             j.builders.web.openresty.build(reset=True)
 
@@ -81,7 +81,7 @@ class BuilderLua(j.baseclasses.builder):
 
         # ADD items from sandbox
         LUALIB = j.core.tools.text_replace("{DIR_BASE}/openresty/lualib")
-        assert j.sal.fs.exists(LUALIB)
+        assert self._exists(LUALIB)
         self.profile.env_set("LUALIB", LUALIB)
 
         lua_path = (
@@ -98,7 +98,7 @@ class BuilderLua(j.baseclasses.builder):
         self.profile.env_set("LUA_CPATH", lua_cpath, quote=True)
 
         LUAINCDIR = j.core.tools.text_replace("{DIR_BASE}/openresty/luajit/include/luajit-2.1")
-        assert j.sal.fs.exists(LUAINCDIR)
+        assert self._exists(LUAINCDIR)
         self.profile.env_set("LUA_INCDIR", LUAINCDIR)
         self.profile.path_add(j.core.tools.text_replace("{DIR_BASE}/bin"))
 
@@ -122,7 +122,7 @@ class BuilderLua(j.baseclasses.builder):
         if j.core.platformtype.myplatform.platform_is_osx:
             C = "luarocks install $NAME CRYPTO_DIR=$CRYPTODIR OPENSSL_DIR=$CRYPTODIR "
             CRYPTODIR = "/usr/local/opt/openssl"
-            assert j.sal.fs.exists(CRYPTODIR)
+            assert self._exists(CRYPTODIR)
             C = C.replace("$CRYPTODIR", CRYPTODIR)
         else:
             # C = "luarocks install $NAME CRYPTO_DIR=$CRYPTODIR OPENSSL_DIR=$CRYPTODIR"
@@ -214,11 +214,11 @@ class BuilderLua(j.baseclasses.builder):
             self.lua_rock_install("lua-resty-iyo-auth", reset=reset)  # need to check how to get this to work on OSX
 
         cmd = "rsync -rav  {DIR_BASE}/openresty/luarocks/lua_modules/lib/lua/5.1/ {DIR_BASE}/openresty/lualib"
-        self.tools.execute(cmd, die=False)
+        self._execute(cmd, die=False)
         cmd = "rsync -rav {DIR_BASE}/openresty/luarocks/share/lua/5.1/  {DIR_BASE}/openresty/lualib/"
-        self.tools.execute(cmd, die=False)
+        self._execute(cmd, die=False)
         cmd = "rsync -rav {DIR_BASE}/openresty/luarocks/lib/lua/5.1/  {DIR_BASE}/openresty/lualib/"
-        self.tools.execute(cmd, die=False)
+        self._execute(cmd, die=False)
 
     # def build_crypto(self):
     #
@@ -281,7 +281,7 @@ class BuilderLua(j.baseclasses.builder):
         cp lapis {DIR_BASE}/bin/_lapis.lua
         cp lapis {DIR_BASE}/bin/lapis
         popd
-        pushd j.core.tools.text_replace("{DIR_BASE}/openresty/luarocks/lib/luarocks/rocks-5.1/moonscript/0.5.0-1/bin")
+        pushd "{DIR_BASE}/openresty/luarocks/lib/luarocks/rocks-5.1/moonscript/0.5.0-1/bin"
         cp moon {DIR_BASE}/bin/_moon.lua
         cp moonc {DIR_BASE}/bin/_moonc.lua
         popd
@@ -368,15 +368,15 @@ class BuilderLua(j.baseclasses.builder):
         # bins = ["lua", "_lapis.lua", "_moonc.lua", "_moon.lua", "_moonrocks.lua", "lapis", "moon", "moonc"]
         # TODO: this was the original, we prob need to copy more
         for bin_name in bins:
-            dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, bin_name)
-            dir_dest = self.tools.joinpaths(dest_path, j.core.dirs.BINDIR[1:])
-            self.tools.dir_ensure(dir_dest)
+            dir_src = self._joinpaths(j.core.dirs.BINDIR, bin_name)
+            dir_dest = self._joinpaths(dest_path, j.core.dirs.BINDIR[1:])
+            self._dir_ensure(dir_dest)
             self._copy(dir_src, dir_dest)
 
-        lib_dest = self.tools.joinpaths(dest_path, "sandbox/lib")
-        self.tools.dir_ensure(lib_dest)
+        lib_dest = self._joinpaths(dest_path, "sandbox/lib")
+        self._dir_ensure(lib_dest)
         for bin in bins:
-            dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, bin)
+            dir_src = self._joinpaths(j.core.dirs.BINDIR, bin)
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest, exclude_sys_libs=False)
 
     def copy_to_github(self):
@@ -410,9 +410,9 @@ class BuilderLua(j.baseclasses.builder):
                 d2 = dest
             else:
                 raise j.exceptions.Base(item)
-            dir_dest_full = j.sal.fs.getDirName(self.tools.joinpaths(d2, rdest))
-            self.tools.dir_ensure(dir_dest_full)
-            dest_full = self.tools.joinpaths(d2, rdest)
+            dir_dest_full = j.sal.fs.getDirName(self._joinpaths(d2, rdest))
+            self._dir_ensure(dir_dest_full)
+            dest_full = self._joinpaths(d2, rdest)
             self._copy(item, dest_full)
 
         self.clean()
@@ -449,5 +449,3 @@ class BuilderLua(j.baseclasses.builder):
         self.stop()
 
         self._log_info("openresty test was ok,no longer running")
-
-

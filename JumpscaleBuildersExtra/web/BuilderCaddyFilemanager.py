@@ -9,7 +9,7 @@ class BuilderCaddyFilemanager(j.baseclasses.builder):
 
     def _init(self, **kwargs):
         self.go_runtime = j.builders.runtimes.go
-        self.templates_dir = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates")
+        self.templates_dir = self._joinpaths(j.sal.fs.getDirName(__file__), "templates")
         # self.root_dirs = {
         #     j.core.tools.text_replace("{DIR_BASE}/cfg/ssl/certs': '{DIR_BASE}/cfg/ssl/certs")
         # }
@@ -37,33 +37,33 @@ class BuilderCaddyFilemanager(j.baseclasses.builder):
     @builder_method()
     def sandbox(self, reset=False, zhub_client=None, flist_create=False):
         dest_path = self.DIR_SANDBOX
-        caddy_bin_path = self.tools.joinpaths(self.go_runtime.DIR_GO_PATH_BIN, "caddy")
-        bin_dest = self.tools.joinpaths(dest_path, "sandbox", "bin")
-        self.tools.dir_ensure(bin_dest)
+        caddy_bin_path = self._joinpaths(self.go_runtime.DIR_GO_PATH_BIN, "caddy")
+        bin_dest = self._joinpaths(dest_path, "sandbox", "bin")
+        self._dir_ensure(bin_dest)
 
-        self.root_dirs = {j.core.tools.text_replace("{DIR_BASE}/cfg/ssl/certs": "{DIR_BASE}/cfg/ssl/certs")}
+        self.root_dirs = {j.core.tools.text_replace("{DIR_BASE}/cfg/ssl/certs"): "{DIR_BASE}/cfg/ssl/certs"}
 
         # empty dirs
-        self.tools.dir_ensure(self.tools.joinpaths(dest_path, "sandbox", "var", "log"))
-        self.tools.dir_ensure(self.tools.joinpaths(dest_path, "sandbox", "filemanager", "files"))
+        self._dir_ensure(self._joinpaths(dest_path, "sandbox", "var", "log"))
+        self._dir_ensure(self._joinpaths(dest_path, "sandbox", "filemanager", "files"))
 
         # bin
         self._copy(caddy_bin_path, bin_dest)
 
         # caddy config
-        cfg_dir = self.tools.joinpaths(dest_path, "sandbox", "cfg", "filemanager")
-        caddyfile = self.tools.joinpaths(self.templates_dir, "filemanager_caddyfile")
-        self._copy(caddyfile, self.tools.joinpaths(cfg_dir, "filemanager_caddyfile"))
+        cfg_dir = self._joinpaths(dest_path, "sandbox", "cfg", "filemanager")
+        caddyfile = self._joinpaths(self.templates_dir, "filemanager_caddyfile")
+        self._copy(caddyfile, self._joinpaths(cfg_dir, "filemanager_caddyfile"))
 
         # startup
-        startup_file = self.tools.joinpaths(self.templates_dir, "filemanager_startup.toml")
-        file_dest = self.tools.joinpaths(dest_path, ".startup.toml")
+        startup_file = self._joinpaths(self.templates_dir, "filemanager_startup.toml")
+        file_dest = self._joinpaths(dest_path, ".startup.toml")
         self._write(file_dest, self.tools.file_read(startup_file))
 
         # copy {DIR_BASE}/cfg/ssl/cert
-        certs = self.tools.joinpaths(dest_path, "etc", "ssl", "certs")
-        self.tools.dir_ensure(certs)
-        self.tools.dir_copy(source=j.core.tools.text_replace("{DIR_BASE}/cfg/ssl/certs"), dest=certs)
+        certs = self._joinpaths(dest_path, "etc", "ssl", "certs")
+        self._dir_ensure(certs)
+        self._copy("{DIR_BASE}/cfg/ssl/certs", dest=certs)
         if flist_create:
             print(self._flist_create(zhub_client=zhub_client))
         self._done_set("sandbox")
@@ -81,5 +81,3 @@ class BuilderCaddyFilemanager(j.baseclasses.builder):
         child_process = tmux_pane.process_obj_child
         assert child_process.is_running()
         assert j.sal.nettools.waitConnectionTest("localhost", 2015)
-
-

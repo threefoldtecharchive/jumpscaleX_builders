@@ -24,7 +24,7 @@ class BuilderSonic(j.baseclasses.builder):
             self.system.package.install("clang")
         self.profile.env_set_part("PATH", j.builders.runtimes.rust.DIR_CARGOBIN)
         self._execute("rustup update")
-        self._remove(j.core.tools.text_replace("{DIR_BASE}/bin/sonic"))
+        self._remove("{DIR_BASE}/bin/sonic")
         self._execute("cargo install sonic-server --force", timeout=3600 * 2, retry=2)
 
     @builder_method()
@@ -54,18 +54,16 @@ class BuilderSonic(j.baseclasses.builder):
         :type zhub_instance:str
         """
         # ensure dirs
-        bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
-        self.tools.dir_ensure(bin_dest)
+        bin_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "bin")
+        self._dir_ensure(bin_dest)
 
         # sandbox sonic
         bins = ["sonic"]
         for bin in bins:
             self._copy("{DIR_BIN}/" + bin, bin_dest)
 
-        lib_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "lib")
-        self.tools.dir_ensure(lib_dest)
+        lib_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "lib")
+        self._dir_ensure(lib_dest)
         for bin in bins:
-            dir_src = self.tools.joinpaths(bin_dest, bin)
+            dir_src = self._joinpaths(bin_dest, bin)
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest)
-
-

@@ -121,13 +121,13 @@ class BuilderNGINX(j.baseclasses.builder):
         self._execute(C)
 
         # COPY BINARIES TO BINDIR
-        self.tools.dir_ensure("{DIR_BIN}")
+        self._dir_ensure("{DIR_BIN}")
         cmd = self._replace("cp {DIR_BUILD}/sbin/* {DIR_BIN}/")
         self._execute(cmd)
 
         # Writing config files
-        self.tools.dir_ensure("{DIR_BUILD}/conf/conf.d/")
-        self.tools.dir_ensure("{DIR_BUILD}/conf/sites-enabled/")
+        self._dir_ensure("{DIR_BUILD}/conf/conf.d/")
+        self._dir_ensure("{DIR_BUILD}/conf/sites-enabled/")
 
         basicnginxconf = self.get_basic_nginx_conf()
         defaultenabledsitesconf = self.get_basic_nginx_site()
@@ -155,9 +155,9 @@ class BuilderNGINX(j.baseclasses.builder):
             )
 
             tmp_dir = self._replace("{DIR_TEMP}/build/nginx")
-            self.tools.dir_ensure(tmp_dir)
+            self._dir_ensure(tmp_dir)
             build_dir = self._replace("{DIR_BUILD}")
-            self.tools.dir_ensure(build_dir)
+            self._dir_ensure(build_dir)
 
             C = """
             #!/bin/bash
@@ -191,7 +191,9 @@ class BuilderNGINX(j.baseclasses.builder):
             nginxcmd = self._replace(nginxcmd)
 
             self._log_info("cmd: %s" % nginxcmd)
-            cmd = j.servers.startupcmd.get("nginx", cmd_start=nginxcmd, cmd_stop="nginx -s stop", path=j.core.tools.text_replace("{DIR_BASE}/bin"))
+            cmd = j.servers.startupcmd.get(
+                "nginx", cmd_start=nginxcmd, cmd_stop="nginx -s stop", path=j.core.tools.text_replace("{DIR_BASE}/bin")
+            )
             return [cmd]
         else:
             raise j.exceptions.Base("Failed to start nginx")
@@ -238,20 +240,18 @@ class BuilderNGINX(j.baseclasses.builder):
             :param flist_create: create flist after copying files
             :type flist_create:bool
         """
-        dir_dest = j.sal.fs.joinPaths(j.core.tools.text_replace("{DIR_BASE}/var/build", "{}{DIR_BASE}").format(self.DIR_SANDBOX))
-        self.tools.dir_ensure(dir_dest)
-        bin_path = self.tools.joinpaths(self._replace("{DIR_BIN}"), self._name)
-        bin_dest = self.tools.joinpaths(dir_dest, "bin", self._name)
-        self.tools.file_copy(bin_path, bin_dest)
+        dir_dest = self._joinpaths("{DIR_BASE}/var/build", "{DIR_SANDBOX}{DIR_BASE}")
+        self._dir_ensure(dir_dest)
+        bin_path = self._joinpaths("{DIR_BIN}", self._name)
+        bin_dest = self._joinpaths(dir_dest, "bin", self._name)
+        self._copy(bin_path, bin_dest)
 
-        self.tools.file_copy(self._replace("{DIR_BUILD}/conf/fastcgi.conf"), "{}/cfg/fastcgi.conf".format(dir_dest))
-        self.tools.file_copy(self._replace("{DIR_BUILD}/conf/nginx.conf"), "{}/cfg/nginx.conf".format(dir_dest))
+        self._copy("{DIR_BUILD}/conf/fastcgi.conf"), "{}/cfg/fastcgi.conf".format(dir_dest))
+        self._copy("{DIR_BUILD}/conf/nginx.conf"), "{}/cfg/nginx.conf".format(dir_dest))
 
         bins = [self._name]
-        lib_dest = self.tools.joinpaths(self.DIR_SANDBOX, "sandbox/lib")
-        self.tools.dir_ensure(lib_dest)
+        lib_dest = "{DIR_SANDBOX}/sandbox/lib"
+        self._dir_ensure(lib_dest)
         for bin in bins:
-            dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, bin)
+            dir_src = self._joinpaths(j.core.dirs.BINDIR, bin)
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest, exclude_sys_libs=False)
-
-

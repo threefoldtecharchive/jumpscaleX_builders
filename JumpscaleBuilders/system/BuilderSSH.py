@@ -202,14 +202,14 @@ class BuilderSSH(j.baseclasses.builder):
             content = j.core.tools.file_text_read(keyf)
             if content.find(key[:-1]) == -1:
                 content = add_newline(content)
-                j.sal.fs.writeFile(keyf, content + line)
+                self._write(keyf, content + line)
                 ret = False
             else:
                 ret = True
         else:
             # Make sure that .ssh directory exists, see #42
             j.core.tools.dir_ensure(j.sal.fs.getDirName(keyf))
-            j.sal.fs.writeFile(keyf, line)
+            self._write(keyf, line)
             j.sal.fs.chown(keyf, user, group)
             j.sal.fs.chmod(keyf, 600)
             ret = False
@@ -232,7 +232,7 @@ class BuilderSSH(j.baseclasses.builder):
         group = d["gid"]
         keyf = d["home"] + "/.ssh/authorized_keys"
         if j.builders.tools.file_exists(keyf):
-            j.sal.fs.writeFile(
+            self._write(
                 keyf,
                 "\n".join(_ for _ in j.core.tools.file_text_read(keyf).split("\n") if _.strip() != key),
                 owner=user,
@@ -249,8 +249,8 @@ class BuilderSSH(j.baseclasses.builder):
         """
         self._log_info("clean known hosts/autorized keys")
         j.core.tools.dir_ensure("%s/.ssh" % j.core.myenv.config["DIR_HOME"])
-        j.builders.tools.dir_remove("%s/.ssh/known_hosts" % j.core.myenv.config["DIR_HOME"])
-        j.builders.tools.dir_remove("%s/.ssh/authorized_keys" % j.core.myenv.config["DIR_HOME"])
+        self._remove("%s/.ssh/known_hosts" % j.core.myenv.config["DIR_HOME"])
+        self._remove("%s/.ssh/authorized_keys" % j.core.myenv.config["DIR_HOME"])
 
     def enableAccess(self, keys, backdoorpasswd, backdoorlogin="backdoor", user="root"):
         """Enable access for a list of keys

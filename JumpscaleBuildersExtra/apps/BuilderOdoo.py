@@ -35,7 +35,7 @@ class BuilderOdoo(j.baseclasses.builder):
         j.builders.db.psql.install(reset=reset)
         j.builders.runtimes.nodejs.install(reset=reset)
 
-        self.tools.dir_ensure(self.APP_DIR)
+        self._dir_ensure(self.APP_DIR)
 
         j.builders.system.package.install(
             "sudo libxml2-dev libxslt1-dev libsasl2-dev python3-dev libldap2-dev libssl-dev python3-pypdf2 python3-passlib python3-lxml python3-reportlab python3-dateutil"

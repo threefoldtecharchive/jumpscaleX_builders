@@ -67,26 +67,26 @@ class BuilderFreeflowPages(j.baseclasses.builder):
             "/usr/bin/php",
         ]
         for bin_name in self.bins:
-            dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, bin_name)
-            dir_dest = j.sal.fs.joinPaths(dest_path, j.core.dirs.BINDIR[1:])
+            dir_src = self._joinpaths(j.core.dirs.BINDIR, bin_name)
+            dir_dest = self._joinpaths(dest_path, j.core.dirs.BINDIR[1:])
             j.builders.tools.dir_ensure(dir_dest)
             j.sal.fs.copyFile(dir_src, dir_dest)
-        lib_dest = j.sal.fs.joinPaths(dest_path, "sandbox/lib")
+        lib_dest = self._joinpaths(dest_path, "sandbox/lib")
         j.builders.tools.dir_ensure(lib_dest)
         for bin in self.bins:
             j.tools.sandboxer.libs_sandbox(bin, lib_dest, exclude_sys_libs=False)
         self.share = ["/usr/share/mysql"]
         for mysqlshare in self.share:
-            share_dest = j.sal.fs.joinPaths(dest_path, "sandbox/share/mysql")
+            share_dest = self._joinpaths(dest_path, "sandbox/share/mysql")
             j.builders.tools.dir_ensure(share_dest)
-            self.tools.copyTree(mysqlshare, share_dest)
+            self._copy(mysqlshare, share_dest)
 
         apache_dir = ["/etc/apache2", "/usr/lib/apache2", "/etc/php", "/usr/lib/php", "/var/lib/php"]
         for dir in apache_dir:
             relative_dir = dir.strip("/")
-            dest_dir = j.sal.fs.joinPaths(dest_path, "sandbox", relative_dir)
+            dest_dir = self._joinpaths(dest_path, "sandbox", relative_dir)
             j.builders.tools.dir_ensure(dest_dir)
-            self.tools.copyTree(dir, dest_dir, keepsymlinks=True)
+            self._copy(dir, dest_dir, keepsymlinks=True)
 
         copy_php_share_script = """
         mkdir -p /tmp/package/freeflow/sandbox/usr/share/php
@@ -97,16 +97,18 @@ class BuilderFreeflowPages(j.baseclasses.builder):
         cd 
         """
         self._execute(copy_php_share_script)
-        startup_file = (
-            j.core.tools.text_replace("{DIR_BASE}/code/github/threefoldtech/jumpscaleX_core/Jumpscale/builder/apps/templates/freeflow_startup.toml")
+        startup_file = j.core.tools.text_replace(
+            "{DIR_BASE}/code/github/threefoldtech/jumpscaleX_core/Jumpscale/builder/apps/templates/freeflow_startup.toml"
         )
         startup = j.sal.fs.readFile(startup_file)
-        startup_dest = j.sal.fs.joinPaths(dest_path, ".startup.toml")
+        startup_dest = self._joinpaths(dest_path, ".startup.toml")
         j.builders.tools.file_ensure(startup_dest)
         j.builders.tools.file_write(startup_dest, startup)
-        apache_file = j.core.tools.text_replace("{DIR_BASE}/code/github/threefoldtech/jumpscaleX_core/Jumpscale/builder/apps/templates/freeflow_apache_prepare.sh")
+        apache_file = j.core.tools.text_replace(
+            "{DIR_BASE}/code/github/threefoldtech/jumpscaleX_core/Jumpscale/builder/apps/templates/freeflow_apache_prepare.sh"
+        )
         apache_conf = j.sal.fs.readFile(apache_file)
-        apache_conf_dest = j.sal.fs.joinPaths(dest_path, ".apache_prepare.sh")
+        apache_conf_dest = self._joinpaths(dest_path, ".apache_prepare.sh")
         j.builders.tools.file_ensure(apache_conf_dest)
         j.builders.tools.file_write(apache_conf_dest, apache_conf)
         self._done_set("sandbox")
@@ -135,4 +137,3 @@ class BuilderFreeflowPages(j.baseclasses.builder):
     def test(self):
         self.stop()
         self.start()
-

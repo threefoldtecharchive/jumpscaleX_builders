@@ -30,9 +30,9 @@ class BuilderEthereum(BuilderGolangTools):
         """
         Install the binaries of ethereum
         """
-        bin_path = self.tools.joinpaths(self.package_path, self._name)
-        self.tools.dir_ensure("{DIR_BIN}")
-        self.tools.file_copy(bin_path, self._replace("{DIR_BIN}"))
+        bin_path = self._joinpaths(self.package_path, self._name)
+        self._dir_ensure("{DIR_BIN}")
+        self._copy(bin_path, self._replace("{DIR_BIN}"))
 
     @property
     def startup_cmds(self):
@@ -61,12 +61,12 @@ class BuilderEthereum(BuilderGolangTools):
         """
         dest_path = self.DIR_SANDBOX
         self.profile_sandbox_select()
-        dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, "geth")
-        dir_dest = self.tools.joinpaths(dest_path, j.core.dirs.BINDIR[1:])
-        self.tools.dir_ensure(dir_dest)
+        dir_src = self._joinpaths(j.core.dirs.BINDIR, "geth")
+        dir_dest = self._joinpaths(dest_path, j.core.dirs.BINDIR[1:])
+        self._dir_ensure(dir_dest)
         self._copy(dir_src, dir_dest)
-        lib_dest = self.tools.joinpaths(dest_path, "sandbox/lib")
-        self.tools.dir_ensure(lib_dest)
+        lib_dest = self._joinpaths(dest_path, "sandbox/lib")
+        self._dir_ensure(lib_dest)
         j.tools.sandboxer.libs_sandbox(dir_src, lib_dest, exclude_sys_libs=False)
 
     def test(self):

@@ -59,7 +59,7 @@ class BuilderVRouter(j.baseclasses.builder):
         net.ipv4.ip_forward=1
         """
         # make sure it works at runtime
-        j.sal.fs.writeFile("/etc/sysctl.d/90-ipforward.conf", config)
+        self._write("/etc/sysctl.d/90-ipforward.conf", config)
         j.sal.process.execute("sysctl --system")
         j.sal.process.execute("nft -f /etc/nftables.conf")
         # firewall is now empty
@@ -171,7 +171,7 @@ class BuilderVRouter(j.baseclasses.builder):
         }
         """
         config = config.replace("$range", r)
-        j.sal.fs.writeFile("/etc/dhcp/dhcpd.conf", config)
+        self._write("/etc/dhcp/dhcpd.conf", config)
 
         C = """
         killall dhcpd
@@ -247,7 +247,7 @@ class BuilderVRouter(j.baseclasses.builder):
         C = C.replace("$iface", self.wirelessInterfaceNonDefGW)
         C = C.replace("$passphrase", passphrase)
         configdest = "/etc/hostapd.conf"
-        j.sal.fs.writeFile(configdest, C)
+        self._write(configdest, C)
 
         cmd = "/opt/netpoc/hostapd-2.5/hostapd/hostapd %s" % configdest
         j.builders.system.tmux.executeInScreen("ovsrouter", "ap", cmd)
@@ -317,4 +317,3 @@ class BuilderVRouter(j.baseclasses.builder):
         return "prefab.vrouter:%s:%s" % (getattr(self.executor, "addr", "local"), getattr(self.executor, "port", ""))
 
     __repr__ = __str__
-

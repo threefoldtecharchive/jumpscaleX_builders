@@ -79,7 +79,7 @@ class BuilderARDB(j.baseclasses.builder):
         """
         as backend use ForestDB
         """
-        self.tools.dir_ensure("{DIR_BIN}")
+        self._dir_ensure("{DIR_BIN}")
         self._copy("{BUILD_DIR_ARDB}/ARDB/ardb-server", "{DIR_BIN}/ardb-server")
 
     @builder_method()
@@ -97,13 +97,13 @@ class BuilderARDB(j.baseclasses.builder):
         :param zhub_instance: hub instance to upload flist to
         :type zhub_instance:str
         """
-        bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
-        self.tools.dir_ensure(bin_dest)
+        bin_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "bin")
+        self._dir_ensure(bin_dest)
         self._copy("{DIR_BIN}/ardb-server", bin_dest)
 
-        lib_dest = self.tools.joinpaths(self.DIR_SANDBOX, "lib", "x86_64-linux-gnu")
-        self.tools.dir_ensure(lib_dest)
-        dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, "ardb-server")
+        lib_dest = self._joinpaths(self.DIR_SANDBOX, "lib", "x86_64-linux-gnu")
+        self._dir_ensure(lib_dest)
+        dir_src = self._joinpaths(j.core.dirs.BINDIR, "ardb-server")
         j.tools.sandboxer.libs_sandbox(dir_src, lib_dest)
 
     @builder_method()

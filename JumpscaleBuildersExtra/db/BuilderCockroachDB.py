@@ -14,7 +14,7 @@ class BuilderCockroachDB(j.baseclasses.builder):
         """
         Builds cockroachdb
         """
-        self.tools.dir_ensure(self.DIR_BUILD)
+        self._dir_ensure(self.DIR_BUILD)
         url = "https://binaries.cockroachdb.com/cockroach-latest.linux-amd64.tgz"
         dest = "{}/cockroach-latest.linux-amd64.tgz".format(self.DIR_BUILD)
 
@@ -40,7 +40,9 @@ class BuilderCockroachDB(j.baseclasses.builder):
         port = 26257
         http_port = 8581
 
-        cmd = j.core.tools.text_replace("{DIR_BASE}/bin/cockroach start --host={} --insecure --port={} --http-port={}").format(host, port, http_port)
+        cmd = j.core.tools.text_replace(
+            "{DIR_BASE}/bin/cockroach start --host={} --insecure --port={} --http-port={}"
+        ).format(host, port, http_port)
         cmds = [j.servers.startupcmd.get(name=self._name, cmd_start=cmd)]
         return cmds
 
@@ -51,9 +53,9 @@ class BuilderCockroachDB(j.baseclasses.builder):
 
     @builder_method()
     def sandbox(self):
-        bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox")
-        self.tools.dir_ensure(bin_dest)
-        bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
+        bin_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox")
+        self._dir_ensure(bin_dest)
+        bin_path = self._joinpaths("{DIR_BIN}", self._name)
         self._copy(bin_path, bin_dest)
 
     @builder_method()
@@ -70,7 +72,6 @@ class BuilderCockroachDB(j.baseclasses.builder):
 
     @builder_method()
     def uninstall(self):
-        bin_path = self.tools.joinpaths("{DIR_BIN}", self._name)
+        bin_path = self._joinpaths("{DIR_BIN}", self._name)
         self._remove(bin_path)
         self.clean()
-

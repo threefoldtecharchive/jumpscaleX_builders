@@ -27,8 +27,8 @@ class BuilderRust(j.baseclasses.builder):
         :return:
         """
         dest_path = self.DIR_SANDBOX
-        dir_dest = j.sal.fs.joinPaths(dest_path, "sandbox")
-        self.tools.dir_ensure(dir_dest)
+        dir_dest = self._joinpaths(dest_path, "sandbox")
+        self._dir_ensure(dir_dest)
 
         bins = [
             "cargo",
@@ -45,7 +45,7 @@ class BuilderRust(j.baseclasses.builder):
             "rustup",
         ]
         for bin_name in bins:
-            dir_src = self.tools.joinpaths(self.DIR_CARGOBIN, bin_name)
+            dir_src = self._joinpaths(self.DIR_CARGOBIN, bin_name)
             self._copy(dir_src, dir_dest)
 
     @builder_method()

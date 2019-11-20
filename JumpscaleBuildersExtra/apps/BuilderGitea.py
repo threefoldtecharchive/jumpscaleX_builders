@@ -39,7 +39,10 @@ class BuilderGitea(BuilderGolangTools):
         if self.tools.exists(self.CUSTOM_PATH) and not self.tools.file_is_link(self.CUSTOM_PATH):
             self.tools.dir_remove(self.CUSTOM_PATH)
 
-        self.tools.file_link(source=j.core.tools.text_replace("{DIR_BASE}/code/github/incubaid/gitea-custom"), destination=self.CUSTOM_PATH)
+        self.tools.file_link(
+            source=j.core.tools.text_replace("{DIR_BASE}/code/github/incubaid/gitea-custom"),
+            destination=self.CUSTOM_PATH,
+        )
 
         # build gitea (will be stored in self.GITEAPATH/gitea)
         self._execute('cd {GITEAPATH} && TAGS="bindata" make generate build')
@@ -76,7 +79,7 @@ class BuilderGitea(BuilderGolangTools):
         """
 
         config = textwrap.dedent(config)
-        self.tools.dir_ensure(j.sal.fs.getDirName(path))
+        self._dir_ensure(j.sal.fs.getDirName(path))
         self._write(path, config)
 
     @builder_method()
@@ -132,24 +135,23 @@ class BuilderGitea(BuilderGolangTools):
         j.builders.db.psql.sandbox()
 
         # add certs
-        dir_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "etc/ssl/certs/")
-        self.tools.dir_ensure(dir_dest)
-        self._copy(j.core.tools.text_replace("{DIR_BASE}/cfg/ssl/certs"), dir_dest)
+        dir_dest = self._joinpaths(self.DIR_SANDBOX, "etc/ssl/certs/")
+        self._dir_ensure(dir_dest)
+        self._copy("{DIR_BASE}/cfg/ssl/certs", dir_dest)
 
         # gitea bin
-        self.tools.dir_ensure("{DIR_SANDBOX}/sandbox/bin")
+        self._dir_ensure("{DIR_SANDBOX}/sandbox/bin")
         self._copy("{DIR_GO_PATH}/bin/gitea", "{DIR_SANDBOX}/sandbox/bin/gitea")
 
         # startup files
-        templates_dir = self.tools.joinpaths(j.sal.fs.getDirName(__file__), "templates")
+        templates_dir = self._joinpaths(j.sal.fs.getDirName(__file__), "templates")
         postgres_init_script = self._replace("{DIR_SANDBOX}/sandbox/bin/gitea_postgres_init.sh")
         gitea_init_script = self._replace("{DIR_SANDBOX}/sandbox/bin/gitea_init.sh")
         gitea_startup = self._replace("{DIR_SANDBOX}/.startup.toml")
-        self._copy(self.tools.joinpaths(templates_dir, "gitea_postgres_init.sh"), postgres_init_script)
-        self._copy(self.tools.joinpaths(templates_dir, "gitea_init.sh"), gitea_init_script)
-        self._copy(self.tools.joinpaths(templates_dir, "gitea_startup.toml"), gitea_startup)
+        self._copy(self._joinpaths(templates_dir, "gitea_postgres_init.sh"), postgres_init_script)
+        self._copy(self._joinpaths(templates_dir, "gitea_init.sh"), gitea_init_script)
+        self._copy(self._joinpaths(templates_dir, "gitea_startup.toml"), gitea_startup)
 
         # init config
         custom_dir = self._replace("{DIR_SANDBOX}/sandbox/bin/custom/conf")
         self.write_ini_config("%s/app.ini" % custom_dir)
-

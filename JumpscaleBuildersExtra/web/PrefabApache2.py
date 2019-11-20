@@ -14,13 +14,13 @@ class BuilderApache2(j.baseclasses.builder):
         httpdir = "/optvar/build/httpd"
 
         if reset and j.builders.tools.dir_exists(httpdir):
-            j.builders.tools.dir_remove("{DIR_BASE}/apps/apache2")
+            self._remove("{DIR_BASE}/apps/apache2")
 
         j.core.tools.dir_ensure("/optvar/build")
 
         # DOWNLOAD LINK
         DOWNLOADLINK = "www-eu.apache.org/dist//httpd/httpd-2.4.29.tar.bz2"
-        dest = j.sal.fs.joinPaths("/optvar", "httpd-2.4.29.tar.bz2")
+        dest = self._joinpaths("/optvar", "httpd-2.4.29.tar.bz2")
 
         if not j.builders.tools.file_exists(dest):
             j.builders.tools.file_download(DOWNLOADLINK, dest)
@@ -57,7 +57,7 @@ class BuilderApache2(j.baseclasses.builder):
         return True
 
     def install(self):
-        httpdir = j.sal.fs.joinPaths("/optvar/build", "httpd")
+        httpdir = self._joinpaths("/optvar/build", "httpd")
         installscript = """cd {httpdir} &&  make install""".format(httpdir=httpdir)
         j.sal.process.execute(installscript)
 
@@ -106,7 +106,7 @@ class BuilderApache2(j.baseclasses.builder):
         j.core.tools.dir_ensure("{DIR_BASE}/apps/apache2/sites-available")
         j.core.tools.dir_ensure("{DIR_BASE}/apps/apache2/sites-enabled")
         # self._log_info("Config to be written = ", conffile)
-        j.sal.fs.writeFile("{DIR_BASE}/apps/apache2/conf/httpd.conf", conffile)
+        self._write("{DIR_BASE}/apps/apache2/conf/httpd.conf", conffile)
 
     def start(self):
         """start Apache."""

@@ -57,7 +57,7 @@ class BuilderZeroStor(BuilderGolangTools):
         j.builders.db.zdb.install()
 
         self._copy("{}/src/github.com/threefoldtech/0-stor/bin".format(self.DIR_GO_PATH), "{DIR_BIN}")
-        j.sal.fs.writeFile(filename=j.core.tools.text_replace("{DIR_BASE}/cfg/zstor.yaml"), contents=CONFIG_TEMPLATE)
+        self._write("{DIR_BASE}/cfg/zstor.yaml", CONFIG_TEMPLATE)
 
     @property
     def startup_cmds(self):
@@ -65,7 +65,7 @@ class BuilderZeroStor(BuilderGolangTools):
         Starts zstor
         """
         self.datadir = self.DIR_BUILD
-        self.tools.dir_ensure(self.datadir)
+        self._dir_ensure(self.datadir)
 
         cmd = "zstor --config {DIR_BASE}/cfg/zstor.yaml daemon --listen 127.0.0.1:8000"
         cmd_zdb = j.builders.db.zdb.startup_cmds
@@ -87,31 +87,31 @@ class BuilderZeroStor(BuilderGolangTools):
         Copy required bin files to be used to sandbox
         """
         # Copy zstor bins
-        bin_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "bin")
-        self.tools.dir_ensure(bin_dest)
-        bin_path = j.sal.fs.joinPaths(self._replace("{DIR_BIN}"), self._classname)
-        bin_bench_path = j.sal.fs.joinPaths(self._replace("{DIR_BIN}"), "zstorbench")
+        bin_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "bin")
+        self._dir_ensure(bin_dest)
+        bin_path = self._joinpaths(self._replace("{DIR_BIN}"), self._classname)
+        bin_bench_path = self._joinpaths(self._replace("{DIR_BIN}"), "zstorbench")
         self._copy(bin_path, bin_dest)
         self._copy(bin_bench_path, bin_dest)
 
         # Copy zdb bin and lib
         j.builders.db.zdb.sandbox()
-        bin_src = self.tools.joinpaths(j.builders.db.zdb.DIR_SANDBOX, "sandbox/bin")
+        bin_src = self._joinpaths(j.builders.db.zdb.DIR_SANDBOX, "sandbox/bin")
         self._copy(bin_src, bin_dest)
 
-        lib_src = self.tools.joinpaths(j.builders.db.zdb.DIR_SANDBOX, "sandbox/lib")
-        lib_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "lib")
-        self.tools.dir_ensure(lib_dest)
+        lib_src = self._joinpaths(j.builders.db.zdb.DIR_SANDBOX, "sandbox/lib")
+        lib_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "lib")
+        self._dir_ensure(lib_dest)
         j.tools.sandboxer.libs_sandbox(lib_src, lib_dest, exclude_sys_libs=False)
 
         # Copy etcd bin and lib
         j.builders.db.etcd.sandbox()
-        bin_src = self.tools.joinpaths(j.builders.db.etcd.DIR_SANDBOX, "sandbox/bin")
+        bin_src = self._joinpaths(j.builders.db.etcd.DIR_SANDBOX, "sandbox/bin")
         self._copy(bin_src, bin_dest)
 
-        lib_src = self.tools.joinpaths(j.builders.db.etcd.DIR_SANDBOX, "sandbox/lib")
-        lib_dest = j.sal.fs.joinPaths(self.DIR_SANDBOX, "sandbox", "lib")
-        self.tools.dir_ensure(lib_dest)
+        lib_src = self._joinpaths(j.builders.db.etcd.DIR_SANDBOX, "sandbox/lib")
+        lib_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "lib")
+        self._dir_ensure(lib_dest)
         j.tools.sandboxer.libs_sandbox(lib_src, lib_dest, exclude_sys_libs=False)
 
     @builder_method()
@@ -131,10 +131,8 @@ class BuilderZeroStor(BuilderGolangTools):
         """
         Uninstall zstor by removing all related files from bin directory and build destination
         """
-        bin_path = self.tools.joinpaths("{DIR_BIN}", self._classname)
-        bin_bench_path = self.tools.joinpaths("{DIR_BIN}", "zstorbench")
+        bin_path = self._joinpaths("{DIR_BIN}", self._classname)
+        bin_bench_path = self._joinpaths("{DIR_BIN}", "zstorbench")
         self._remove(bin_path)
         self._remove(bin_bench_path)
         self.clean()
-
-

@@ -31,7 +31,7 @@ class BuilderTraefik(j.baseclasses.builder):
         else:
             raise j.exceptions.RuntimeError("platform not supported")
 
-        dest = self.tools.joinpaths(self._replace("{DIR_BIN}"), self._name)
+        dest = self._joinpaths(self._replace("{DIR_BIN}"), self._name)
         self.tools.file_download(download_url, dest, overwrite=True, retry=3, timeout=0)
         self.tools.file_attribs(dest, mode=0o770)
 
@@ -46,7 +46,7 @@ class BuilderTraefik(j.baseclasses.builder):
         :return: tmux pane
         :rtype: tmux.Pane
         """
-        cmd = self.tools.joinpaths(self._replace("{DIR_BIN}"), self._name)
+        cmd = self._joinpaths(self._replace("{DIR_BIN}"), self._name)
         if config_file and self.tools.file_exists(config_file):
             cmd += " --configFile=%s" % config_file
 
@@ -107,13 +107,13 @@ class BuilderTraefik(j.baseclasses.builder):
 
         bins = ["traefik"]
         for bin_name in bins:
-            dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, bin_name)
-            dir_dest = self.tools.joinpaths(dest_path, j.core.dirs.BINDIR[1:])
-            self.tools.dir_ensure(dir_dest)
+            dir_src = self._joinpaths(j.core.dirs.BINDIR, bin_name)
+            dir_dest = self._joinpaths(dest_path, j.core.dirs.BINDIR[1:])
+            self._dir_ensure(dir_dest)
             self._copy(dir_src, dir_dest)
 
-        lib_dest = self.tools.joinpaths(dest_path, "sandbox/lib")
-        self.tools.dir_ensure(lib_dest)
+        lib_dest = self._joinpaths(dest_path, "sandbox/lib")
+        self._dir_ensure(lib_dest)
         for bin in bins:
-            dir_src = self.tools.joinpaths(j.core.dirs.BINDIR, bin)
+            dir_src = self._joinpaths(j.core.dirs.BINDIR, bin)
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest, exclude_sys_libs=False)

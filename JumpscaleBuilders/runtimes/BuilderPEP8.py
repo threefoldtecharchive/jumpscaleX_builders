@@ -23,7 +23,7 @@ class BuilderPEP8(j.baseclasses.builder):
         fi
         """
         for repo_path in paths:
-            j.sal.fs.writeFile(repo_path, hook_cmd)
+            self._write(repo_path, hook_cmd)
 
     def autopep8(self, repo_path=None, commit=True, rebase=False):
         """
