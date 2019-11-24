@@ -33,7 +33,7 @@ class BuilderZdb(j.baseclasses.builder):
         Installs the zdb binary to the correct location
         kosmos 'j.builders.db.zdb.install()'
         """
-        zdb_bin_path = j.builders.tools.joinpaths(self.DIR_BUILD, "0-db/bin/zdb")
+        zdb_bin_path = j.builders.tools.joinpaths(self.DIR_BUILD, "0-db/bin")
         self._copy(zdb_bin_path, "{DIR_BIN}")
 
     @property
