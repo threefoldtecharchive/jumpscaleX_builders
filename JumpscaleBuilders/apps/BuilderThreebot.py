@@ -110,7 +110,7 @@ class BuilderThreebot(j.baseclasses.builder):
         for dir_dest in new_dirs:
             dir_dest = self._joinpaths(self.DIR_SANDBOX, self.tools.path_relative(dir_dest))
             self._dir_ensure(dir_dest)
-            self.tools.touch(f"{dir_dest}/.keep")
+            self._touch(f"{dir_dest}/.keep")
 
         for file_dest, content in root_files.items():
             file_dest = self._joinpaths(self.DIR_SANDBOX, self.tools.path_relative(file_dest))
