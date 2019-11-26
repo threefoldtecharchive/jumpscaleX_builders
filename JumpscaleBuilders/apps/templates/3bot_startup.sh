@@ -5,10 +5,15 @@ export LANGUAGE=en_US.UTF-8zdb
 export LC_ALL=en_US.UTF-8
 ssh-keygen -t rsa -N "" -f my.key && eval `ssh-agent` && ssh-add
 apt-get update -y
+mkdir -p /sandbox/code/github/threefoldtech
 rm -rf /sandbox/lib/python3.6/site-packages/zerohub-nspkg.pth
 export DEBIAN_FRONTEND="noninteractive"
 
 apt install -y openssh-server locales curl git rsync unzip lsb
+cd /sandbox/code/github/threefoldtech
+git clone https://github.com/threefoldtech/jumpscaleX_threebot
+git clone https://github.com/threefoldtech/jumpscaleX_core
+git clone https://github.com/threefoldtech/jumpscaleX_libs
 
 cp -r /sandbox_threebot_linux64/* /
 echo messagebus:x:51 >> /etc/group
@@ -34,6 +39,6 @@ cd /sandbox/code/github/threefoldtech/jumpscaleX_threebot
 git stash; git fetch -v; git pull origin development; git checkout development -f
 cd /sandbox/code/github/threefoldtech/jumpscaleX_libs
 git stash; git fetch -v; git pull origin development; git checkout development -f
-
+js_init generate
 . /sandbox/env.sh; kosmos -p 'j.server.threebot.local_start_default()'
 . /sandbox/env.sh&&jsx wiki-load
