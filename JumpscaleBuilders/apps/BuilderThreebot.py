@@ -13,7 +13,7 @@ class BuilderThreebot(j.baseclasses.builder):
         self._sandbox_source = j.clients.git.getContentPathFromURLorPath(url)
         self.prebuilt_url = "https://github.com/threefoldtech/sandbox_threebot_linux64"
         self.path_cfg_dir = "{DIR_BASE}/cfg/nginx/default"
-        self._web_path = "{DIR_BASE}/var/web/default"
+        self._web_path = "/{DIR_BASE}/var/web/default"
 
     @builder_method()
     def install(self, reset=False):
@@ -46,7 +46,6 @@ class BuilderThreebot(j.baseclasses.builder):
         :param push_to_repo:
         :return:
         """
-        raise RuntimeError("needs to be revisited, not sure this works well")
         j.builders.db.zdb.sandbox(reset=reset_deps)
 
         j.builders.apps.sonic.sandbox(reset=reset_deps)
@@ -111,7 +110,7 @@ class BuilderThreebot(j.baseclasses.builder):
         for dir_dest in new_dirs:
             dir_dest = self._joinpaths(self.DIR_SANDBOX, self.tools.path_relative(dir_dest))
             self._dir_ensure(dir_dest)
-            self._touch(f"{dir_dest}/.keep")
+            self.tools.touch(f"{dir_dest}/.keep")
 
         for file_dest, content in root_files.items():
             file_dest = self._joinpaths(self.DIR_SANDBOX, self.tools.path_relative(file_dest))
