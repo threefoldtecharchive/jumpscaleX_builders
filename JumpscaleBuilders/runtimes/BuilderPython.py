@@ -72,11 +72,12 @@ class BuilderPython(j.baseclasses.builder):
         """
         kosmos 'j.builders.runtimes.python3.install()'
         """
-        install_cmd = """
-        cd {DIR_CODE_L}/cpython
+        install_cmd = (
+            """
+        cd %s/cpython
         make install DESTDIR={DIR_BASE}
-        """.format(
-            DIR_CODE_L=self.DIR_CODE_L
+        """
+            % self.DIR_CODE_L
         )
         self._execute(install_cmd)
         self.build_pip()
