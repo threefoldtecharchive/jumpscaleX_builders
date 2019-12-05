@@ -21,6 +21,7 @@ class BuilderTCPRouter(BuilderGolangTools):
         j.builders.runtimes.go.install()
         self.get("gopkg.in/redis.v5")
         self.get("github.com/threefoldtech/tcprouter")
+        self.profile.env_set("GO111MODULE", "on")
         build_cmd = """
         cd {DIR_TCPROUTER}
         make all
