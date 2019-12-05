@@ -10,7 +10,7 @@ class BuilderTCPRouter(BuilderGolangTools):
     @builder_method()
     def _init(self, **kwargs):
         super()._init()
-        self.DIR_TCPROUTER = self.package_path_get("xmonader/tcprouter")
+        self.DIR_TCPROUTER = self.package_path_get("threefoldtech/tcprouter")
 
     @builder_method()
     def configure(self):
@@ -20,7 +20,7 @@ class BuilderTCPRouter(BuilderGolangTools):
     def build(self):
         j.builders.runtimes.go.install()
         self.get("gopkg.in/redis.v5")
-        self.get("github.com/xmonader/tcprouter")
+        self.get("github.com/threefoldtech/tcprouter")
         build_cmd = """
         cd {DIR_TCPROUTER}
         make all
