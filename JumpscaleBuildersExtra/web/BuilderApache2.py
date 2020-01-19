@@ -6,7 +6,7 @@ DIR_BIN = j.core.tools.text_replace("{DIR_BIN}")
 
 class BuilderApache2(j.baseclasses.builder):
 
-    __jslocation__ = "j.builders.web.apachectl"
+    __jslocation__ = "j.builders.web.apache2"
 
     def build(self, reset=True):
 
