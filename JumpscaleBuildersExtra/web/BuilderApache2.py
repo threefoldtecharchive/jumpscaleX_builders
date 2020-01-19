@@ -1,5 +1,8 @@
 from Jumpscale import j
 
+DIR_BASE = j.core.tools.text_replace("{DIR_BASE}")
+DIR_BIN = j.core.tools.text_replace("{DIR_BIN}")
+
 
 class BuilderApache2(j.baseclasses.builder):
 
@@ -13,27 +16,25 @@ class BuilderApache2(j.baseclasses.builder):
         httpdir = "/optvar/build/httpd"
 
         if reset and j.builders.tools.dir_exists(httpdir):
-            self._remove("{DIR_BASE}/apps/apache2")
+            self._remove(f"{DIR_BASE}/apps/apache2")
 
         j.core.tools.dir_ensure("/optvar/build")
 
         # DOWNLOAD LINK
-        DOWNLOADLINK = "www-eu.apache.org/dist//httpd/httpd-2.4.29.tar.bz2"
-        dest = self._joinpaths("/optvar", "httpd-2.4.29.tar.bz2")
+        DOWNLOADLINK = "www-eu.apache.org/dist//httpd/httpd-2.4.38.tar.bz2"
+        dest = self._joinpaths("/optvar", "httpd-2.4.38.tar.bz2")
 
         if not j.builders.tools.file_exists(dest):
             j.builders.tools.file_download(DOWNLOADLINK, dest)
 
         # EXTRACT SROURCE CODE
         j.sal.process.execute(
-            "cd /optvar/build && tar xjf {dest} && cp -r /optvar/build/httpd-2.4.29 /optvar/build/httpd".format(
-                **locals()
-            )
+            f"cd /optvar/build && tar xjf {dest} && cp -r /optvar/build/httpd-2.4.38 /optvar/build/httpd"
         )
         j.core.tools.dir_ensure("{DIR_BASE}/apps/apache2/bin")
         j.core.tools.dir_ensure("{DIR_BASE}/apps/apache2/lib")
 
-        buildscript = """
+        buildscript = f"""
 
         cd {httpdir} &&  ./configure --prefix={DIR_BASE}/apps/apache2 --bindir={DIR_BASE}/apps/apache2/bin --sbindir={DIR_BASE}/apps/apache2/bin \
               --libdir={DIR_BASE}/apps/apache2/lib \
@@ -49,22 +50,20 @@ class BuilderApache2(j.baseclasses.builder):
               --enable-dbd --enable-imagemap --enable-ident --enable-cern-meta \
               --enable-xml2enc && make && make test\
         """
-        buildscript = self.replace(buildscript, args={"httpdir": httpdir})
-
         j.sal.process.execute(buildscript)
 
         return True
 
     def install(self):
         httpdir = self._joinpaths("/optvar/build", "httpd")
-        installscript = """cd {httpdir} &&  make install""".format(httpdir=httpdir)
+        installscript = f"""cd {httpdir} &&  make install"""
         j.sal.process.execute(installscript)
 
         # COPY APACHE BINARIES to /opt/jumpscale/bin
-        j.builders.tools.file_copy("{DIR_BASE}/apps/apache2/bin/*", "{DIR_BIN}/")
+        j.sal.process.execute(f"cp {DIR_BASE}/apps/apache2/bin/* {DIR_BIN}/")
 
     def configure(self):
-        conffile = j.core.tools.file_text_read("{DIR_BASE}/apps/apache2/conf/httpd.conf")
+        conffile = j.core.tools.file_text_read(f"{DIR_BASE}/apps/apache2/conf/httpd.conf")
         # SANE CONFIGURATIONS
         lines = """
         #LoadModule negotiation_module
@@ -102,10 +101,10 @@ class BuilderApache2(j.baseclasses.builder):
 
         # MAKE VHOSTS DIRECTORY
         j.core.tools.dir_ensure("%s/apache2/sites-enabled/" % j.dirs.CFGDIR)
-        j.core.tools.dir_ensure("{DIR_BASE}/apps/apache2/sites-available")
-        j.core.tools.dir_ensure("{DIR_BASE}/apps/apache2/sites-enabled")
+        j.core.tools.dir_ensure(f"{DIR_BASE}/apps/apache2/sites-available")
+        j.core.tools.dir_ensure(f"{DIR_BASE}/apps/apache2/sites-enabled")
         # self._log_info("Config to be written = ", conffile)
-        self._write("{DIR_BASE}/apps/apache2/conf/httpd.conf", conffile)
+        self._write(f"{DIR_BASE}/apps/apache2/conf/httpd.conf", conffile)
 
     def start(self):
         """start Apache."""
