@@ -108,12 +108,12 @@ class BuilderApache2(j.baseclasses.builder):
 
     def start(self):
         """start Apache."""
-        j.sal.process.execute("apachectl start", profile=True)
+        j.sal.process.execute("apachectl start")
 
     def stop(self):
         """stop Apache."""
-        j.sal.process.execute("apachectl stop", profile=True)
+        j.sal.process.execute("apachectl stop")
 
     def restart(self):
         """restart Apache."""
-        j.sal.process.execute("apachectl restart", profile=True)
+        j.sal.process.execute("apachectl restart")
