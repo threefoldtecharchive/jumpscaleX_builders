@@ -49,7 +49,6 @@ class BuilderDocker(j.baseclasses.builder):
     def install(self):
         j.builders.tools.file_copy("/usr/bin/docker", "{DIR_BIN}/docker")
         j.builders.tools.file_copy("/usr/bin/dockerd", "{DIR_BIN}/dockerd")
-        j.builders.tools.file_copy("/usr/bin/dockerd-ce", "{DIR_BIN}/dockerd-ce")
         j.builders.tools.file_copy("/usr/bin/docker-proxy", "{DIR_BIN}/docker-proxy")
         j.builders.tools.file_copy("/usr/bin/docker-init", "{DIR_BIN}/docker-init")
 
@@ -84,7 +83,7 @@ class BuilderDocker(j.baseclasses.builder):
     ):
 
         dest_path = self.DIR_SANDBOX
-        bins = ["docker", "dockerd", "dockerd-ce", "docker-init", "docker-proxy"]
+        bins = ["docker", "dockerd", "docker-init", "docker-proxy"]
         for bin_name in bins:
             dir_src = self._joinpaths(j.core.dirs.BINDIR, bin_name)
             dir_dest = self._joinpaths(dest_path, j.core.dirs.BINDIR[1:])
