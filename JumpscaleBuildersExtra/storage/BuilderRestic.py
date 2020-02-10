@@ -1,33 +1,55 @@
 from Jumpscale import j
+from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
 builder_method = j.baseclasses.builder_method
 
 
-class BuilderRestic(j.baseclasses.builder):
+class BuilderRestic(BuilderGolangTools):
 
     __jslocation__ = "j.builders.storage.restic"
 
     def _init(self, **kwargs):
-        self.DIR_BUILD = self._replace("{DIR_VAR}/build/restic")
-        self._dir_ensure(self.DIR_BUILD)
+        super()._init()
+
+        # self.env = self.bash.profile
+
+        self.DIR_CLONE = "{DIR_CODE}/github/restic"
+        self.DIR_RESTIC = self._replace("{DIR_CLONE}/restic")
+        self.DIR_REST = self._replace("{DIR_CLONE}/rest-server")
+
+        self._dir_ensure(self.DIR_CLONE)
 
     @builder_method()
-    def build(self):
+    def build(self, reset=False):
 
         # install golang dependancy
         j.builders.runtimes.go.install()
 
-        # clone the repo
-        C = """
-        cd {}
-        git clone --depth 1 https://github.com/restic/restic.git
-        """.format(
-            self.DIR_BUILD
+        cmd = self._replace(
+            """
+            cd {DIR_CLONE}
+            rm -rf restic/
+            git clone --depth 1 https://github.com/restic/restic.git
+        """
         )
-        self._execute(C, timeout=1200)
+        self._execute(cmd, timeout=1200)
+
+        cmd = self._replace(
+            """
+            cd {DIR_CLONE}
+            rm -rf rest-server/
+            git clone --depth 1 https://github.com/restic/rest-server.git
+        """
+        )
+        self._execute(cmd, timeout=1200)
+
+        self.profile.env_set("GO111MODULE", "on")
 
         # build binaries
-        build_cmd = "cd {dir}/restic; go run build.go -k -v; make".format(dir=self.DIR_BUILD)
+        build_cmd = self._replace("cd {DIR_RESTIC}; go run -mod=vendor build.go -k -v")
+        self._execute(build_cmd, timeout=1000)
+
+        build_cmd = self._replace("cd {DIR_REST}; go run build.go")
         self._execute(build_cmd, timeout=1000)
 
     @builder_method()
@@ -35,7 +57,8 @@ class BuilderRestic(j.baseclasses.builder):
         """
         download, install, move files to appropriate places, and create relavent configs
         """
-        self._copy("{DIR_BUILD}/restic/restic", "{DIR_BIN}")
+        self._copy("{DIR_RESTIC}/restic", "{DIR_BIN}")
+        self._copy("{DIR_REST}/rest-server", "{DIR_BIN}")
 
     @builder_method()
     def sandbox(
@@ -69,7 +92,8 @@ class BuilderRestic(j.baseclasses.builder):
 
     @builder_method()
     def clean(self):
-        self._remove(self.DIR_BUILD)
+        self._remove(self.DIR_RESTIC)
+        self._remove(self.DIR_REST)
 
     @builder_method()
     def reset(self):
