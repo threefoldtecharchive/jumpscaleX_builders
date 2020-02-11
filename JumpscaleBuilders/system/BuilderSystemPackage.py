@@ -101,7 +101,8 @@ class BuilderSystemPackage(j.baseclasses.builder):
 
     def update(self):
         if j.core.platformtype.myplatform.platform_is_osx:
-            raise j.exceptions.NotImplemented()
+            return
+            # raise j.exceptions.NotImplemented()
         self._execute(f"{CMD_APT_GET} update -y")
 
     def set_non_interactive(self):
