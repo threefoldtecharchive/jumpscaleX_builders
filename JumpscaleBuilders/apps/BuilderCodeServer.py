@@ -56,7 +56,6 @@ class BuilderCodeServer(j.baseclasses.builder):
         """
         kosmos 'j.builders.apps.codeserver.sandbox()'
         """
-        j.debug()
         bin_dest = self._joinpaths(self.DIR_SANDBOX, "sandbox", "bin")
         self._dir_ensure(bin_dest)
 
