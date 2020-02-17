@@ -2,7 +2,6 @@ from Jumpscale import j
 
 builder_method = j.baseclasses.builder_method
 
-
 class BuilderCodeServer(j.baseclasses.builder):
     __jslocation__ = "j.builders.apps.codeserver"
 
@@ -19,9 +18,9 @@ class BuilderCodeServer(j.baseclasses.builder):
         gcc libx11-dev libxkbfile-dev libsecret-1-dev pkg-config
         """
         j.builders.system.package.ensure(deps)
-        self._run("cd {DIR_TEMP}; wget -c https://github.com/cdr/code-server/releases/download/%s/code-server%s-linux"
+        self._execute("cd {DIR_TEMP}; wget -c https://github.com/cdr/code-server/releases/download/%s/code-server%s-linux"
                   "-x86_64.tar.gz" % (self.RELEASE_VERSION, self.TAR_VERSION))
-        self._run("cd {DIR_TEMP}; tar -xvzf code-server%s-linux-x86_64.tar.gz" % self.TAR_VERSION)
+        self._execute("cd {DIR_TEMP}; tar -xvzf code-server%s-linux-x86_64.tar.gz" % self.TAR_VERSION)
 
     @builder_method()
     def install(self, reset=False):
@@ -32,13 +31,18 @@ class BuilderCodeServer(j.baseclasses.builder):
         """
         if not reset and j.sal.fs.exists("{DIR_BIN}/code-server"):
             return
-        self._run("cd {DIR_TEMP}/code-server%s-linux-x86_64; cp code-server {DIR_BIN}" % self.TAR_VERSION)
+        self._copy("{DIR_TEMP}/code-server%s-linux-x86_64/code-server" % self.TAR_VERSION, "{DIR_BIN}")
 
     @builder_method()
     def clean(self):
-        self._run("rm -rf {DIR_TEMP}/code-server%s-linux-x86_64" % self.TAR_VERSION)
-        self._run("rm -f {DIR_TEMP}/code-server%s-linux-x86_64.tar.gz" % self.TAR_VERSION)
-        self._run("rm -f {DIR_BIN}/code-server")
+        self._remove("{DIR_TEMP}/code-server%s-linux-x86_64" % self.TAR_VERSION)
+        self._remove("{DIR_TEMP}/code-server%s-linux-x86_64.tar.gz" % self.TAR_VERSION)
+        self._remove("{DIR_BIN}/code-server")
+
+    @builder_method()
+    def reset(self):
+        super().reset()
+        self.clean()
 
     @property
     def startup_cmds(self):
@@ -71,5 +75,3 @@ class BuilderCodeServer(j.baseclasses.builder):
             dir_src = self._joinpaths(bin_dest, bin)
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest)
 
-    def _run(self, command):
-        return j.sal.process.execute(self._replace(command))
