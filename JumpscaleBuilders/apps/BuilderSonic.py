@@ -18,10 +18,15 @@ class BuilderSonic(j.baseclasses.builder):
         :param reset:
         :return:
         """
-        j.builders.runtimes.rust.install(reset=reset)
+        if not reset and j.sal.fs.exists("{DIR_BASE}/bin/sonic"):
+            return
+
+        if reset:
+            j.builders.runtimes.rust.install(reset=reset)
 
         if not j.core.platformtype.myplatform.platform_is_osx:
             self.system.package.install("clang")
+
         self.profile.env_set_part("PATH", j.builders.runtimes.rust.DIR_CARGOBIN)
         self._execute("rustup update")
         self._remove("{DIR_BASE}/bin/sonic")
@@ -34,6 +39,9 @@ class BuilderSonic(j.baseclasses.builder):
         :param reset:
         :return:
         """
+        if not reset and j.sal.fs.exists("{DIR_BASE}/bin/sonic"):
+            return
+
         self._execute("cp %s/sonic {DIR_BASE}/bin/" % j.builders.runtimes.rust.DIR_CARGOBIN)
 
     @builder_method()

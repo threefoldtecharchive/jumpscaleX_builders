@@ -1,0 +1,8 @@
+[startup.codeserver]
+name = "core.system"
+protected = true #set protected to true to respawn the container if it crashed
+
+[startup.codeserver.args]
+script = """
+/sandbox/bin/code-server --auth none --host 0.0.0.0
+"""
