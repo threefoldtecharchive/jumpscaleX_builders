@@ -46,10 +46,13 @@ class BuilderCodeServer(j.baseclasses.builder):
 
     @property
     def startup_cmds(self):
-        # TODO: remove --host 0.0.0.0 when nginx location is added
-        cmd = "code-server --auth none --host 0.0.0.0"
+        cmd = "code-server --auth none"
         cmds = [j.servers.startupcmd.get(name=self._name, cmd_start=cmd)]
         return cmds
+
+    @builder_method()
+    def uninstall(self):
+        self.clean()
 
     @builder_method()
     def sandbox(self):
