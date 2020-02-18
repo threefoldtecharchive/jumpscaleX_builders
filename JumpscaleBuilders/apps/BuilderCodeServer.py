@@ -31,18 +31,20 @@ class BuilderCodeServer(j.baseclasses.builder):
         """
         if not reset and j.sal.fs.exists("{DIR_BIN}/code-server"):
             return
+        if reset:
+            self._remove("{DIR_BIN}/code-server")
         self._copy("{DIR_TEMP}/code-server%s-linux-x86_64/code-server" % self.TAR_VERSION, "{DIR_BIN}")
 
-    @builder_method()
     def clean(self):
+        self._remove("{DIR_TEMP}/code-server%s-linux-x86_64/code-server" % self.TAR_VERSION)
         self._remove("{DIR_TEMP}/code-server%s-linux-x86_64" % self.TAR_VERSION)
         self._remove("{DIR_TEMP}/code-server%s-linux-x86_64.tar.gz" % self.TAR_VERSION)
-        self._remove("{DIR_BIN}/code-server")
 
     @builder_method()
     def reset(self):
         super().reset()
         self.clean()
+        self._remove("{DIR_BIN}/code-server")
 
     @property
     def startup_cmds(self):
@@ -52,7 +54,9 @@ class BuilderCodeServer(j.baseclasses.builder):
 
     @builder_method()
     def uninstall(self):
-        self.clean()
+        if self.running():
+            self.stop()
+        self._remove("{DIR_BIN}/code-server")
 
     @builder_method()
     def sandbox(self):
