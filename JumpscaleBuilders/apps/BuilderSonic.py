@@ -21,8 +21,7 @@ class BuilderSonic(j.baseclasses.builder):
         if not reset and j.sal.fs.exists("{DIR_BASE}/bin/sonic"):
             return
 
-        if reset:
-            j.builders.runtimes.rust.install(reset=reset)
+        j.builders.runtimes.rust.install()
 
         if not j.core.platformtype.myplatform.platform_is_osx:
             self.system.package.install("clang")
