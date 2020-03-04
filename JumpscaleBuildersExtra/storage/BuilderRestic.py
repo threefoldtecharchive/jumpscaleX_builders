@@ -23,7 +23,8 @@ class BuilderRestic(BuilderGolangTools):
     def build(self, reset=False):
 
         # install golang dependancy
-        j.builders.runtimes.go.install()
+        if not j.sal.fs.exists("{DIR_BIN}/go"):
+            j.builders.runtimes.go.install(reset=True)
 
         cmd = self._replace(
             """
