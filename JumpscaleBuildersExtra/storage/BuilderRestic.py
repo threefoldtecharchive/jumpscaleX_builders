@@ -47,7 +47,7 @@ class BuilderRestic(BuilderGolangTools):
         self.profile.env_set("GO111MODULE", "on")
 
         # build binaries
-        build_cmd = self._replace("cd {DIR_RESTIC}; go run -mod=vendor build.go -k -v")
+        build_cmd = self._replace("cd {DIR_RESTIC}; go run -mod=vendor build.go -v")
         self._execute(build_cmd, timeout=1000)
 
         build_cmd = self._replace("cd {DIR_REST}; go run build.go")
