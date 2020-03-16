@@ -156,8 +156,8 @@ class BuilderSystemPackage(j.baseclasses.builder):
                     if unsupported in package:
                         continue
 
-                if "wget" == package:
-                    package = "%s --enable-iri" % package
+                # if "wget" == package:
+                #     package = "%s --enable-iri" % package
 
                 cmd = "brew install %s || brew upgrade  %s\n" % (package, package)
 
