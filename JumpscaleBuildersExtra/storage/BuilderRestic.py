@@ -23,7 +23,8 @@ class BuilderRestic(BuilderGolangTools):
     def build(self, reset=False):
 
         # install golang dependancy
-        j.builders.runtimes.go.install()
+        if not j.sal.fs.exists("{DIR_BIN}/go"):
+            j.builders.runtimes.go.install(reset=True)
 
         cmd = self._replace(
             """
@@ -46,7 +47,7 @@ class BuilderRestic(BuilderGolangTools):
         self.profile.env_set("GO111MODULE", "on")
 
         # build binaries
-        build_cmd = self._replace("cd {DIR_RESTIC}; go run -mod=vendor build.go -k -v")
+        build_cmd = self._replace("cd {DIR_RESTIC}; go run -mod=vendor build.go -v")
         self._execute(build_cmd, timeout=1000)
 
         build_cmd = self._replace("cd {DIR_REST}; go run build.go")

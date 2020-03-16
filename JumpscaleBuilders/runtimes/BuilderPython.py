@@ -141,7 +141,6 @@ class BuilderPython(j.baseclasses.builder):
         """
         The "package" argument, defines the name of the package that will be ensured.
         """
-        self.ensure()
         packages = j.core.text.getList(package, "str")
         if len(packages) == 1:
             return j.sal.process.execute("pip3 uninstall %s" % (packages[0]))
