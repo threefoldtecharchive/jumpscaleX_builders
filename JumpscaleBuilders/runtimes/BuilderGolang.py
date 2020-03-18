@@ -7,7 +7,7 @@ builder_method = j.baseclasses.builder_method
 class BuilderGolang(BuilderGolangTools):
 
     __jslocation__ = "j.builders.runtimes.go"
-    STABLE_VERSION = "1.12.1"
+    STABLE_VERSION = "1.14"
     DOWNLOAD_URL = "https://dl.google.com/go/go{version}.{platform}-{arch}.tar.gz"
 
     def _init(self, **kwargs):
