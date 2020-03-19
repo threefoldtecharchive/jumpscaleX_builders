@@ -103,7 +103,7 @@ class BuilderSyncthing(BuilderGolangTools):
 
         self.start()
         time.sleep(3)
-        sync_client = j.clients.syncthing.get("test", port=34475, addr="localhost", apikey=self.apikey)
+        sync_client = j.clients.syncthing.get("test", port=8384, addr="localhost", apikey=self.apikey)
         status = sync_client.status_get()
         device_id = status["myID"]
         assert device_id == self.myid
