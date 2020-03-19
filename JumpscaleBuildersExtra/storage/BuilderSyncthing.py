@@ -3,6 +3,7 @@ from JumpscaleBuilders.runtimes.BuilderGolangTools import BuilderGolangTools
 
 builder_method = j.baseclasses.builder_method
 import xml.etree.ElementTree as etree
+import time
 
 
 class BuilderSyncthing(BuilderGolangTools):
@@ -38,12 +39,16 @@ class BuilderSyncthing(BuilderGolangTools):
         download, install, move files to appropriate places, and create relavent configs
         """
         src = "{}/bin/syncthing".format(self.package_path)
-        self._copy(src, "{DIR_BIN}")
+        self._copy(src, "{DIR_BIN}/startupcmd_syncthing")  # necessary to rename executable in order to run in tmux
         if not self.tools.dir_exists("{DIR_CFG}/syncthing"):
-            cmd = "{DIR_BIN}/syncthing -generate  {DIR_CFG}/syncthing"
+            cmd = "{DIR_BIN}/startupcmd_syncthing -generate  {DIR_CFG}/syncthing"
         else:
-            cmd = "rm -rf {DIR_CFG}/syncthing; {DIR_BIN}/syncthing -generate  {DIR_CFG}/syncthing"
+            cmd = "rm -rf {DIR_CFG}/syncthing; {DIR_BIN}/startupcmd_syncthing -generate  {DIR_CFG}/syncthing"
+
         self._execute(cmd)
+
+        j.builders.tools.execute("useradd syncthing || true")
+        j.builders.tools.execute(self._replace("chown -R syncthing:syncthing {DIR_CFG}/syncthing"))
 
     @builder_method()
     def sandbox(
@@ -86,7 +91,7 @@ class BuilderSyncthing(BuilderGolangTools):
 
     @property
     def startup_cmds(self):
-        cmd = self._replace("{DIR_BIN}/syncthing -home  {DIR_CFG}/syncthing")
+        cmd = self._replace("sudo -u syncthing {DIR_BIN}/startupcmd_syncthing -home  {DIR_CFG}/syncthing")
         cmds = [j.servers.startupcmd.get(name=self._name, cmd_start=cmd)]
         return cmds
 
@@ -97,7 +102,8 @@ class BuilderSyncthing(BuilderGolangTools):
             self.stop()
 
         self.start()
-        sync_client = j.clients.syncthing.get("test", port=8384, addr="localhost", apikey=self.apikey)
+        time.sleep(3)
+        sync_client = j.clients.syncthing.get("test", port=34475, addr="localhost", apikey=self.apikey)
         status = sync_client.status_get()
         device_id = status["myID"]
         assert device_id == self.myid
