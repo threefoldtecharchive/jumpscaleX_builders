@@ -2,6 +2,7 @@ from Jumpscale import j
 
 builder_method = j.baseclasses.builder_method
 
+
 class BuilderCodeServer(j.baseclasses.builder):
     __jslocation__ = "j.builders.apps.codeserver"
 
@@ -14,12 +15,15 @@ class BuilderCodeServer(j.baseclasses.builder):
         """
         kosoms 'j.builders.apps.codeserver.build()'
         """
-        deps = """
-        gcc libx11-dev libxkbfile-dev libsecret-1-dev pkg-config
-        """
-        j.builders.system.package.ensure(deps)
-        self._execute("cd {DIR_TEMP}; wget -c https://github.com/cdr/code-server/releases/download/%s/code-server%s-linux"
-                  "-x86_64.tar.gz" % (self.RELEASE_VERSION, self.TAR_VERSION))
+        # TODO: check what deps were used for here... seems to work ok on fresh container
+        # deps = """
+        # gcc libx11-dev libxkbfile-dev libsecret-1-dev pkg-config
+        # """
+        # j.builders.system.package.ensure(deps)
+        self._execute(
+            "cd {DIR_TEMP}; wget -c https://github.com/cdr/code-server/releases/download/%s/code-server%s-linux"
+            "-x86_64.tar.gz" % (self.RELEASE_VERSION, self.TAR_VERSION)
+        )
         self._execute("cd {DIR_TEMP}; tar -xvzf code-server%s-linux-x86_64.tar.gz" % self.TAR_VERSION)
 
     @builder_method()
@@ -80,4 +84,3 @@ class BuilderCodeServer(j.baseclasses.builder):
         for bin in bins:
             dir_src = self._joinpaths(bin_dest, bin)
             j.tools.sandboxer.libs_sandbox(dir_src, lib_dest)
-
