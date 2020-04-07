@@ -33,11 +33,10 @@ class BuilderMdbook(j.baseclasses.builder):
             return
         if reset:
             self._remove("{DIR_BIN}/mdbook")
-        self._copy("{DIR_TEMP}/mdbook-%s-x86_64-unknown-linux-gnu/mdbook" % self.RELEASE_VERSION, "{DIR_BIN}")
+        self._copy("{DIR_TEMP}/mdbook", "{DIR_BIN}")
 
     def clean(self):
-        self._remove("{DIR_TEMP}/mdbook-%s-x86_64-unknown-linux-gnu/mdbook" % self.RELEASE_VERSION)
-        self._remove("{DIR_TEMP}/mdbook-%s-x86_64-unknown-linux-gnu" % self.RELEASE_VERSION)
+        self._remove("{DIR_TEMP}/mdbook")
         self._remove("{DIR_TEMP}/mdbook-%s-x86_64-unknown-linux-gnu.tar.gz" % self.RELEASE_VERSION)
 
     @builder_method()
