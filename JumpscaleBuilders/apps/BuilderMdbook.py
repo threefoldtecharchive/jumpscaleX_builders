@@ -39,14 +39,13 @@ class BuilderMdbook(j.baseclasses.builder):
         self._remove("{DIR_TEMP}/mdbook")
         self._remove("{DIR_TEMP}/mdbook-%s-x86_64-unknown-linux-gnu.tar.gz" % self.RELEASE_VERSION)
 
-    @builder_method()
     def reset(self):
         super().reset()
         self.clean()
         self._remove("{DIR_BIN}/mdbook")
 
-    @builder_method()
-    def uninstall(self):
-        if self.running():
-            self.stop()
-        self._remove("{DIR_BIN}/mdbook")
+    # @builder_method()
+    # def uninstall(self):
+    #     if self.running():
+    #         self.stop()
+    #     self._remove("{DIR_BIN}/mdbook")
