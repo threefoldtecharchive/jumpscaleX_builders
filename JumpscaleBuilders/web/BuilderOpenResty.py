@@ -24,7 +24,7 @@ class BuilderOpenResty(j.baseclasses.builder):
 
         dest = self._replace("{DIR_BUILD}/openresty")
         self.tools.file_download(
-            url, to=dest, overwrite=False, retry=3, expand=True, minsizekb=1000, removeTopDir=True, deletedest=True
+            url, to=dest, overwrite=reset, retry=3, expand=True, minsizekb=1000, removeTopDir=True, deletedest=True
         )
         C = """
         cd {DIR_BUILD}/openresty
@@ -47,7 +47,7 @@ class BuilderOpenResty(j.baseclasses.builder):
         self._execute(C)
 
     @builder_method()
-    def install(self, **kwargs):
+    def install(self, reset=False, **kwargs):
         """
         kosmos 'j.builders.web.openresty.install()'
         #will call the build step
@@ -55,6 +55,7 @@ class BuilderOpenResty(j.baseclasses.builder):
         :return:
         """
         # copy the files from the sandbox !!! IMPORTANT
+        # will automatically call the build method
 
         C = """
         ln -sf {DIR_BASE}/openresty/bin/resty {DIR_BASE}/bin/resty

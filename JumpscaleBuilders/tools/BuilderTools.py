@@ -227,6 +227,8 @@ class BuilderTools(j.baseclasses.builder):
                         timeout,
                     )
                     rc, out, err = self.execute(cmd, die=False, timeout=timeout)
+                if not j.sal.fs.exists(to):
+                    raise j.exceptions.RuntimeError("Could not download:{}.\nDid not find file on: \n".format(url, to))
                 fsize = self.file_size(to)
                 if minsizekb != 0 and fsize < minsizekb:
                     raise j.exceptions.RuntimeError(

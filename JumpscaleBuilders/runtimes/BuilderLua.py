@@ -15,7 +15,7 @@ class BuilderLua(j.baseclasses.builder):
         self.ROCKS_PATHS_PROFILE = self._replace("{DIR_BUILD}/rocks_paths")
 
     @builder_method()
-    def build(self, reset=False, deps_reset=False):
+    def build(self, reset=False):
         """
         kosmos 'j.builders.runtimes.lua.build(reset=True)'
         :param install:
@@ -23,17 +23,18 @@ class BuilderLua(j.baseclasses.builder):
         """
         if j.core.platformtype.myplatform.platform_is_ubuntu:
             j.builders.system.package.install(
-                ["libsqlite3-dev", "libpcre3-dev", "libssl-dev", "perl", "make", "build-essential"]
+                ["libsqlite3-dev", "libpcre3-dev", "libssl-dev", "perl", "make", "build-essential"], reset=reset
             )
 
-        j.builders.web.openresty.install(reset=deps_reset)
+        # do not force, just to check it has been done
+        j.builders.web.openresty.install()
         # j.builders.libs.openssl.build(reset=deps_reset)  #DOES NOT WORK FOR NOW, maybe wrong version of openssl?
 
         url = "https://luarocks.org/releases/luarocks-3.1.3.tar.gz"
         dest = self._replace("{DIR_BUILD}/luarocks")
         self._dir_ensure(dest)
         self.tools.file_download(
-            url, to=dest, overwrite=False, retry=3, expand=True, minsizekb=100, removeTopDir=True, deletedest=True
+            url, to=dest, overwrite=reset, retry=3, expand=True, minsizekb=100, removeTopDir=True, deletedest=True
         )
         C = """
         cd {DIR_BUILD}/luarocks
@@ -261,14 +262,18 @@ class BuilderLua(j.baseclasses.builder):
         self.clean()
 
     @builder_method()
-    def install(self, reset=False, deps_reset=False):
+    def install(self, reset=False):
         """
         will build & install in sandbox
         kosmos 'j.builders.runtimes.lua.install(reset=False)'
         :return:
         """
-        j.builders.web.openresty.install(reset=deps_reset)
-        self.lua_rocks_install(reset=deps_reset)
+        # will auto call the builder
+
+        # not to reset here, this just needs to check its already done
+        j.builders.web.openresty.install()
+
+        self.lua_rocks_install(reset=reset)
 
         # will get the sandbox files, important that these files get there unmodified
         j.builders.apps.threebot.base_bin()
