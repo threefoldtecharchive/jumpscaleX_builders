@@ -282,11 +282,14 @@ class BuilderLua(j.baseclasses.builder):
         C = """
 
         set -e
-        pushd {DIR_BASE}/openresty/luarocks/lib/luarocks/rocks-5.1/lapis/1.7.0-1/bin/
+        lapis_version=`luarocks show lapis --mversion`
+        pushd {DIR_BASE}/openresty/luarocks/lib/luarocks/rocks-5.1/lapis/$lapis_version/bin/
         cp lapis {DIR_BASE}/bin/_lapis.lua
         cp lapis {DIR_BASE}/bin/lapis
         popd
-        pushd "{DIR_BASE}/openresty/luarocks/lib/luarocks/rocks-5.1/moonscript/0.5.0-1/bin"
+        
+        moonscript_version=`luarocks show moonscript --mversion`
+        pushd "{DIR_BASE}/openresty/luarocks/lib/luarocks/rocks-5.1/moonscript/$moonscript_version/bin"
         cp moon {DIR_BASE}/bin/_moon.lua
         cp moonc {DIR_BASE}/bin/_moonc.lua
         popd
