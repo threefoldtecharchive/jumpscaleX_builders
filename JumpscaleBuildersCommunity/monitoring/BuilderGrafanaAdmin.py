@@ -25,7 +25,7 @@ class BuilderGrafanaAdmin(j.baseclasses.builder):
 
         set -ex
 
-        rm -rf "/sandbox/grafana"
+        rm -rf /sandbox/grafana
         rm {DIR_BIN}/grafana-server
         rm {DIR_BIN}/grafana-cli
         rm -rf {DIR_BUILD}
@@ -54,7 +54,9 @@ class BuilderGrafanaAdmin(j.baseclasses.builder):
     @builder_method()
     def install(self, reset=False):
         j.core.tools.dir_ensure(self.DIR_BUILD)
-        j.builders.tools.copyTree(f"{self.DIR_BUILD}/grafana-{self.version}", dest=self.DIR_BASE, recursive=True)
+        j.builders.tools.copyTree(
+            f"{self.DIR_BUILD}/grafana-{self.version}", dest=self.DIR_BASE_GRAFANA, recursive=True
+        )
 
         j.builders.tools.file_copy(f"{self.DIR_INSTALL}/bin/grafana-server", "{DIR_BIN}")
         j.builders.tools.file_copy(f"{self.DIR_INSTALL}/bin/grafana-cli", "{DIR_BIN}")
